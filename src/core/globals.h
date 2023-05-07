@@ -1,8 +1,6 @@
 #pragma once
 #include "log.h"
 
-class Shader;
-class Texture;
 class vec2;
 
 extern vec2 mousePos;

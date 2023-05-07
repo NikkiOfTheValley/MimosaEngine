@@ -63,15 +63,15 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	stbi_set_flip_vertically_on_load(true);
 
-	// You need flatShader and the font.png atlas to render text
+	// We need flatShader and the font.png atlas to render text
 	resourceManager->LoadShader("assets/flatShader.vert", "assets/flatShader.frag", "flatShader");
 	resourceManager->LoadTexture("assets/font.png", true, true, "textTexture");
 
-	// You need button.png and button-highlighted.png to render buttons
+	// We need button.png and button-highlighted.png to render buttons
 	resourceManager->LoadTexture("assets/button.png", true, true, "buttonBackground");
 	resourceManager->LoadTexture("assets/button-highlighted.png", true, true, "buttonBackgroundHighlighted");
 
-	// You need text-box.png and text-box-highlighted.png to render text boxes
+	// We need text-box.png and text-box-highlighted.png to render text boxes
 	resourceManager->LoadTexture("assets/text-box.png", true, true, "textBox");
 	resourceManager->LoadTexture("assets/text-box-highlighted.png", true, true, "textBoxHighlighted");
 
@@ -113,19 +113,20 @@ int main(int /*argc*/, char* /*argv[]*/)
 			logger->log(text);
 		});
 
-	// You have to select a UI before entering the render loop
+	// We have to select a UI before entering the render loop
 	uiManager->SelectUI("example");
 
 	inUI = true;
 
 	// -- Create meshes --
+
 	renderer->CreateNewMesh(
 		"assets/example.obj",
 		"exampleMesh",
 		materialManager.GetMaterial("exampleMaterial"),
 		vec3{ 4.f, 0.f, 2.f });
 
-	// You have to update the mesh before you first draw it, otherwise the mesh
+	// We have to update the mesh before drawing it, otherwise the mesh
 	// data is never sent to the GPU
 	renderer->UpdateMesh("exampleMesh");
 	
@@ -165,7 +166,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 		if (displayUI)
 		{
-			// You have to clear the depth buffer or the UI might end up drawing under the geometry
+			// We have to clear the depth buffer or the UI might end up drawing under the geometry
 			glClear(GL_DEPTH_BUFFER_BIT);
 			uiManager->Draw();
 		}
@@ -178,7 +179,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 		if (displayUI)
 			uiManager->Update();
 
-		if (lastStateOfF2 == false && glfwGetKey(renderer->window, GLFW_KEY_F2) == GLFW_PRESS)
+		if (lastStateOfF2 == GLFW_RELEASE && glfwGetKey(renderer->window, GLFW_KEY_F2) == GLFW_PRESS)
 			enableFPSLimiter = !enableFPSLimiter;
 		lastStateOfF2 = glfwGetKey(renderer->window, GLFW_KEY_F2) == GLFW_PRESS;
 

@@ -6,6 +6,8 @@
 #include <functional>
 #include "types/vec.h"
 
+class Shader;
+class Texture;
 class Mesh;
 class Polygon2D;
 class Material;
