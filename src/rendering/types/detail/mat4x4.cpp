@@ -14,7 +14,7 @@ void mat4x4f::identity()
 void mat4x4f::perspective(const float aspectRatio, const float nearClip, const float farClip, const float fov)
 {
 	if (abs(aspectRatio - std::numeric_limits<float>::epsilon()) < 0)
-		logger->err("I have no idea what this means. (in mat4x4f::perspective())");
+		Logger::getInstance().err("I have no idea what this means. (in mat4x4f::perspective())");
 
 	const double scale = tan(conv::deg_to_rad(fov) / 2);
 

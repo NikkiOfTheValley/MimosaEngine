@@ -1,9 +1,11 @@
 #pragma once
 #include <vector>
 #include "..\rendering\types\vec3.h"
+#include "constraint.h"
 
-struct PhysObj
+class PhysObj
 {
+public:
 	std::vector<Constraint*> constraints;
 
 	vec3 pos;
@@ -15,4 +17,6 @@ struct PhysObj
 	vec3 angAccel;
 
 	std::string name;
+
+	void Step(double deltaTime);
 };

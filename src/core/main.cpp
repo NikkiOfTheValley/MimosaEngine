@@ -14,7 +14,6 @@
 
 // - Global variables -
 
-Logger* logger = new Logger(true);
 ResourceManager* resourceManager;
 float fov = 45;
 bool inUI = true;
@@ -36,6 +35,7 @@ double fixedTime = 0; // The amount of time since program startup in millisecond
 
 UIManager* uiManager;
 MaterialManager materialManager;
+Logger* logger;
 bool enableFPSLimiter = true;
 bool displayUI = true;
 int setFPS = 60;
@@ -43,6 +43,8 @@ int setFPS = 60;
 int main(int /*argc*/, char* /*argv[]*/)
 {
 	// -- Initialize --
+
+	logger = &Logger::getInstance();
 
 	logger->log(NAME_STR + " " + VERSION_STR);
 

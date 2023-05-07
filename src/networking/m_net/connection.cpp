@@ -24,14 +24,14 @@ bool Connection::Connect(const std::string& host, const uint16_t port)
 				}
 				else
 				{
-					logger->err("Error while attempting to connect to " + host + ": " + ec.message());
+					Logger::getInstance().err("Error while attempting to connect to " + host + ": " + ec.message());
 				}
 			});
 		return true;
 	}
 	else
 	{
-		logger->err("Error while attempting to connect to " + host + ": " + ec.message());
+		Logger::getInstance().err("Error while attempting to connect to " + host + ": " + ec.message());
 		return false;
 	}
 }
@@ -93,7 +93,7 @@ void Connection::SetID(int newID)
 	if (id == -1)
 		id = newID;
 	else
-		logger->err("Connection ID has already been set");
+		Logger::getInstance().err("Connection ID has already been set");
 }
 
 // Prime ASIO to write a message
@@ -127,8 +127,8 @@ void Connection::AsyncWriteMessage()
 			else
 			{
 				// ASIO failed to write the message, for simplicity we'll not bother with trying to figure out why
-				logger->err("Failed to write header! Connection " + std::to_string(id));
-				logger->err(ec.message());
+				Logger::getInstance().err("Failed to write header! Connection " + std::to_string(id));
+				Logger::getInstance().err(ec.message());
 				socket->close();
 			}
 		});
@@ -158,7 +158,7 @@ void Connection::AsyncWriteMessageBody()
 			else
 			{
 				// ASIO failed to write the message, for simplicity we'll not bother with trying to figure out why
-				logger->err("Failed to write body! Connection " + std::to_string(id));
+				Logger::getInstance().err("Failed to write body! Connection " + std::to_string(id));
 				socket->close();
 			}
 		});
@@ -193,7 +193,7 @@ void Connection::AsyncReadMessage()
 			else
 			{
 				// ASIO failed to read the message, for simplicity we'll not bother with trying to figure out why
-				logger->err("Failed to read header! Connection " + std::to_string(id));
+				Logger::getInstance().err("Failed to read header! Connection " + std::to_string(id));
 				socket->close();
 			}
 		});
@@ -215,7 +215,7 @@ void Connection::AsyncReadMessageBody()
 			else
 			{
 				// ASIO failed to read the message, for simplicity we'll not bother with trying to figure out why
-				logger->err("Failed to read body! Connection " + std::to_string(id));
+				Logger::getInstance().err("Failed to read body! Connection " + std::to_string(id));
 				socket->close();
 			}
 		});

@@ -7,6 +7,8 @@
 
 bool Renderer::init(uint32_t width, uint32_t height, std::function<void(GLFWwindow* window, double xpos, double ypos)> cursor_callback, std::function<void(GLFWwindow* window, int key)> key_upd_callback)
 {
+    Logger* logger = &Logger::getInstance();
+
     logger->log("Initailizing rendering");
 
     // Initialize and configure GLFW
@@ -98,7 +100,7 @@ void Renderer::framebuffer_size_callback(GLFWwindow* /*window*/, int width, int 
 
 void Renderer::error_callback(int error, const char* description)
 {
-    logger->err("GLFW Error " + std::to_string(error) + "\n" + description);
+    Logger::getInstance().err("GLFW Error " + std::to_string(error) + "\n" + description);
     glfwSetWindowShouldClose(Renderer::getInstance().window, true);
 }
 
@@ -110,7 +112,7 @@ void Renderer::mouse_callback(GLFWwindow* window, double xpos, double ypos)
     }
     catch (std::bad_function_call e)
     {
-        logger->err(e.what());
+        Logger::getInstance().err(e.what());
     }
 }
 
@@ -130,7 +132,7 @@ void Renderer::key_callback(GLFWwindow* window, int key, int /*scancode*/, int /
     }
     catch (std::bad_function_call e)
     {
-        logger->err(e.what());
+        Logger::getInstance().err(e.what());
     }
 }
 
@@ -197,7 +199,7 @@ Mesh* Renderer::GetMesh(std::string name)
 {
     if (!nameToMeshIndex.contains(name))
     {
-        logger->err("No mesh exists called " + name);
+        Logger::getInstance().err("No mesh exists called " + name);
         return nullptr;
     }
 
@@ -208,7 +210,7 @@ Polygon2D* Renderer::GetPolygon(std::string name)
 {
     if (!nameToPolygonIndex.contains(name))
     {
-        logger->err("No polygon exists called " + name);
+        Logger::getInstance().err("No polygon exists called " + name);
         return nullptr;
     }
 

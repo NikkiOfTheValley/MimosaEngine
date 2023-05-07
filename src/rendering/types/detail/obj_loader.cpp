@@ -19,6 +19,8 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 	namespace fs = std::filesystem;
 	using namespace std::chrono;
 
+	Logger* logger = &Logger::getInstance();
+
 	logger->log("Loading OBJ file " + path);
 	auto loadStart = std::chrono::steady_clock::now();
 

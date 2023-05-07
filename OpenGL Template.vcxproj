@@ -177,9 +177,10 @@
     <ClInclude Include="src\networking\m_net\tsqueue.h" />
     <ClInclude Include="src\physics\constraint.h" />
     <ClInclude Include="src\physics\ode_solver.h" />
+    <ClInclude Include="src\physics\physics_manager.h" />
     <ClInclude Include="src\physics\phys_obj.h" />
     <ClInclude Include="src\physics\sle_solver.h" />
-    <ClInclude Include="src\physics\state.h" />
+    <ClInclude Include="src\physics\phys_state.h" />
     <ClInclude Include="src\rendering\post_processing_manager.h" />
     <ClInclude Include="src\rendering\renderer.h" />
     <ClInclude Include="src\rendering\types\camera.h" />
@@ -874,6 +875,9 @@
     <ClCompile Include="src\networking\m_net\connection.cpp" />
     <ClCompile Include="src\networking\m_net\device_interface.cpp" />
     <ClCompile Include="src\networking\m_net\message.cpp" />
+    <ClCompile Include="src\physics\constraints\constraint.cpp" />
+    <ClCompile Include="src\physics\detail\physics_manager.cpp" />
+    <ClCompile Include="src\physics\detail\phys_obj.cpp" />
     <ClCompile Include="src\rendering\post_processing_manager.cpp" />
     <ClCompile Include="src\rendering\renderer.cpp" />
     <ClCompile Include="src\rendering\types\detail\camera.cpp" />

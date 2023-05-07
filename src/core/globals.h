@@ -7,7 +7,6 @@ class vec2;
 class UIManager;
 class ResourceManager;
 
-extern Logger* logger;
 extern ResourceManager* resourceManager;
 
 extern vec2 mousePos;

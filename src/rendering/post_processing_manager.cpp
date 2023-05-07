@@ -21,7 +21,7 @@ PostProcessingManager::PostProcessingManager()
 
 	// Make sure the multisampled framebuffer is complete
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		logger->err("Failed to initialize multisampled framebuffer");
+		Logger::getInstance().err("Failed to initialize multisampled framebuffer");
 
 	// Initialize the texture to blit multisampled color buffer to
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
@@ -38,7 +38,7 @@ PostProcessingManager::PostProcessingManager()
 
 	// Make sure the framebuffer is complete
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		logger->err("Failed to initialize framebuffer");
+		Logger::getInstance().err("Failed to initialize framebuffer");
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	

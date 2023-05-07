@@ -4,6 +4,8 @@ Shader::Shader(std::string vertShaderPath, std::string fragShaderPath)
 {
 	namespace fs = std::filesystem;
 
+	Logger* logger = &Logger::getInstance();
+
 	vertPath = vertShaderPath;
 	fragPath = fragShaderPath;
 
@@ -97,7 +99,7 @@ void Shader::CheckCompileErrors(GLuint shader, std::string type)
 		if (!success)
 		{
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			logger->err("Shader compilation error! Type " + type + "\n" + infoLog);
+			Logger::getInstance().err("Shader compilation error! Type " + type + "\n" + infoLog);
 		}
 	}
 	else
@@ -106,7 +108,7 @@ void Shader::CheckCompileErrors(GLuint shader, std::string type)
 		if (!success)
 		{
 			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-			logger->err("Shader linking error! Type " + type + "\n" + infoLog);
+			Logger::getInstance().err("Shader linking error! Type " + type + "\n" + infoLog);
 		}
 	}
 }

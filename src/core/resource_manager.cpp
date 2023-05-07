@@ -2,14 +2,14 @@
 
 void ResourceManager::LoadTexture(std::string path, bool isRGBA, bool useNearestNeighbor, std::string name)
 {
-	logger->log("Loading texture " + name + " (at " + path + ")");
+	Logger::getInstance().log("Loading texture " + name + " (at " + path + ")");
 	nameToTexIndex[name] = textures.size();
 	textures.push_back(new Texture(path, isRGBA, useNearestNeighbor));
 }
 
 void ResourceManager::LoadShader(std::string vertPath, std::string fragPath, std::string name)
 {
-	logger->log("Loading shader " + name + " (at " + vertPath + " and " + fragPath + ")");
+	Logger::getInstance().log("Loading shader " + name + " (at " + vertPath + " and " + fragPath + ")");
 	nameToShaderIndex[name] = shaders.size();
 	shaders.push_back(new Shader(vertPath, fragPath));
 }
@@ -18,7 +18,7 @@ Texture* ResourceManager::GetTexture(std::string name)
 {
 	if (!nameToTexIndex.contains(name))
 	{
-		logger->err("No texture exists called " + name);
+		Logger::getInstance().err("No texture exists named " + name);
 		return nullptr;
 	}
 
@@ -29,7 +29,7 @@ Shader* ResourceManager::GetShader(std::string name)
 {
 	if (!nameToShaderIndex.contains(name))
 	{
-		logger->err("No shader exists called " + name);
+		Logger::getInstance().err("No shader exists named " + name);
 		return nullptr;
 	}
 

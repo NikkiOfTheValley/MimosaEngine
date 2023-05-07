@@ -13,10 +13,20 @@
 
 // Free to copy, preferably with credit, but I don't mind if you don't give credit. 
 
+
+// The Logger is a Singleton because more than one thing accesses it while also needing global state
+
 class Logger
 {
 public:
 	bool output;
+
+	// Should be thread-safe, magic statics (also known as "dynamic initialization and destruction with concurrency") were implemented in VS 2015
+	static Logger& getInstance()
+	{
+		static Logger instance;
+		return instance;
+	}
 
 	// Default constructor, sets output to true
 	Logger();

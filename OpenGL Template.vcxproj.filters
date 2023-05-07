@@ -2088,7 +2088,7 @@
     <ClInclude Include="src\rendering\types\obj_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\physics\state.h">
+    <ClInclude Include="src\physics\phys_state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\physics\phys_obj.h">
@@ -2110,6 +2110,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering\post_processing_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\physics_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -2193,6 +2196,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\rendering\post_processing_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\detail\phys_obj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\constraints\constraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\detail\physics_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

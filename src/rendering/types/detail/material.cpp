@@ -28,7 +28,7 @@ void Material::SetUniform(std::string name, std::any value)
 		}
 	}
 
-	logger->warn("No uniform named " + name + " found");
+	Logger::getInstance().warn("No uniform named " + name + " found");
 }
 
 void Material::Bind(mat4x4f viewMatrix, mat4x4f projectionMatrix, mat4x4f modelMatrix)

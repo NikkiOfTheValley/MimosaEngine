@@ -5,7 +5,7 @@ void UIManager::CreateImageElement(Texture* tex, bool isFullscreen, vec2 pos, ve
 {
 	if (!curState)
 	{
-		logger->err("No UIs exist or an invalid UI was selected.");
+		Logger::getInstance().err("No UIs exist or an invalid UI was selected.");
 		return;
 	}
 
@@ -47,7 +47,7 @@ void UIManager::CreateTextElement(std::string str, std::string name, vec2 pos, i
 {
 	if (!curState)
 	{
-		logger->err("No UIs exist or an invalid UI was selected.");
+		Logger::getInstance().err("No UIs exist or an invalid UI was selected.");
 		return;
 	}
 
@@ -62,7 +62,7 @@ void UIManager::CreateButtonElement(std::string str, vec2 pos, vec2 dim, int tex
 {
 	if (!curState)
 	{
-		logger->err("No UIs exist or an invalid UI was selected.");
+		Logger::getInstance().err("No UIs exist or an invalid UI was selected.");
 		return;
 	}
 
@@ -75,7 +75,7 @@ void UIManager::CreateTextBoxElement(std::string defaultStr, std::string name, v
 {
 	if (!curState)
 	{
-		logger->err("No UIs exist or an invalid UI was selected.");
+		Logger::getInstance().err("No UIs exist or an invalid UI was selected.");
 		return;
 	}
 
@@ -86,6 +86,8 @@ void UIManager::CreateTextBoxElement(std::string defaultStr, std::string name, v
 // Updates a text element in the current UI state
 void UIManager::UpdateTextElement(std::string name, std::string str)
 {
+	Logger* logger = &Logger::getInstance();
+
 	if (!curState)
 	{
 		logger->err("No UIs exist or an invalid UI was selected.");
@@ -118,6 +120,8 @@ void UIManager::UpdateTextElement(std::string name, std::string str)
 
 std::string UIManager::GetTextBoxContents(std::string name)
 {
+	Logger* logger = &Logger::getInstance();
+
 	if (!curState)
 	{
 		logger->err("No UIs exist or an invalid UI was selected.");
@@ -153,7 +157,7 @@ void UIManager::SelectUI(std::string name)
 		}
 	}
 	if (!curState)
-		logger->err("Selected invalid UI! This will cause broken behavior!");
+		Logger::getInstance().err("Selected invalid UI! This will cause broken behavior!");
 
 	curUIStateName = name;
 }
@@ -163,7 +167,7 @@ void UIManager::Update()
 {
 	if (!curState)
 	{
-		logger->err("No UIs exist or an invalid UI was selected.");
+		Logger::getInstance().err("No UIs exist or an invalid UI was selected.");
 		return;
 	}
 
@@ -184,7 +188,7 @@ void UIManager::Draw()
 {
 	if (!curState)
 	{
-		logger->err("No UIs exist or an invalid UI was selected.");
+		Logger::getInstance().err("No UIs exist or an invalid UI was selected.");
 		return;
 	}
 

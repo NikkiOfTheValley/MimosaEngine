@@ -13,7 +13,6 @@
 [LOG]: Loading shader exampleShader (at assets/example.vert and assets/example.frag)
 [LOG]: Creating material exampleMaterial
 [LOG]: Loading OBJ file assets/example.obj
-[LOG]: Finished loading OBJ file assets/example.obj, took 0.415000ms and has 12 tris.
-[LOG]: deltaTime: 16.666668ms | frameTime: 1.281000ms | FPS: 30
-[LOG]: deltaTime: 16.666668ms | frameTime: 0.568000ms | FPS: 60
+[LOG]: Finished loading OBJ file assets/example.obj, took 0.444000ms and has 12 tris.
+[LOG]: deltaTime: 16.666668ms | frameTime: 2.472000ms | FPS: 30
 [LOG]: Exiting application

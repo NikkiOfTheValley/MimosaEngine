@@ -13,6 +13,8 @@ class PostProcessingManager;
 struct vert;
 struct vert2d;
 
+// The Renderer is a Singleton because more than one thing accesses it while also needing global state
+
 class Renderer
 {
 public:

@@ -36,7 +36,7 @@ Texture::Texture(std::string path, bool isRGBA, bool useNearestNeighbor)
 	}
 	else
 	{
-		logger->err("Failed to load texture " + path);
+		Logger::getInstance().err("Failed to load texture " + path);
 	}
 	stbi_image_free(data);
 }
