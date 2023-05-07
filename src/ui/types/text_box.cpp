@@ -26,8 +26,8 @@ TextBox::TextBox(std::string defaultStr, vec2 pos, vec2 dim, int textScale)
 		vert2d{ dim.data[0], dim.data[1], 1.f, 1.f },
 		vert2d{ 0.f,         0.f,         0.f, 0.f } };
 	poly->position = pos;
-	poly->shader = resourceManager->GetShader("flatShader");
-	poly->texture = resourceManager->GetTexture("textBox");
+	poly->shader = ResourceManager::getInstance().GetShader("flatShader");
+	poly->texture = ResourceManager::getInstance().GetTexture("textBox");
 	poly->uvIsNDC = true;
 	poly->vertIsNDC = true;
 	poly->posIsNDC = true;
@@ -76,6 +76,8 @@ void TextBox::Update()
 	vec2* screenDim = Renderer::getInstance().screenDim;
 
 	text = new Text(str, vec2((center.data[0] + dim.data[0] / 2) - (4 * textScale * str.length() / screenDim->data[0]), center.data[1] + (4 / screenDim->data[1])), textScale);
+
+	ResourceManager* resourceManager = &ResourceManager::getInstance();
 
 	// Construct background polygon
 	Polygon2D* poly = new Polygon2D();

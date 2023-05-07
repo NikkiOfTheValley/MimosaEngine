@@ -14,7 +14,6 @@
 
 // - Global variables -
 
-ResourceManager* resourceManager;
 float fov = 45;
 bool inUI = true;
 vec2 mousePos = vec2();
@@ -35,6 +34,7 @@ double fixedTime = 0; // The amount of time since program startup in millisecond
 
 UIManager* uiManager;
 MaterialManager materialManager;
+ResourceManager* resourceManager;
 Logger* logger;
 bool enableFPSLimiter = true;
 bool displayUI = true;
@@ -48,7 +48,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	logger->log(NAME_STR + " " + VERSION_STR);
 
-	resourceManager = new ResourceManager();
+	resourceManager = &ResourceManager::getInstance();
 	uiManager = new UIManager();
 
 	InputHandler inputHandler;
@@ -221,7 +221,6 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	renderer->destroy();
 	resourceManager->Dealloc();
-	delete resourceManager;
 	delete uiManager;
 
 	logger->log("Exiting application");

@@ -8,10 +8,10 @@ Material::Material(
 	std::string textureName,
 	std::vector<std::pair<std::any /* DEFAULT VALUE */, std::string /* NAME */>> customUniforms)
 {
-	shader = resourceManager->GetShader(shaderName);
+	shader = ResourceManager::getInstance().GetShader(shaderName);
 	this->shaderName = shaderName;
 
-	texture = resourceManager->GetTexture(textureName);
+	texture = ResourceManager::getInstance().GetTexture(textureName);
 	this->textureName = textureName;
 
 	this->customUniforms = customUniforms;
@@ -52,8 +52,8 @@ void Material::Bind(mat4x4f viewMatrix, mat4x4f projectionMatrix, mat4x4f modelM
 
 void Material::Reload()
 {
-	shader = resourceManager->GetShader(shaderName);
-	texture = resourceManager->GetTexture(textureName);
+	shader = ResourceManager::getInstance().GetShader(shaderName);
+	texture = ResourceManager::getInstance().GetTexture(textureName);
 
 	for (auto& mesh : meshesThatUseThisMaterial)
 		Renderer::getInstance().GetMesh(mesh)->UpdateMesh();

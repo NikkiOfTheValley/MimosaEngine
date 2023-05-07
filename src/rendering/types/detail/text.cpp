@@ -25,8 +25,8 @@ Text::Text(std::string text, vec2 pos, int scale)
 		vec2* screenDim = Renderer::getInstance().screenDim;
 		poly.position = vec2(pos.data[0] + ((float)(i * 8 * scale) / screenDim->data[0]), pos.data[1] * screenDim->data[1]);
 		
-		poly.shader = resourceManager->GetShader("flatShader");
-		poly.texture = resourceManager->GetTexture("textTexture");
+		poly.shader = ResourceManager::getInstance().GetShader("flatShader");
+		poly.texture = ResourceManager::getInstance().GetTexture("textTexture");
 		poly.posIsNDC = true;
 		
 		poly.InitBuffers();
@@ -68,8 +68,8 @@ void Text::Update()
 		vec2* screenDim = Renderer::getInstance().screenDim;
 		poly.position = vec2(pos.data[0] + ((float)(i * 8 * scale) / screenDim->data[0]), pos.data[1] * screenDim->data[1]);
 
-		poly.shader = resourceManager->GetShader("flatShader");
-		poly.texture = resourceManager->GetTexture("textTexture");
+		poly.shader = ResourceManager::getInstance().GetShader("flatShader");
+		poly.texture = ResourceManager::getInstance().GetTexture("textTexture");
 		poly.posIsNDC = true;
 
 		poly.InitBuffers();
@@ -110,8 +110,8 @@ void Text::UpdateText(std::string newText)
 		vec2* screenDim = Renderer::getInstance().screenDim;
 		poly.position = vec2(pos.data[0] + ((float)(i * 8 * scale) / screenDim->data[0]), pos.data[1] * screenDim->data[1]);
 
-		poly.shader = resourceManager->GetShader("flatShader");
-		poly.texture = resourceManager->GetTexture("textTexture");
+		poly.shader = ResourceManager::getInstance().GetShader("flatShader");
+		poly.texture = ResourceManager::getInstance().GetTexture("textTexture");
 		poly.posIsNDC = true;
 
 		poly.InitBuffers();

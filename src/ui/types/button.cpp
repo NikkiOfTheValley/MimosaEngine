@@ -27,8 +27,8 @@ Button::Button(std::string str, vec2 pos, vec2 dim, int textScale, std::function
 		vert2d{ dim.data[0], dim.data[1], 1.f, 1.f },
 		vert2d{ 0.f,         0.f,         0.f, 0.f } };
 	poly->position = pos;
-	poly->shader = resourceManager->GetShader("flatShader");
-	poly->texture = resourceManager->GetTexture("buttonBackground");
+	poly->shader = ResourceManager::getInstance().GetShader("flatShader");
+	poly->texture = ResourceManager::getInstance().GetTexture("buttonBackground");
 	poly->uvIsNDC = true;
 	poly->vertIsNDC = true;
 	poly->posIsNDC = true;
@@ -88,8 +88,8 @@ void Button::Update()
 		vert2d{ dim.data[0], dim.data[1], 1.f, 1.f },
 		vert2d{ 0.f,         0.f,         0.f, 0.f } };
 	poly->position = pos;
-	poly->shader = resourceManager->GetShader("flatShader");
-	poly->texture = resourceManager->GetTexture("buttonBackground");
+	poly->shader = ResourceManager::getInstance().GetShader("flatShader");
+	poly->texture = ResourceManager::getInstance().GetTexture("buttonBackground");
 	poly->uvIsNDC = true;
 	poly->vertIsNDC = true;
 	poly->posIsNDC = true;
@@ -99,7 +99,7 @@ void Button::Update()
 		mousePos.data[1] / screenDim->data[1] > pos.data[1] && mousePos.data[1] / screenDim->data[1] < pos.data[1] + dim.data[1])
 	{
 		// Highlight the button
-		poly->texture = resourceManager->GetTexture("buttonBackgroundHighlighted");
+		poly->texture = ResourceManager::getInstance().GetTexture("buttonBackgroundHighlighted");
 
 		// Check if the button has been pressed
 		if (lmbPressed)

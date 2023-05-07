@@ -4,10 +4,6 @@
 class Shader;
 class Texture;
 class vec2;
-class UIManager;
-class ResourceManager;
-
-extern ResourceManager* resourceManager;
 
 extern vec2 mousePos;
 extern bool lmbPressed;

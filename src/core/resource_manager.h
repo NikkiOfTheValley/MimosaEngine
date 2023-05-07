@@ -3,9 +3,18 @@
 #include "../rendering/types/shader.h"
 #include <unordered_map>
 
+// The ResourceManager is a Singleton because more than one thing accesses it while also needing global state
+
 class ResourceManager
 {
 public:
+	// Should be thread-safe, magic statics (also known as "dynamic initialization and destruction with concurrency") were implemented in VS 2015
+	static ResourceManager& getInstance()
+	{
+		static ResourceManager instance;
+		return instance;
+	}
+
 	void LoadTexture(std::string path, bool isRGBA, bool useNearestNeighbor, std::string name);
 	void LoadShader(std::string vertPath, std::string fragPath, std::string name);
 

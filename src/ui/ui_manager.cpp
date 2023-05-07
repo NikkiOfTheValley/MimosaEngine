@@ -32,7 +32,7 @@ void UIManager::CreateImageElement(Texture* tex, bool isFullscreen, vec2 pos, ve
 			vert2d{ 0.f,         0.f,         0.f, 0.f } };
 	}
 	poly->position = pos;
-	poly->shader = resourceManager->GetShader("flatShader");
+	poly->shader = ResourceManager::getInstance().GetShader("flatShader");
 	poly->texture = tex;
 	poly->uvIsNDC = true;
 	poly->vertIsNDC = true;
