@@ -53,6 +53,9 @@ public:
 	*/
 	std::string serialize(std::any input);
 
+	Logger(Logger const&) = delete;
+	void operator=(Logger const&) = delete;
+
 private:
 	std::string* m_log;
 };
