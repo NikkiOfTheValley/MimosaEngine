@@ -10,6 +10,8 @@ class Texture
 public:
 	Texture(std::string path, bool isRGBA, bool useNearestNeighbor);
 
+	Texture(unsigned char* data, int width, int height, bool isRGBA, bool useNearestNeighbor);
+
 	// Use this texture
 	void Bind(int id);
 

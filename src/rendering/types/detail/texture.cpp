@@ -41,6 +41,42 @@ Texture::Texture(std::string path, bool isRGBA, bool useNearestNeighbor)
 	stbi_image_free(data);
 }
 
+Texture::Texture(unsigned char* data, int width, int height, bool isRGBA, bool useNearestNeighbor)
+{
+	this->isRGBA = isRGBA;
+	this->path = "tex:" + std::to_string(rand());
+	this->useNearestNeighbor = useNearestNeighbor;
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	// Set the texture wrapping/filtering options on the currently bound texture object
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, useNearestNeighbor ? GL_NEAREST : GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, useNearestNeighbor ? GL_NEAREST : GL_LINEAR);
+
+
+	// Generate the texture
+	if (data)
+	{
+		// Check if the texture has an alpha channel. If so, tell OpenGL that it does
+		if (isRGBA)
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		if (!isRGBA)
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+		glGenerateMipmap(GL_TEXTURE_2D);
+		w = width;
+		h = height;
+	}
+	else
+	{
+		Logger::getInstance().err("Failed to generate texture " + path);
+	}
+	stbi_image_free(data);
+}
+
 // Use this texture
 void Texture::Bind(int id)
 {
