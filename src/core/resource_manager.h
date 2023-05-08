@@ -27,7 +27,12 @@ public:
 	// Deallocates all shaders and textures, this must be called before the ResourceManager goes out of scope
 	void Dealloc();
 
+	ResourceManager(ResourceManager const&) = delete;
+	void operator=(ResourceManager const&) = delete;
+
 private:
+	ResourceManager() {};
+
 	std::vector<Texture*> textures;
 	std::unordered_map<std::string, size_t> nameToTexIndex;
 
