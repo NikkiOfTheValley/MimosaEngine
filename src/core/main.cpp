@@ -11,6 +11,7 @@
 #include "../ui/ui_manager.h"
 #include "../rendering/types/camera.h"
 #include "material_manager.h"
+#include "../rendering/texture_manager.h"
 
 // - Global variables -
 
@@ -48,6 +49,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	logger->log(NAME_STR + " " + VERSION_STR);
 
+	TextureManager::getInstance().Init();
 	resourceManager = &ResourceManager::getInstance();
 	uiManager = new UIManager();
 
@@ -79,6 +81,23 @@ int main(int /*argc*/, char* /*argv[]*/)
 	resourceManager->LoadTexture("assets/example2.png", true, true, "exampleImage2");
 	resourceManager->LoadShader("assets/example.vert", "assets/example.frag", "exampleShader");
 
+
+
+	Image* img = new Image("assets/font.png", true);
+
+	uint32_t* data = new uint32_t[16 * 16];
+
+	std::memset(data, 0, 16 * 16 * sizeof(uint32_t));
+
+
+	Image* dest = new Image(data, 16, 16, true);
+
+	img->Blit(dest, 16, 0, 16, 8, 0, 0);
+
+	Texture* tex = new Texture(dest, true);
+
+
+
 	// -- Create materials --
 
 	materialManager.CreateMaterial("exampleMaterial", "exampleShader", "exampleImage2");
@@ -97,7 +116,9 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	uiManager->CreateTextElement("Static Example Text", "example_static", vec2{ 0.05f, 0.15f }, 4);
 
-	uiManager->CreateImageElement(resourceManager->GetTexture("exampleImage"), false, vec2{ 0.25f, 0.1f }, vec2{ 0.25f, 0.25f });
+	//uiManager->CreateImageElement(resourceManager->GetTexture("exampleImage"), false, vec2{ 0.25f, 0.1f }, vec2{ 0.25f, 0.25f });
+
+	uiManager->CreateImageElement(tex, false, vec2{ 0.25f, 0.2f }, vec2{ tex->w / renderer->screenDim->data[0], tex->h / renderer->screenDim->data[1] });
 
 	uiManager->CreateButtonElement("Example Button", vec2{ 0.41f, 0.36f }, vec2{ 0.38f, 0.08f }, 4,
 		[&]() {
@@ -116,24 +137,26 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// We have to select a UI before entering the render loop
 	uiManager->SelectUI("example");
 
-	const int numTests = 10;
-	const int spacing = 100;
+	//const int numTests = 10;
+	//const int spacing = 100;
 
-	for (int i = 0; i < numTests; i++)
-	{
-		uiManager->NewUI("test_" + std::to_string(i));
-		uiManager->SelectUI("test_" + std::to_string(i));
+	//for (int i = 0; i < numTests; i++)
+	//{
+	//	uiManager->NewUI("test_" + std::to_string(i));
+	//	uiManager->SelectUI("test_" + std::to_string(i));
 
-		int numElements = (i + 1) * spacing;
+	//	int numElements = (i + 1) * spacing;
 
-		for (int k = 0; k < numElements; k++)
-			uiManager->CreateTextElement("AAAAAAAAAAAA", "elem_" + std::to_string((i * spacing) + k), vec2{ 0.5f, 0.5f }, 4);
-	}
+	//	for (int k = 0; k < numElements; k++)
+	//		uiManager->CreateTextElement("AAAAAAAAAAAA", "elem_" + std::to_string((i * spacing) + k), vec2{ 0.5f, 0.5f }, 4);
 
-	int curTest = 0;
+	//	uiManager->CreateTextElement("numElements: " + std::to_string(numElements), "elem_0_" + std::to_string(i), vec2{0.5f, 0.8f}, 4);
+	//}
 
-	// We have to select a UI before entering the render loop
-	uiManager->SelectUI("example");
+	//int curTest = 0;
+
+	//// We have to select a UI before entering the render loop
+	//uiManager->SelectUI("example");
 
 	inUI = true;
 
@@ -156,7 +179,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 	cam.pos = vec3{ 0, 0, 0 };
 	
 	bool lastStateOfF2 = false;
-	bool lastStateOfF3 = false;
+	//bool lastStateOfF3 = false;
 
 	// -- Render loop --
 
@@ -203,15 +226,19 @@ int main(int /*argc*/, char* /*argv[]*/)
 			enableFPSLimiter = !enableFPSLimiter;
 		lastStateOfF2 = glfwGetKey(renderer->window, GLFW_KEY_F2) == GLFW_PRESS;
 
-		if (lastStateOfF3 == false && glfwGetKey(renderer->window, GLFW_KEY_F3) == GLFW_PRESS)
-		{
-			uiManager->SelectUI("test_" + std::to_string(curTest));
-			curTest++;
+		//if (lastStateOfF3 == false && glfwGetKey(renderer->window, GLFW_KEY_F3) == GLFW_PRESS)
+		//{
+		//	uiManager->SelectUI("test_" + std::to_string(curTest));
 
-			if (curTest == numTests)
-				curTest = 0;
-		}
-		lastStateOfF3 = glfwGetKey(renderer->window, GLFW_KEY_F3) == GLFW_PRESS;
+		//	int numElements = (curTest + 1) * spacing;
+		//	logger->log("numElements: " + std::to_string(numElements));
+
+		//	curTest++;
+
+		//	if (curTest == numTests)
+		//		curTest = 0;
+		//}
+		//lastStateOfF3 = glfwGetKey(renderer->window, GLFW_KEY_F3) == GLFW_PRESS;
 
 		if (glfwGetKey(renderer->window, GLFW_KEY_F4) == GLFW_PRESS)
 			displayUI = !displayUI;
@@ -230,7 +257,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 		auto endOfFrame = steady_clock::now();
 		deltaTime = ((double)duration_cast<microseconds>(endOfFrame - startOfFrame).count() * 0.000001);
 		frameTime = deltaTime;
-		if (enableFPSLimiter)
+		if (enableFPSLimiter && (1.f / (float)setFPS) > frameTime)
 			deltaTime += (1.f / (float)setFPS) - frameTime;
 
 		auto nextFrame = duration_cast<steady_clock::duration>(duration<double>((1.f / (float)setFPS) - frameTime));

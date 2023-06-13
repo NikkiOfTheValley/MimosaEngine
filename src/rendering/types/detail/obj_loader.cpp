@@ -129,7 +129,7 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 			
 			for (auto& elemAsString : lineSplitBySpaces)
 			{
-				// Ignore the "f" at the beginning as it isn't face data
+				// Ignore the "f" at the beginning, as it isn't data
 				if (elemAsString == "f")
 					continue;
 

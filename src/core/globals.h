@@ -19,3 +19,5 @@ const float epsilon = 0.005f;
 const float clearColorR = 0.2f;
 const float clearColorG = 0.3f;
 const float clearColorB = 0.3f;
+
+const size_t maxPhysObjects = 256;

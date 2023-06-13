@@ -1,4 +1,5 @@
 #include "../texture.h"
+#include "../../texture_manager.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -41,7 +42,7 @@ Texture::Texture(std::string path, bool isRGBA, bool useNearestNeighbor)
 	stbi_image_free(data);
 }
 
-Texture::Texture(unsigned char* data, int width, int height, bool isRGBA, bool useNearestNeighbor)
+Texture::Texture(Image* image, bool useNearestNeighbor)
 {
 	this->isRGBA = isRGBA;
 	this->path = "tex:" + std::to_string(rand());
@@ -58,23 +59,28 @@ Texture::Texture(unsigned char* data, int width, int height, bool isRGBA, bool u
 
 
 	// Generate the texture
-	if (data)
+	if (image->data)
 	{
-		// Check if the texture has an alpha channel. If so, tell OpenGL that it does
-		if (isRGBA)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		if (!isRGBA)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		// Check if the image has an alpha channel. If so, tell OpenGL that it does
+		if (image->IsRGBA())
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image->data);
+		else
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image->data);
 
 		glGenerateMipmap(GL_TEXTURE_2D);
-		w = width;
-		h = height;
+		w = image->w;
+		h = image->h;
 	}
 	else
 	{
-		Logger::getInstance().err("Failed to generate texture " + path);
+		Logger::getInstance().err("Failed to generate texture " + path + " from image");
 	}
-	stbi_image_free(data);
+}
+
+Texture::Texture(std::pair<vec2, vec2> /*atlasLoc*/)
+{
+	//w = abs(atlasLoc.first.data[0] - atlasLoc.second.data[0]) * TextureManager::getInstance().GetAtlasDimensions().data[0];
+	//h = abs(atlasLoc.first.data[1] - atlasLoc.second.data[1]) * TextureManager::getInstance().GetAtlasDimensions().data[1];
 }
 
 // Use this texture

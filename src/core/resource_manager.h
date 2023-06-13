@@ -18,7 +18,7 @@ public:
 	void LoadTexture(std::string path, bool isRGBA, bool useNearestNeighbor, std::string name);
 	void LoadShader(std::string vertPath, std::string fragPath, std::string name);
 
-	Texture* GetTexture(std::string name);
+	Texture*  GetTexture(std::string name);
 	Shader* GetShader(std::string name);
 
 	void ReloadTextures();

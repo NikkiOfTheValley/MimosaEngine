@@ -1,8 +1,12 @@
 #include "resource_manager.h"
+#include "../rendering/texture_manager.h"
 
 void ResourceManager::LoadTexture(std::string path, bool isRGBA, bool useNearestNeighbor, std::string name)
 {
 	Logger::getInstance().log("Loading texture " + name + " (at " + path + ")");
+
+	//TextureManager::getInstance().AddTexture(path, name, isRGBA, useNearestNeighbor);
+
 	nameToTexIndex[name] = textures.size();
 	textures.push_back(new Texture(path, isRGBA, useNearestNeighbor));
 }
@@ -16,6 +20,9 @@ void ResourceManager::LoadShader(std::string vertPath, std::string fragPath, std
 
 Texture* ResourceManager::GetTexture(std::string name)
 {
+	//TextureManager::getInstance().GetTextureLocation(name);
+
+
 	if (!nameToTexIndex.contains(name))
 	{
 		Logger::getInstance().err("No texture exists named " + name);

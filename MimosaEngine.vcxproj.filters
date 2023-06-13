@@ -2088,19 +2088,19 @@
     <ClInclude Include="src\rendering\types\obj_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\physics\phys_state.h">
+    <ClInclude Include="src\physics\types\phys_state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\physics\phys_obj.h">
+    <ClInclude Include="src\physics\types\phys_obj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\physics\constraint.h">
+    <ClInclude Include="src\physics\types\constraint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\physics\ode_solver.h">
+    <ClInclude Include="src\physics\types\ode_solver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\physics\sle_solver.h">
+    <ClInclude Include="src\physics\types\sle_solver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering\types\material.h">
@@ -2119,6 +2119,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering\texture_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\types\image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\types\large_matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -2204,13 +2210,19 @@
     <ClCompile Include="src\rendering\post_processing_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\physics\detail\phys_obj.cpp">
+    <ClCompile Include="src\physics\types\detail\phys_obj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\physics\constraints\constraint.cpp">
+    <ClCompile Include="src\physics\types\constraints\constraint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\physics\detail\physics_manager.cpp">
+    <ClCompile Include="src\physics\physics_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\types\detail\image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\texture_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)src\vendor;$(ProjectDir)src\vendor\asio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -110,7 +110,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)src\vendor;$(ProjectDir)src\vendor\asio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -130,7 +130,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)src\vendor;$(ProjectDir)src\vendor\asio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -175,18 +175,21 @@
     <ClInclude Include="src\networking\m_net\device_interface.h" />
     <ClInclude Include="src\networking\m_net\message.h" />
     <ClInclude Include="src\networking\m_net\tsqueue.h" />
-    <ClInclude Include="src\physics\constraint.h" />
-    <ClInclude Include="src\physics\ode_solver.h" />
+    <ClInclude Include="src\physics\types\constraint.h" />
+    <ClInclude Include="src\physics\types\large_matrix.h" />
+    <ClInclude Include="src\physics\types\large_vector.h" />
+    <ClInclude Include="src\physics\types\ode_solver.h" />
     <ClInclude Include="src\physics\physics_manager.h" />
-    <ClInclude Include="src\physics\phys_obj.h" />
-    <ClInclude Include="src\physics\sle_solver.h" />
-    <ClInclude Include="src\physics\phys_state.h" />
+    <ClInclude Include="src\physics\types\phys_obj.h" />
+    <ClInclude Include="src\physics\types\sle_solver.h" />
+    <ClInclude Include="src\physics\types\phys_state.h" />
     <ClInclude Include="src\rendering\post_processing_manager.h" />
     <ClInclude Include="src\rendering\renderer.h" />
     <ClInclude Include="src\rendering\texture_manager.h" />
     <ClInclude Include="src\rendering\types\camera.h" />
     <ClInclude Include="src\rendering\types\conversion.h" />
     <ClInclude Include="src\rendering\types\dynamic_texture.h" />
+    <ClInclude Include="src\rendering\types\image.h" />
     <ClInclude Include="src\rendering\types\material.h" />
     <ClInclude Include="src\rendering\types\obj_loader.h" />
     <ClInclude Include="src\rendering\types\vec2.h" />
@@ -877,13 +880,15 @@
     <ClCompile Include="src\networking\m_net\connection.cpp" />
     <ClCompile Include="src\networking\m_net\device_interface.cpp" />
     <ClCompile Include="src\networking\m_net\message.cpp" />
-    <ClCompile Include="src\physics\constraints\constraint.cpp" />
-    <ClCompile Include="src\physics\detail\physics_manager.cpp" />
-    <ClCompile Include="src\physics\detail\phys_obj.cpp" />
+    <ClCompile Include="src\physics\types\constraints\constraint.cpp" />
+    <ClCompile Include="src\physics\physics_manager.cpp" />
+    <ClCompile Include="src\physics\types\detail\phys_obj.cpp" />
     <ClCompile Include="src\rendering\post_processing_manager.cpp" />
     <ClCompile Include="src\rendering\renderer.cpp" />
+    <ClCompile Include="src\rendering\texture_manager.cpp" />
     <ClCompile Include="src\rendering\types\detail\camera.cpp" />
     <ClCompile Include="src\rendering\types\detail\conversion.cpp" />
+    <ClCompile Include="src\rendering\types\detail\image.cpp" />
     <ClCompile Include="src\rendering\types\detail\material.cpp" />
     <ClCompile Include="src\rendering\types\detail\obj_loader.cpp" />
     <ClCompile Include="src\rendering\types\detail\vec2.cpp" />
