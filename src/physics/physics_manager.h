@@ -1,10 +1,12 @@
 #pragma once
-#include "phys_state.h"
+#include "types/phys_state.h"
 
 class PhysicsManager
 {
 public:
 	void Init();
+
+	void Step(double deltaTime);
 
 	void CreateObject(std::string name, vec3 pos, vec3 rot, vec3 vel = vec3(), vec3 angVel = vec3());
 
