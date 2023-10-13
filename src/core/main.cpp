@@ -12,6 +12,7 @@
 #include "../rendering/types/camera.h"
 #include "material_manager.h"
 #include "../rendering/texture_manager.h"
+#include "../physics/physics_manager.h"
 #include "../rendering/types/obj_loader.h"
 #include "accurate_timer.h"
 
@@ -38,6 +39,7 @@ double fixedTime = 0; // The amount of time since program startup in millisecond
 UIManager* uiManager;
 MaterialManager materialManager;
 ResourceManager* resourceManager;
+PhysicsManager* physicsManager;
 Logger* logger;
 bool enableFPSLimiter = true;
 bool displayUI = true;
@@ -49,11 +51,13 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	logger = &Logger::getInstance();
 
+	logger->log("MimosaEngine " + ENG_VERSION_STR);
 	logger->log(NAME_STR + " " + VERSION_STR);
 
 	TextureManager::getInstance().Init();
 	resourceManager = &ResourceManager::getInstance();
 	uiManager = new UIManager();
+	physicsManager = new PhysicsManager();
 
 	InputHandler inputHandler;
 
@@ -61,7 +65,6 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	if (!renderer->init(800, 600, inputHandler.mouse_callback, inputHandler.key_callback))
 		return -1;
-
 
 	// -- Load assets --
 
@@ -83,7 +86,8 @@ int main(int /*argc*/, char* /*argv[]*/)
 	resourceManager->LoadTexture("assets/example2.png", true, true, "exampleImage2");
 	resourceManager->LoadShader("assets/example.vert", "assets/example.frag", "exampleShader");
 
-
+	resourceManager->LoadShader("assets/examplePostProcessingShader.vert", "assets/examplePostProcessingShader.frag", "examplePostProcessingShader");
+	renderer->AddNewPostProcessingShader(resourceManager->GetShader("examplePostProcessingShader"));
 
 	Image* img = new Image("assets/font.png", true);
 
@@ -97,7 +101,6 @@ int main(int /*argc*/, char* /*argv[]*/)
 	img->Blit(dest, 16, 0, 16, 8, 0, 0);
 
 	Texture* tex = new Texture(dest, true);
-
 
 
 	// -- Create materials --
@@ -134,7 +137,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 		[&]() {
 			std::string text = uiManager->GetTextBoxContents("text_box");
 
-			logger->log(text);
+			uiManager->UpdateTextElement("example", text);
 		});
 
 	// We have to select a UI before entering the render loop
@@ -155,6 +158,24 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// data is never sent to the GPU
 	renderer->UpdateMesh("exampleMesh");
 	
+
+	// -- Create physics objects --
+
+	Mesh* cubeMesh = new Mesh(obj_loader::LoadOBJ("assets/example.obj"), materialManager.GetMaterial("exampleMaterial"));
+
+	CollisionMesh collisionMesh;
+	collisionMesh = *cubeMesh;
+
+	// We can just `delete` `cubeMesh`, as without calling `UpdateMesh()`, the data is never sent to the GPU,
+	// so all the data is purely in RAM, so `delete` does actually delete all data.
+	delete cubeMesh;
+
+	CollisionConstraint* constraint = new CollisionConstraint();
+	constraint->collisionMesh = collisionMesh;
+
+	physicsManager->CreateObject("ground", { 0.f, 0.f, 0.f }, { 0.f, 0.f, 0.f }, 4, constraint, {}, {0.f, 0.f, 0.f});
+
+
 	// -- Create camera --
 
 	Camera cam;
@@ -162,6 +183,11 @@ int main(int /*argc*/, char* /*argv[]*/)
 	cam.pos = vec3{ 0, 0, 0 };
 	
 	bool lastStateOfF2 = false;
+
+
+	// -- Start physics simulation --
+	physicsManager->Start();
+
 
 	// -- Render loop --
 
@@ -234,7 +260,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 		FPS = 1 / deltaTime;
 		if ((int)counter % setFPS == 0)
 			logger->log("deltaTime: " + std::to_string(deltaTime * 1000) + "ms | frameTime: " + std::to_string(frameTime * 1000) + "ms | FPS: " + std::to_string(((int)ceil(FPS) + (int)ceil(prevFPS)) / 2));
-
+		
 
 		prevFPS = FPS;
 		counter++;

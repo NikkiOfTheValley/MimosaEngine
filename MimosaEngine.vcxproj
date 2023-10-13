@@ -98,6 +98,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)src\vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <StackReserveSize>41943040</StackReserveSize>
+      <StackCommitSize>
+      </StackCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -121,6 +124,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)src\vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <StackReserveSize>41943040</StackReserveSize>
+      <StackCommitSize>
+      </StackCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -139,6 +145,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)src\vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <StackReserveSize>41943040</StackReserveSize>
+      <StackCommitSize>
+      </StackCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -162,9 +171,13 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)src\vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <StackReserveSize>41943040</StackReserveSize>
+      <StackCommitSize>
+      </StackCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\accurate_timer.h" />
     <ClInclude Include="src\core\globals.h" />
     <ClInclude Include="src\core\input_handler.h" />
     <ClInclude Include="src\core\log.h" />
@@ -175,9 +188,14 @@
     <ClInclude Include="src\networking\m_net\device_interface.h" />
     <ClInclude Include="src\networking\m_net\message.h" />
     <ClInclude Include="src\networking\m_net\tsqueue.h" />
+    <ClInclude Include="src\physics\phys_globals.h" />
+    <ClInclude Include="src\physics\types\assert.h" />
+    <ClInclude Include="src\physics\types\collision_mesh.h" />
     <ClInclude Include="src\physics\types\constraint.h" />
+    <ClInclude Include="src\physics\types\constraints\collision_constraint.h" />
     <ClInclude Include="src\physics\types\large_matrix.h" />
     <ClInclude Include="src\physics\types\large_vector.h" />
+    <ClInclude Include="src\physics\types\mlcp_solver.h" />
     <ClInclude Include="src\physics\types\ode_solver.h" />
     <ClInclude Include="src\physics\physics_manager.h" />
     <ClInclude Include="src\physics\types\phys_obj.h" />
@@ -872,6 +890,7 @@
     <ClInclude Include="src\vendor\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\accurate_timer.cpp" />
     <ClCompile Include="src\core\input_handler.cpp" />
     <ClCompile Include="src\core\log.cpp" />
     <ClCompile Include="src\core\main.cpp" />
@@ -880,9 +899,14 @@
     <ClCompile Include="src\networking\m_net\connection.cpp" />
     <ClCompile Include="src\networking\m_net\device_interface.cpp" />
     <ClCompile Include="src\networking\m_net\message.cpp" />
+    <ClCompile Include="src\physics\types\constraints\collision_constraint.cpp" />
     <ClCompile Include="src\physics\types\constraints\constraint.cpp" />
     <ClCompile Include="src\physics\physics_manager.cpp" />
+    <ClCompile Include="src\physics\types\detail\assert.cpp" />
+    <ClCompile Include="src\physics\types\detail\collision_mesh.cpp" />
+    <ClCompile Include="src\physics\types\detail\ode_solver.cpp" />
     <ClCompile Include="src\physics\types\detail\phys_obj.cpp" />
+    <ClCompile Include="src\physics\types\detail\sle_solver.cpp" />
     <ClCompile Include="src\rendering\post_processing_manager.cpp" />
     <ClCompile Include="src\rendering\renderer.cpp" />
     <ClCompile Include="src\rendering\texture_manager.cpp" />

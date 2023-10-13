@@ -1,21 +1,34 @@
 #pragma once
 #include "types/phys_state.h"
+#include "phys_globals.h"
+#include <thread>
 
 class PhysicsManager
 {
 public:
 	void Init();
 
-	void Step(double deltaTime);
+	// Starts the simulation
+	void Start();
 
-	void CreateObject(std::string name, vec3 pos, vec3 rot, vec3 vel = vec3(), vec3 angVel = vec3());
+	void CreateObject(std::string name, vec3 pos, vec3 rot, float mass, CollisionConstraint* collisionConstraint, std::vector<Constraint*> constraints = {}, vec3 vel = vec3(), vec3 angVel = vec3(), bool hasGravity = true, bool isPinned = false);
 
-	PhysObj* GetObj(std::string name);
+	PhysObj* GetPhysObject(std::string name);
 
 	void ApplyForce(std::string name, vec3 force);
 
-	void ApplyAngularForce(std::string name, vec3 angForce);
+	void ApplyTorque(std::string name, vec3 torque);
 
+	bool runPhys = true;
 private:
+	void Step(double deltaTime);
+
 	PhysState state;
+	std::thread physThread;
+
+	MLCPSolver mlcpSolver;
+	SLESolver sleSolver;
+	ODESolver odeSolver;
+
+	unsigned int timer = 0;
 };
