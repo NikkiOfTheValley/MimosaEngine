@@ -79,6 +79,7 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 	>>> faces;
 
 	bool hasNormals = false;
+	bool hasUVs = false;
 
 	for (auto& line : lines)
 	{
@@ -112,6 +113,8 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 			uv.data[0] = lineSplitBySpacesFloat[1];
 			uv.data[1] = lineSplitBySpacesFloat[2];
 			UVs.push_back(uv);
+
+			hasUVs = true;
 		}
 		else if (lineSplitBySpaces[0] == "vn")
 		{
@@ -136,22 +139,12 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 				std::tuple<size_t, size_t, size_t> elem;
 
 				std::vector<std::string> elementsAsStrings = split(elemAsString, '/');
-				if (hasNormals)
-				{
-					elem = std::make_tuple(
-						std::stoi(elementsAsStrings[0]),
-						std::stoi(elementsAsStrings[1]),
-						std::stoi(elementsAsStrings[2])
-					);
-				}
-				else
-				{
-					elem = std::make_tuple(
-						std::stoi(elementsAsStrings[0]),
-						std::stoi(elementsAsStrings[1]),
-						SIZE_MAX
-					);
-				}
+
+				elem = std::make_tuple(
+					std::stoi(elementsAsStrings[0]),
+					hasUVs ? std::stoi(elementsAsStrings[1]) : SIZE_MAX,
+					hasNormals ? std::stoi(elementsAsStrings[2]) : SIZE_MAX
+				);
 
 				face.push_back(elem);
 			}
@@ -163,6 +156,8 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 	if (!hasNormals)
 		logger->warn("OBJ file " + path + " doesn't have normals! This could cause broken rendering!");
 
+	if (!hasUVs)
+		logger->warn("OBJ file " + path + " doesn't have UVs! This could cause broken rendering!");
 
 	// Resolve faces into vertices
 
@@ -181,14 +176,15 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 			size_t normalIndex = std::get<2>(v);
 
 			vec3 normal = normalIndex == SIZE_MAX ? vec3() : normals[normalIndex - 1];
+			vec2 uv = uvIndex == SIZE_MAX ? vec2() : UVs[uvIndex - 1];
 
 			vert faceVert{};
 			faceVert.x = vertPositions[vertexIndex - 1].data[0];
 			faceVert.y = vertPositions[vertexIndex - 1].data[1];
 			faceVert.z = vertPositions[vertexIndex - 1].data[2];
 
-			faceVert.u = UVs[uvIndex - 1].data[0];
-			faceVert.v = UVs[uvIndex - 1].data[1];
+			faceVert.u = uv.data[0];
+			faceVert.v = uv.data[1];
 
 			faceVert.normX = normal.data[0];
 			faceVert.normY = normal.data[1];
