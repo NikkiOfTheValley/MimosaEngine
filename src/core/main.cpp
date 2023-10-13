@@ -140,28 +140,8 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// We have to select a UI before entering the render loop
 	uiManager->SelectUI("example");
 
-	//const int numTests = 10;
-	//const int spacing = 100;
-
-	//for (int i = 0; i < numTests; i++)
-	//{
-	//	uiManager->NewUI("test_" + std::to_string(i));
-	//	uiManager->SelectUI("test_" + std::to_string(i));
-
-	//	int numElements = (i + 1) * spacing;
-
-	//	for (int k = 0; k < numElements; k++)
-	//		uiManager->CreateTextElement("AAAAAAAAAAAA", "elem_" + std::to_string((i * spacing) + k), vec2{ 0.5f, 0.5f }, 4);
-
-	//	uiManager->CreateTextElement("numElements: " + std::to_string(numElements), "elem_0_" + std::to_string(i), vec2{0.5f, 0.8f}, 4);
-	//}
-
-	//int curTest = 0;
-
-	//// We have to select a UI before entering the render loop
-	//uiManager->SelectUI("example");
-
 	inUI = true;
+
 
 	// -- Create meshes --
 
@@ -182,7 +162,6 @@ int main(int /*argc*/, char* /*argv[]*/)
 	cam.pos = vec3{ 0, 0, 0 };
 	
 	bool lastStateOfF2 = false;
-	//bool lastStateOfF3 = false;
 
 	// -- Render loop --
 
@@ -228,20 +207,6 @@ int main(int /*argc*/, char* /*argv[]*/)
 		if (lastStateOfF2 == false && glfwGetKey(renderer->window, GLFW_KEY_F2) == GLFW_PRESS)
 			enableFPSLimiter = !enableFPSLimiter;
 		lastStateOfF2 = glfwGetKey(renderer->window, GLFW_KEY_F2) == GLFW_PRESS;
-
-		//if (lastStateOfF3 == false && glfwGetKey(renderer->window, GLFW_KEY_F3) == GLFW_PRESS)
-		//{
-		//	uiManager->SelectUI("test_" + std::to_string(curTest));
-
-		//	int numElements = (curTest + 1) * spacing;
-		//	logger->log("numElements: " + std::to_string(numElements));
-
-		//	curTest++;
-
-		//	if (curTest == numTests)
-		//		curTest = 0;
-		//}
-		//lastStateOfF3 = glfwGetKey(renderer->window, GLFW_KEY_F3) == GLFW_PRESS;
 
 		if (glfwGetKey(renderer->window, GLFW_KEY_F4) == GLFW_PRESS)
 			displayUI = !displayUI;
