@@ -108,15 +108,20 @@ void PostProcessingManager::EndRendering()
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
 	glBlitFramebuffer(0, 0, screenWidth, screenHeight, 0, 0, screenWidth, screenHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
 
+	glBindVertexArray(framebufferVertsVAO);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, framebufferTexture);
+	std::reverse(shaders.begin(), shaders.end());
 	for (auto& shader : shaders)
 	{
 		shader->Bind();
+		shader->SetInt("framebufferSampler", 0);
+
 		// render textured quad
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, framebufferTexture);
-		glBindVertexArray(framebufferVertsVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
-		glBindVertexArray(0);
 	}
+	std::reverse(shaders.begin(), shaders.end());
+	glBindVertexArray(0);
 }
