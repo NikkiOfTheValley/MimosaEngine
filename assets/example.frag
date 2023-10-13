@@ -23,6 +23,6 @@ void main()
 	if(texColor.a < 0.1)
         discard;
 	
-	//FragColor = vec4((Normals + 1) / 2, 1);
-	FragColor = texColor;
+	FragColor = vec4((Normals + 1) / 2, 1);
+	//FragColor = texColor;
 }
