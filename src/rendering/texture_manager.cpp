@@ -139,3 +139,9 @@ vec2 TextureManager::GetAtlasDimensions()
 //{
 //
 //}
+
+// Updates the `textureAtlasTexture` DynamicTexture
+void UpdateAtlasTexture()
+{
+
+}

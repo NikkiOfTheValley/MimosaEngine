@@ -40,6 +40,9 @@ private:
 	// Check if the given texture location (in pixels) is within the bounds of the atlas
 	bool CheckInBounds(std::pair<vec2, vec2> image);
 
+	// Updates the `textureAtlasTexture` DynamicTexture
+	void UpdateAtlasTexture();
+
 	// An atlas of all used textures. Allows more than 16 textures to be in use at once
 	Image* textureAtlas;
 
