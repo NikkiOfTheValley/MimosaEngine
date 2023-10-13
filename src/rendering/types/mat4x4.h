@@ -6,6 +6,7 @@
 #include <sstream>
 
 // 4x4 matrix of floats
+// Data organization is row-major (i.e. [x][y])
 class mat4x4f
 {
 public:
