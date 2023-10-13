@@ -12,6 +12,8 @@
 #include "../rendering/types/camera.h"
 #include "material_manager.h"
 #include "../rendering/texture_manager.h"
+#include "../rendering/types/obj_loader.h"
+#include "accurate_timer.h"
 
 // - Global variables -
 
@@ -101,6 +103,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// -- Create materials --
 
 	materialManager.CreateMaterial("exampleMaterial", "exampleShader", "exampleImage2");
+
 
 	// -- Create UIs --
 
@@ -260,14 +263,13 @@ int main(int /*argc*/, char* /*argv[]*/)
 		if (enableFPSLimiter && (1.f / (float)setFPS) > frameTime)
 			deltaTime += (1.f / (float)setFPS) - frameTime;
 
-		auto nextFrame = duration_cast<steady_clock::duration>(duration<double>((1.f / (float)setFPS) - frameTime));
-
 		if (enableFPSLimiter)
-			std::this_thread::sleep_for(nextFrame);
+			BlockForNanoseconds(long long(((1.f / (double)(setFPS)) - frameTime) * 1000000000));
 
 		FPS = 1 / deltaTime;
-		if ((int)counter % 60 == 0)
+		if ((int)counter % setFPS == 0)
 			logger->log("deltaTime: " + std::to_string(deltaTime * 1000) + "ms | frameTime: " + std::to_string(frameTime * 1000) + "ms | FPS: " + std::to_string(((int)ceil(FPS) + (int)ceil(prevFPS)) / 2));
+
 
 		prevFPS = FPS;
 		counter++;
