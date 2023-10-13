@@ -104,6 +104,10 @@ std::string Logger::serialize(std::any input)
 	{
 		return std::to_string(std::any_cast<uint64_t>(input));
 	}
+	else if (type == "__int64")
+	{
+		return std::to_string(std::any_cast<int64_t>(input));
+	}
 	else if (type == "unsigned int")
 	{
 		return std::to_string(std::any_cast<uint32_t>(input));
