@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <initializer_list>
+#include <intrin.h>
 #include "assert.h"
 #include "large_matrix.h"
 
@@ -10,7 +11,8 @@
 template<size_t _size> class LargeVector
 {
 public:
-	std::array<float, _size> data;
+	// Aligned to 32 bytes so SSE instructions work
+	__declspec(align(32)) std::array<float, _size> data;
 	static const size_t size = _size;
 
 	LargeVector()
@@ -100,19 +102,43 @@ public:
 
 	template<size_t matrix_size_x, size_t matrix_size_y> LargeVector& operator*=(const LargeMatrix<matrix_size_x, matrix_size_y> rhs)
 	{
-		LargeVector<size> resultVector = *this;
+		__declspec(align(32)) LargeVector<size> resultVector = *this;
 
-		for (size_t i = 0; i < size; i++)
+		__declspec(align(32)) float zero[8] = { 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f };
+
+		for (size_t i = 0; i < size; i += 8)
 		{
-			float result = 0.f;
-			for (size_t k = 0; k < size; k++)
-				result += this->data[k] * rhs.data[i][k];
+
+			__m256 result = _mm256_load_ps(zero);
+
+			for (size_t k = 0; k < size; k += 8)
+			{
+				__m256 matData = _mm256_load_ps(&rhs.data[k][i]);
+				__m256 vectorData = _mm256_load_ps(&data[k]);
+
+				// Equivelant to result += vectorData * matData
+				_mm256_fmadd_ps(vectorData, matData, result);
+			}
 
 			for (size_t k = size - 1; k < rhs.sizeX - 1; k++)
-				result += rhs.data[k][i];
+			{
+				__m256 matData = _mm256_load_ps(&rhs.data[k][i]);
 
-			resultVector.data[i] = result;
+				result = _mm256_add_ps(result, matData);
+			}
 		}
+
+		//for (size_t i = 0; i < size; i++)
+		//{
+		//	float result = 0.f;
+		//	for (size_t k = 0; k < size; k++)
+		//		result += this->data[k] * rhs.data[i][k];
+
+		//	for (size_t k = size - 1; k < rhs.sizeX - 1; k++)
+		//		result += rhs.data[k][i];
+
+		//	resultVector.data[i] = result;
+		//}
 
 		*this = resultVector;
 		return *this;
@@ -180,6 +206,13 @@ public:
 	}
 
 	LargeVector operator*(const float rhs)
+	{
+		LargeVector<size> result = *this;
+		result *= rhs;
+		return result;
+	}
+
+	LargeVector operator*(const float rhs) const
 	{
 		LargeVector<size> result = *this;
 		result *= rhs;

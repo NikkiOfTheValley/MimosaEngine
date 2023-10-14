@@ -14,7 +14,8 @@ struct PhysState
 	// Make sure to keep track of the current object index, so objects can be added sequentially without overwriting each other
 	size_t objIndex = 0;
 	std::array<PhysObj, MAX_PHYS_OBJECTS> objects;
-	std::array<std::pair<std::array<Constraint*, MAX_CONSTRAINTS_PER_PHYS_OBJ> /* constraints */, size_t /* endConstraintIndex */>, MAX_PHYS_OBJECTS> objConstraints;
+	std::array<Constraint*, MAX_PHYS_OBJECTS * MAX_CONSTRAINTS_PER_PHYS_OBJ> objConstraints;
+
 	std::unordered_map<std::string, size_t> nameToObjIndex;
 
 	// `n` is the maximum number of objects in the scene

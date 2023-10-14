@@ -173,8 +173,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 	CollisionConstraint* constraint = new CollisionConstraint();
 	constraint->collisionMesh = collisionMesh;
 
-	physicsManager->CreateObject("ground", { 0.f, 0.f, 0.f }, { 0.f, 0.f, 0.f }, 4, constraint, {}, {0.f, 0.f, 0.f});
-
+	physicsManager->CreateObject("test", { 4.f, 0.f, 2.f }, { 0.f, 0.f, 0.f }, 4, constraint, {}, {0.f, 0.f, 0.f});
 
 	// -- Create camera --
 
@@ -240,6 +239,8 @@ int main(int /*argc*/, char* /*argv[]*/)
 		cam.Update();
 
 		renderer->GetMesh("exampleMesh")->rotation.data[1] += 0.5f * (float)deltaTime;
+
+		renderer->GetMesh("exampleMesh")->position = physicsManager->GetPhysObject("test")->GetProperties().pos;
 
 		glfwPollEvents();
 

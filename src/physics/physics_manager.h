@@ -6,7 +6,7 @@
 class PhysicsManager
 {
 public:
-	void Init();
+	PhysicsManager();
 
 	// Starts the simulation
 	void Start();

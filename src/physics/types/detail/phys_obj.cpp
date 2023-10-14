@@ -11,8 +11,8 @@ void PhysObj::Update(double fixedDeltaTime)
 phys_obj_prop PhysObj::GetProperties()
 {
 	// Just spin until the step has completed
-	while (state->isInStep)
-		__nop();
+	//while (state->isInStep)
+	//	__nop();
 
 	phys_obj_prop prop;
 	

@@ -9,8 +9,8 @@
 template<size_t _sizeX, size_t _sizeY> class LargeMatrix
 {
 public:
-
-	std::array<std::array<float, _sizeX>, _sizeY> data;
+	// Aligned to 32 bytes so SSE instructions work
+	__declspec(align(32)) std::array<std::array<float, _sizeX>, _sizeY> data;
 	static const size_t sizeX = _sizeX;
 	static const size_t sizeY = _sizeY;
 

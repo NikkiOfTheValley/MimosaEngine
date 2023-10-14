@@ -1,9 +1,10 @@
 #include "physics_manager.h"
 #include "../core/accurate_timer.h"
 
-void PhysicsManager::Init()
+PhysicsManager::PhysicsManager()
 {
-	
+	for (size_t i = 0; i < (MAX_PHYS_OBJECTS * MAX_CONSTRAINTS_PER_PHYS_OBJ) - 1; i++)
+		state.objConstraints[i] = nullptr;
 }
 
 // Starts the simulation
@@ -33,9 +34,8 @@ void PhysicsManager::Start()
 
 			if (timer == PHYS_FPS)
 			{
-				Logger::getInstance().log("deltaTime: " + std::to_string(deltaTime * 1000) + "ms | stepTime: " + std::to_string(stepTime * 1000000000) + "ns | SPS: " + std::to_string(((int)ceil(1.f / deltaTime))));
+				Logger::getInstance().log("deltaTime: " + std::to_string(deltaTime * 1000) + "ms |  stepTime: " + std::to_string(stepTime * 1000) + "ms | SPS: " + std::to_string(((int)ceil(1.f / deltaTime))));
 				timer = 0;
-				Logger::getInstance().log(GetPhysObject("ground")->GetProperties().pos);
 			}
 
 			timer++;
@@ -57,11 +57,24 @@ void PhysicsManager::Step(double fixedDeltaTime)
 	for (auto& obj : state.objects)
 		obj.Update(fixedDeltaTime);
 
+	// Calculate gravity
+	for (auto& obj : state.objects)
+		if (obj.hasGravity)
+			state.objForceVector[(obj.index * 6) + 1] = -9.8f;
+
+	state.objForceVector -= (state.objVelVector * state.objVelVector) * -DRAG_CONSTANT;
+
 	state.isInStep = false;
 }
 
 void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float mass, CollisionConstraint* collisionConstraint, std::vector<Constraint*> constraints, vec3 vel, vec3 angVel, bool hasGravity, bool isPinned)
 {
+	if (state.objIndex >= MAX_PHYS_OBJECTS)
+	{
+		Logger::getInstance().err("Failed to create PhysObj because the number of objects is >= MAX_PHYS_OBJECTS");
+		return;
+	}
+
 	PhysObj obj = PhysObj(&state, state.objIndex, hasGravity);
 
 	state.objVelVector[state.objIndex * 6] = vel.data[0];
@@ -91,21 +104,29 @@ void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float ma
 	// Setting moment of inertia here makes no sense, as that depends
 	// on where the force is being applied, which is an unknown in this function
 
-	size_t endConstraintIndex = state.objConstraints[state.objIndex].second;
 
-	// std::pair will initialize endConstraintIndex to zero on construction,
-	// so we don't need to check if it's not initialized
-	state.objConstraints[state.objIndex].first[endConstraintIndex] = collisionConstraint;
+	size_t startingIndex = state.objIndex * (MAX_CONSTRAINTS_PER_PHYS_OBJ - 1);
 
-	// Increment the endConstraintIndex, as a constraint was just added
-	state.objConstraints[state.objIndex].second++;
+	// The first constraint is always the collision constraint
+	state.objConstraints[startingIndex] = collisionConstraint;
 
-	for (auto& constraint : constraints)
+	for (auto constraint : constraints)
 	{
-		state.objConstraints[state.objIndex].first[endConstraintIndex] = constraint;
+		bool wasConstraintSet = false;
 
-		// Increment the endConstraintIndex, as a constraint was just added
-		state.objConstraints[state.objIndex].second++;
+		for (size_t i = startingIndex; i < startingIndex + MAX_CONSTRAINTS_PER_PHYS_OBJ - 1; i++)
+		{
+			// Wait until we hit a constraint that isn't set, then use that "slot" for the new constraint
+			if (!state.objConstraints[i])
+			{
+				state.objConstraints[i] = constraint;
+				wasConstraintSet = true;
+				break;
+			}
+		}
+
+		if (!wasConstraintSet)
+			Logger::getInstance().err("Failed to set constraint because the number of constraints is >= MAX_CONSTRAINTS_PER_PHYS_OBJ");
 	}
 
 	if (isPinned)
