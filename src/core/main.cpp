@@ -149,7 +149,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// -- Create meshes --
 
 	renderer->CreateNewMesh(
-		"assets/example.obj",
+		"assets/torus.obj",
 		"exampleMesh",
 		materialManager.GetMaterial("exampleMaterial"),
 		vec3{ 4.f, 0.f, 2.f });
@@ -161,19 +161,13 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	// -- Create physics objects --
 
-	Mesh* cubeMesh = new Mesh(obj_loader::LoadOBJ("assets/example.obj"), materialManager.GetMaterial("exampleMaterial"));
-
 	CollisionMesh collisionMesh;
-	collisionMesh = *cubeMesh;
-
-	// We can just `delete` `cubeMesh`, as without calling `UpdateMesh()`, the data is never sent to the GPU,
-	// so all the data is purely in RAM, so `delete` does actually delete all data.
-	delete cubeMesh;
+	collisionMesh = *renderer->GetMesh("exampleMesh");
 
 	CollisionConstraint* constraint = new CollisionConstraint();
 	constraint->collisionMesh = collisionMesh;
 
-	physicsManager->CreateObject("test", { 4.f, 0.f, 2.f }, { 0.f, 0.f, 0.f }, 4, constraint, {}, {0.f, 0.f, 0.f});
+	physicsManager->CreateObject("test", { 4.f, 0.f, 2.f }, { 0.f, 0.f, 0.f }, DENSITY_CAST_IRON, constraint);
 
 	// -- Create camera --
 

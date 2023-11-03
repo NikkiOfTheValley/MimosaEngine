@@ -11,7 +11,7 @@ public:
 	// Starts the simulation
 	void Start();
 
-	void CreateObject(std::string name, vec3 pos, vec3 rot, float mass, CollisionConstraint* collisionConstraint, std::vector<Constraint*> constraints = {}, vec3 vel = vec3(), vec3 angVel = vec3(), bool hasGravity = true, bool isPinned = false);
+	void CreateObject(std::string name, vec3 pos, vec3 rot, float density, CollisionConstraint* collisionConstraint, std::vector<Constraint*> constraints = {}, vec3 vel = vec3(), vec3 angVel = vec3(), bool hasGravity = true, bool isPinned = false);
 
 	PhysObj* GetPhysObject(std::string name);
 
@@ -22,6 +22,9 @@ public:
 	bool runPhys = true;
 private:
 	void Step(double deltaTime);
+
+	// Helper function for PhysicsManager::CreateObject(). Calculates the inertia tensor and mass for the current object.
+	void CalculatePhysicalProperties(float density, const std::vector<collision_vert> verts);
 
 	PhysState state;
 	std::thread physThread;

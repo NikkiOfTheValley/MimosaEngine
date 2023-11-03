@@ -22,17 +22,25 @@ struct PhysState
 
 	// - ODE and SLE solver data -
 
-	// A 3n by 3n diagonal matrix
+	// A 6n by 6n diagonal matrix
 	// Example matrix where `n` is 2 and all object "slots" are in use:
-	// {{m1, 0, 0, 0, 0, 0},
-	//  {0, m1, 0, 0, 0, 0},
-	//  {0, 0, I1, 0, 0, 0},
-	//  {0, 0, 0, m2, 0, 0},
-	//  {0, 0, 0, 0, m2, 0},
-	//  {0, 0, 0, 0, 0, I2}}
+	// 
+	// {{m1, 0,  0,  0,    0,    0,    0,  0,  0,  0,    0,    0},
+	//  {0,  m1, 0,  0,    0,    0,    0,  0,  0,  0,    0,    0},
+	//  {0,  0,  m1, 0,    0,    0,    0,  0,  0,  0,    0,    0},
+	//  {0,  0,  0,  I1_0, I1_1, I1_2, 0,  0,  0,  0,    0,    0},
+	//  {0,  0,  0,  I1_3, I1_4, I1_5, 0,  0,  0,  0,    0,    0},
+	//  {0,  0,  0,  I1_6, I1_7, I1_8, 0,  0,  0,  0,    0,    0},
+	//  {0,  0,  0,  0,    0,    0,    m2, 0,  0,  0,    0,    0},
+	//  {0,  0,  0,  0,    0,    0,    0,  m2, 0,  0,    0,    0},
+	//  {0,  0,  0,  0,    0,    0,    0,  0,  m2, 0,    0,    0},
+	//  {0,  0,  0,  0,    0,    0,    0,  0,  0,  I2_0, I2_1, I2_2},
+	//  {0,  0,  0,  0,    0,    0,    0,  0,  0,  I2_3, I2_4, I2_5},
+	//  {0,  0,  0,  0,    0,    0,    0,  0,  0,  I2_6, I2_7, I2_8}}
+	// 
 	// Where `m` is the mass of the `i`th rigid body,
-	// and I is the moment of inertia of the `i`th rigid body.
-	LargeMatrix<MAX_PHYS_OBJECTS * 3, MAX_PHYS_OBJECTS * 3> objPropertiesMatrix;
+	// and I is the inertia tensor of the `i`th rigid body.
+	LargeMatrix<MAX_PHYS_OBJECTS * 6, MAX_PHYS_OBJECTS * 6> objPropertiesMatrix;
 
 	// A state vector of size 6n
 	// Example vector where `n` is 2 and all object "slots" are in use:
