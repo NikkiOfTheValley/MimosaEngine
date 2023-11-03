@@ -5,8 +5,8 @@
 // This operator is very slow for large meshes, don't use it in preformace-critical locations!
 void CollisionMesh::operator=(const Mesh& rhs)
 {
-	// Reserve the space required for the Mesh's vertices, so the vector doesn't reallocate a bunch of times
-	verts.reserve(rhs.verts.size());
+	// Resize to the space required for the Mesh's vertices, so the vector doesn't reallocate a bunch of times
+	this->verts.resize(rhs.verts.size());
 
 	for (size_t i = 0; i < rhs.verts.size(); i++)
 	{
@@ -22,4 +22,8 @@ void CollisionMesh::operator=(const Mesh& rhs)
 		
 		verts[i] = collisionVert;
 	}
+
+const std::vector<collision_vert> CollisionMesh::GetVerts()
+{
+	return this->verts;
 }
