@@ -4,15 +4,15 @@
 // Implementation of vec2 default constructor from vec2.h
 vec2::vec2()
 {
-	data[0] = 0;
-	data[1] = 0;
+	this->x = 0;
+	this->y = 0;
 }
 
 // Implementation of vec2 float constructor from vec2.h
 vec2::vec2(float x, float y)
 {
-	data[0] = x;
-	data[1] = y;
+	this->x = x;
+	this->y = y;
 }
 
 // Implementation of vec2 int constructor from vec2.h
@@ -20,124 +20,124 @@ vec2::vec2(int x, int y)
 {
 	//logger->warn("Initilization of vec2 with int constructor, this may result in data loss\n");
 
-	data[0] = (float)x;
-	data[1] = (float)y;
+	this->x = (float)x;
+	this->y = (float)y;
 }
 
 // Implementation of various operators
 
 vec2& vec2::operator+=(const vec2& rhs)
 {
-	this->data[0] += rhs.data[0];
-	this->data[1] += rhs.data[1];
+	this->x += rhs.x;
+	this->y += rhs.y;
 	return *this;
 }
 
 vec2& vec2::operator+=(const float rhs)
 {
-	this->data[0] += rhs;
-	this->data[1] += rhs;
+	this->x += rhs;
+	this->y += rhs;
 	return *this;
 }
 
 vec2& vec2::operator-=(const vec2& rhs)
 {
-	this->data[0] -= rhs.data[0];
-	this->data[1] -= rhs.data[1];
+	this->x -= rhs.x;
+	this->y -= rhs.y;
 	return *this;
 }
 
 vec2& vec2::operator-=(const float rhs)
 {
-	this->data[0] -= rhs;
-	this->data[1] -= rhs;
+	this->x -= rhs;
+	this->y -= rhs;
 	return *this;
 }
 
 vec2& vec2::operator*=(const vec2& rhs)
 {
-	this->data[0] *= rhs.data[0];
-	this->data[1] *= rhs.data[1];
+	this->x *= rhs.x;
+	this->y *= rhs.y;
 	return *this;
 }
 
 vec2& vec2::operator*=(const float rhs)
 {
-	this->data[0] *= rhs;
-	this->data[1] *= rhs;
+	this->x *= rhs;
+	this->y *= rhs;
 	return *this;
 }
 
 vec2& vec2::operator/=(const vec2& rhs)
 {
-	this->data[0] /= rhs.data[0];
-	this->data[1] /= rhs.data[1];
+	this->x /= rhs.x;
+	this->y /= rhs.y;
 	return *this;
 }
 
 vec2& vec2::operator/=(const float rhs)
 {
-	this->data[0] /= rhs;
-	this->data[1] /= rhs;
+	this->x /= rhs;
+	this->y /= rhs;
 	return *this;
 }
 
 
 vec2 operator+(const vec2& lhs, const vec2& rhs)
 {
-	return vec2{ lhs.data[0] + rhs.data[0], lhs.data[1] + rhs.data[1]};
+	return vec2{ lhs.x + rhs.x, lhs.y + rhs.y};
 }
 
 vec2 operator+(const vec2& lhs, const float rhs)
 {
-	return vec2{ lhs.data[0] + rhs, lhs.data[1] + rhs };
+	return vec2{ lhs.x + rhs, lhs.y + rhs };
 }
 
 vec2 operator-(const vec2& lhs, const vec2& rhs)
 {
-	return vec2{ lhs.data[0] - rhs.data[0], lhs.data[1] - rhs.data[1] };
+	return vec2{ lhs.x - rhs.x, lhs.y - rhs.y };
 }
 
 vec2 operator-(const vec2& lhs, const float rhs)
 {
-	return vec2{ lhs.data[0] - rhs, lhs.data[1] - rhs };
+	return vec2{ lhs.x - rhs, lhs.y - rhs };
 }
 
 vec2 operator*(const vec2& lhs, const vec2& rhs)
 {
-	return vec2{ lhs.data[0] * rhs.data[0], lhs.data[1] * rhs.data[1] };
+	return vec2{ lhs.x * rhs.x, lhs.y * rhs.y };
 }
 
 vec2 operator*(const vec2& lhs, const float rhs)
 {
-	return vec2{ lhs.data[0] * rhs, lhs.data[1] * rhs };
+	return vec2{ lhs.x * rhs, lhs.y * rhs };
 }
 
 vec2 operator/(const vec2& lhs, const vec2& rhs)
 {
-	return vec2{ lhs.data[0] / rhs.data[0], lhs.data[1] / rhs.data[1] };
+	return vec2{ lhs.x / rhs.x, lhs.y / rhs.y };
 }
 
 vec2 operator/(const vec2& lhs, const float rhs)
 {
-	return vec2{ lhs.data[0] / rhs, lhs.data[1] / rhs };
+	return vec2{ lhs.x / rhs, lhs.y / rhs };
 }
 
 
 bool vec2::operator==(const vec2& rhs)
 {
-	return (this->data[0] == rhs.data[0]) && (this->data[1] == rhs.data[1]);
+	return (this->x == rhs.x) && (this->y == rhs.y);
 }
 
 bool vec2::operator!=(const vec2& rhs)
 {
-	return (this->data[0] != rhs.data[0]) && (this->data[1] != rhs.data[1]);
+	return (this->x != rhs.x) && (this->y != rhs.y);
 }
 
 
 vec2::operator std::string() const {
 	std::stringstream resultString;
-	resultString << "{" << data[0] << ", " << data[1] << "}";
+	resultString << "{" << this->x << ", " << this->y << "}";
 
 	return resultString.str();
 }

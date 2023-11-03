@@ -75,28 +75,28 @@ void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float ma
 		return;
 	}
 
+	// - Create the object and set various properties from the arguments -
+
 	PhysObj obj = PhysObj(&state, state.objIndex, hasGravity);
 
-	state.objVelVector[state.objIndex * 6] = vel.data[0];
-	state.objVelVector[(state.objIndex * 6) + 1] = vel.data[1];
-	state.objVelVector[(state.objIndex * 6) + 2] = vel.data[2];
+	state.objVelVector[state.objIndex * 6] = vel.x;
+	state.objVelVector[(state.objIndex * 6) + 1] = vel.y;
+	state.objVelVector[(state.objIndex * 6) + 2] = vel.z;
 
-	state.objVelVector[(state.objIndex * 6) + 3] = angVel.data[0];
-	state.objVelVector[(state.objIndex * 6) + 4] = angVel.data[1];
-	state.objVelVector[(state.objIndex * 6) + 5] = angVel.data[2];
+	state.objVelVector[(state.objIndex * 6) + 3] = angVel.x;
+	state.objVelVector[(state.objIndex * 6) + 4] = angVel.y;
+	state.objVelVector[(state.objIndex * 6) + 5] = angVel.z;
 
 	obj.hasGravity = hasGravity;
 	state.nameToObjIndex[name] = state.objIndex;
 
-	// Set position
-	state.objStateVector[state.objIndex * 6] = pos.data[0];
-	state.objStateVector[(state.objIndex * 6) + 1] = pos.data[1];
-	state.objStateVector[(state.objIndex * 6) + 2] = pos.data[2];
+	state.objStateVector[state.objIndex * 6] = pos.x;
+	state.objStateVector[(state.objIndex * 6) + 1] = pos.y;
+	state.objStateVector[(state.objIndex * 6) + 2] = pos.z;
 
-	// Set rotation
-	state.objStateVector[(state.objIndex * 6) + 3] = rot.data[0];
-	state.objStateVector[(state.objIndex * 6) + 4] = rot.data[1];
-	state.objStateVector[(state.objIndex * 6) + 5] = rot.data[2];
+	state.objStateVector[(state.objIndex * 6) + 3] = rot.x;
+	state.objStateVector[(state.objIndex * 6) + 4] = rot.y;
+	state.objStateVector[(state.objIndex * 6) + 5] = rot.z;
 
 	state.objPropertiesMatrix.data[state.objIndex * 3][state.objIndex * 3] = mass;
 	state.objPropertiesMatrix.data[(state.objIndex * 3) + 1][(state.objIndex * 3) + 1] = mass;

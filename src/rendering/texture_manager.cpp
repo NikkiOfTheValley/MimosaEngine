@@ -13,8 +13,8 @@ bool TextureManager::CheckOverlapping(std::pair<vec2, vec2> image, std::pair<vec
 {
 	for (auto& texCoord : textureCoords)
 	{
-		bool isOverlapping = std::max(image.first.data[0], texCoord.first.data[0]) < std::min(image.second.data[0], texCoord.second.data[1])
-			&& std::max(image.first.data[1], texCoord.first.data[1]) < std::min(image.second.data[1], texCoord.second.data[1]);
+		bool isOverlapping = std::max(image.first.x, texCoord.first.x) < std::min(image.second.x, texCoord.second.y)
+			&& std::max(image.first.y, texCoord.first.y) < std::min(image.second.y, texCoord.second.y);
 		
 		if (isOverlapping)
 		{
@@ -29,10 +29,10 @@ bool TextureManager::CheckOverlapping(std::pair<vec2, vec2> image, std::pair<vec
 // Check if the given texture location is within the bounds of the atlas
 bool TextureManager::CheckInBounds(std::pair<vec2, vec2> image)
 {
-	return image.first.data[0]  > 0 && image.first.data[0]  < textureAtlas->w &&
-		   image.second.data[0] > 0 && image.second.data[0] < textureAtlas->w &&
-		   image.first.data[1]  > 0 && image.first.data[1]  < textureAtlas->h &&
-		   image.second.data[1] > 0 && image.second.data[1] < textureAtlas->h;
+	return image.first.x  > 0 && image.first.x  < textureAtlas->w &&
+		   image.second.x > 0 && image.second.x < textureAtlas->w &&
+		   image.first.y  > 0 && image.first.y  < textureAtlas->h &&
+		   image.second.y > 0 && image.second.y < textureAtlas->h;
 }
 
 void TextureManager::AddTexture(std::string path, std::string name, bool isRGBA, bool /*useNearestNeighbor*/)
@@ -65,21 +65,21 @@ void TextureManager::AddTexture(std::string path, std::string name, bool isRGBA,
 
 	while (CheckOverlapping(newTextureCoords, overlappingTexture))
 	{
-		int overlappingTextureWidth = (int)abs(overlappingTexture.first.data[0] - overlappingTexture.second.data[0]);
-		int overlappingTextureHeight = (int)abs(overlappingTexture.first.data[1] - overlappingTexture.second.data[1]);
+		int overlappingTextureWidth = (int)abs(overlappingTexture.first.x - overlappingTexture.second.x);
+		int overlappingTextureHeight = (int)abs(overlappingTexture.first.y - overlappingTexture.second.y);
 
-		newTextureCoords.first.data[0] += overlappingTextureWidth;
-		newTextureCoords.second.data[0] += overlappingTextureWidth;
+		newTextureCoords.first.x += overlappingTextureWidth;
+		newTextureCoords.second.x += overlappingTextureWidth;
 
 		if (CheckInBounds(newTextureCoords))
 			continue;
 		else
 		{
-			newTextureCoords.first.data[1] += overlappingTextureHeight;
-			newTextureCoords.second.data[1] += overlappingTextureHeight;
+			newTextureCoords.first.y += overlappingTextureHeight;
+			newTextureCoords.second.y += overlappingTextureHeight;
 
-			newTextureCoords.first.data[0] -= overlappingTextureWidth;
-			newTextureCoords.second.data[0] -= overlappingTextureWidth;
+			newTextureCoords.first.x -= overlappingTextureWidth;
+			newTextureCoords.second.x -= overlappingTextureWidth;
 		}
 
 		if (CheckInBounds(newTextureCoords))
@@ -97,7 +97,7 @@ void TextureManager::AddTexture(std::string path, std::string name, bool isRGBA,
 
 			// Prematurely create the texture to avoid a redundant call to CheckOverlapping()
 
-			tex->Blit(textureAtlas, 0, 0, tex->w, tex->h, (size_t)newTextureCoords.first.data[0], (size_t)newTextureCoords.first.data[1]);
+			tex->Blit(textureAtlas, 0, 0, tex->w, tex->h, (size_t)newTextureCoords.first.x, (size_t)newTextureCoords.first.y);
 
 			nameToTexCoordIndex[name] = textureCoords.size();
 			textureCoords.push_back(newTextureCoords);
@@ -106,7 +106,7 @@ void TextureManager::AddTexture(std::string path, std::string name, bool isRGBA,
 		}
 	}
 
-	tex->Blit(textureAtlas, 0, 0, tex->w, tex->h, (size_t)newTextureCoords.first.data[0], (size_t)newTextureCoords.first.data[1]);
+	tex->Blit(textureAtlas, 0, 0, tex->w, tex->h, (size_t)newTextureCoords.first.x, (size_t)newTextureCoords.first.y);
 
 	nameToTexCoordIndex[name] = textureCoords.size();
 	textureCoords.push_back(newTextureCoords);
@@ -122,11 +122,11 @@ std::pair<vec2, vec2> TextureManager::GetTextureLocation(std::string name)
 	}
 
 	return {
-		vec2(textureCoords[nameToTexCoordIndex[name]].first.data[0] / (float)textureAtlas->w,
-			 textureCoords[nameToTexCoordIndex[name]].first.data[1] / (float)textureAtlas->h),
+		vec2(textureCoords[nameToTexCoordIndex[name]].first.x / (float)textureAtlas->w,
+			 textureCoords[nameToTexCoordIndex[name]].first.y / (float)textureAtlas->h),
 
-		vec2(textureCoords[nameToTexCoordIndex[name]].second.data[0] / (float)textureAtlas->w,
-			 textureCoords[nameToTexCoordIndex[name]].second.data[1] / (float)textureAtlas->h)
+		vec2(textureCoords[nameToTexCoordIndex[name]].second.x / (float)textureAtlas->w,
+			 textureCoords[nameToTexCoordIndex[name]].second.y / (float)textureAtlas->h)
 	};
 }
 

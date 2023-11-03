@@ -11,11 +11,15 @@ required between vec3.h and mat4x4.h
 
 class mat4x4f;
 
-class vec3
+struct vec3
 {
 public:
 	// The components of the vector
-	float data[3];
+	//float data[3];
+
+	float x;
+	float y;
+	float z;
 
 	// Default constructor, initilizes the components to 0
 	vec3();

@@ -4,8 +4,8 @@
 PostProcessingManager::PostProcessingManager()
 {
 	Renderer* renderer = &Renderer::getInstance();
-	int screenWidth = (int)renderer->screenDim->data[0];
-	int screenHeight = (int)renderer->screenDim->data[1];
+	int screenWidth = (int)renderer->screenDim->x;
+	int screenHeight = (int)renderer->screenDim->y;
 
 	// Initialize framebuffers and renderbuffers
 	glGenFramebuffers(1, &multisampledFramebuffer);
@@ -100,8 +100,8 @@ void PostProcessingManager::StartRendering()
 void PostProcessingManager::EndRendering()
 {
 	Renderer* renderer = &Renderer::getInstance();
-	int screenWidth = (int)renderer->screenDim->data[0];
-	int screenHeight = (int)renderer->screenDim->data[1];
+	int screenWidth = (int)renderer->screenDim->x;
+	int screenHeight = (int)renderer->screenDim->y;
 
 	// Copy multisampled color buffer into intermediate framebuffer so that texture holds the color information
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, multisampledFramebuffer);

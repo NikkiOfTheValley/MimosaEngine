@@ -4,8 +4,8 @@ InputHandler::InputHandler()
 {
 	mouse_callback = [&](GLFWwindow* window, double xpos, double ypos)
 	{
-		mousePos.data[0] = (float)xpos;
-		mousePos.data[1] = (float)ypos;
+		mousePos.x = (float)xpos;
+		mousePos.y = (float)ypos;
 
 		if (inUI)
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

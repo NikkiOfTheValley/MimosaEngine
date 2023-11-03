@@ -23,6 +23,8 @@ public:
 	// This operator is very slow for large meshes, don't use it in preformace-critical locations!
 	void operator=(const Mesh& rhs);
 
+	const std::vector<collision_vert> GetVerts();
+
 private:
 
 	std::vector<collision_vert> verts;

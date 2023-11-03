@@ -23,7 +23,7 @@ Text::Text(std::string text, vec2 pos, int scale)
 			vert2d{ 0.f,         0.f,         0.f + (c * 8), 0.f }
 		};
 		vec2* screenDim = Renderer::getInstance().screenDim;
-		poly.position = vec2(pos.data[0] + ((float)(i * 8 * scale) / screenDim->data[0]), pos.data[1] * screenDim->data[1]);
+		poly.position = vec2(pos.x + ((float)(i * 8 * scale) / screenDim->x), pos.y * screenDim->y);
 		
 		poly.shader = ResourceManager::getInstance().GetShader("flatShader");
 		poly.texture = ResourceManager::getInstance().GetTexture("textTexture");
@@ -66,7 +66,7 @@ void Text::Update()
 			vert2d{ 0.f,         0.f,         0.f + (c * 8), 0.f }
 		};
 		vec2* screenDim = Renderer::getInstance().screenDim;
-		poly.position = vec2(pos.data[0] + ((float)(i * 8 * scale) / screenDim->data[0]), pos.data[1] * screenDim->data[1]);
+		poly.position = vec2(pos.x + ((float)(i * 8 * scale) / screenDim->x), pos.y * screenDim->y);
 
 		poly.shader = ResourceManager::getInstance().GetShader("flatShader");
 		poly.texture = ResourceManager::getInstance().GetTexture("textTexture");
@@ -108,7 +108,7 @@ void Text::UpdateText(std::string newText)
 			vert2d{ 0.f,         0.f,         0.f + (c * 8), 0.f }
 		};
 		vec2* screenDim = Renderer::getInstance().screenDim;
-		poly.position = vec2(pos.data[0] + ((float)(i * 8 * scale) / screenDim->data[0]), pos.data[1] * screenDim->data[1]);
+		poly.position = vec2(pos.x + ((float)(i * 8 * scale) / screenDim->x), pos.y * screenDim->y);
 
 		poly.shader = ResourceManager::getInstance().GetShader("flatShader");
 		poly.texture = ResourceManager::getInstance().GetTexture("textTexture");

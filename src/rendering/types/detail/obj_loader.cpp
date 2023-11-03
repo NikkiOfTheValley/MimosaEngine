@@ -63,7 +63,7 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 
 	lines = tempLines;
 
-	// Parse OBJ file into vert positions, UVs, normals (if they exist), and faces
+	// Parse OBJ file into vert positions, UVs (if they exist), normals (if they exist), and faces
 	
 	// This code uses https://people.computing.clemson.edu/~dhouse/courses/405/docs/brief-obj-file-format.html
 	// as a reference.
@@ -101,17 +101,17 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 		{
 			vec3 vert;
 
-			vert.data[0] = lineSplitBySpacesFloat[1];
-			vert.data[1] = lineSplitBySpacesFloat[2];
-			vert.data[2] = lineSplitBySpacesFloat[3];
+			vert.x = lineSplitBySpacesFloat[1];
+			vert.y = lineSplitBySpacesFloat[2];
+			vert.z = lineSplitBySpacesFloat[3];
 			vertPositions.push_back(vert);
 		}
 		else if (lineSplitBySpaces[0] == "vt")
 		{
 			vec2 uv;
 
-			uv.data[0] = lineSplitBySpacesFloat[1];
-			uv.data[1] = lineSplitBySpacesFloat[2];
+			uv.x = lineSplitBySpacesFloat[1];
+			uv.y = lineSplitBySpacesFloat[2];
 			UVs.push_back(uv);
 
 			hasUVs = true;
@@ -120,9 +120,9 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 		{
 			vec3 normal;
 
-			normal.data[0] = lineSplitBySpacesFloat[1];
-			normal.data[1] = lineSplitBySpacesFloat[2];
-			normal.data[2] = lineSplitBySpacesFloat[3];
+			normal.x = lineSplitBySpacesFloat[1];
+			normal.y = lineSplitBySpacesFloat[2];
+			normal.z = lineSplitBySpacesFloat[3];
 			normals.push_back(normal);
 			hasNormals = true;
 		}
@@ -179,16 +179,16 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 			vec2 uv = uvIndex == SIZE_MAX ? vec2() : UVs[uvIndex - 1];
 
 			vert faceVert{};
-			faceVert.x = vertPositions[vertexIndex - 1].data[0];
-			faceVert.y = vertPositions[vertexIndex - 1].data[1];
-			faceVert.z = vertPositions[vertexIndex - 1].data[2];
+			faceVert.x = vertPositions[vertexIndex - 1].x;
+			faceVert.y = vertPositions[vertexIndex - 1].y;
+			faceVert.z = vertPositions[vertexIndex - 1].z;
 
-			faceVert.u = uv.data[0];
-			faceVert.v = uv.data[1];
+			faceVert.u = uv.x;
+			faceVert.v = uv.y;
 
-			faceVert.normX = normal.data[0];
-			faceVert.normY = normal.data[1];
-			faceVert.normZ = normal.data[2];
+			faceVert.normX = normal.x;
+			faceVert.normY = normal.y;
+			faceVert.normZ = normal.z;
 
 			faceVerts.push_back(faceVert);
 		}
@@ -197,9 +197,9 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 		vec3 faceNormal;
 		for (auto& vert : faceVerts)
 		{
-			faceNormal.data[0] += vert.normX;
-			faceNormal.data[1] += vert.normY;
-			faceNormal.data[2] += vert.normZ;
+			faceNormal.x += vert.normX;
+			faceNormal.y += vert.normY;
+			faceNormal.z += vert.normZ;
 		}
 		faceNormal /= (float)faceVerts.size();
 

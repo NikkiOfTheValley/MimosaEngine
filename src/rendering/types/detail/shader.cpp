@@ -130,7 +130,7 @@ void Shader::SetFloat(const std::string& name, float value) const
 
 void Shader::SetVec2(const std::string& name, const vec2& value) const
 {
-	glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value.data[0]);
+	glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value.x);
 }
 
 void Shader::SetVec2(const std::string& name, float x, float y) const
@@ -140,7 +140,7 @@ void Shader::SetVec2(const std::string& name, float x, float y) const
 
 void Shader::SetVec3(const std::string& name, const vec3& value) const
 {
-	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value.data[0]);
+	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value.x);
 }
 
 void Shader::SetVec3(const std::string& name, float x, float y, float z) const
@@ -172,14 +172,14 @@ void Shader::SetVec2Array(const std::string& name, const vec2* arr, GLsizei size
 {
 	// Yes, I know this is slow, but I'm fairly sure it isn't possible to set the entire array in a single glUniform call
 	for (size_t i = 0; i < size; i++)
-		glUniform1fv(glGetUniformLocation(ID, (name + "[" + std::to_string(i) + "]").c_str()), 1, &arr[i].data[0]);
+		glUniform1fv(glGetUniformLocation(ID, (name + "[" + std::to_string(i) + "]").c_str()), 1, &arr[i].x);
 }
 
 void Shader::SetVec3Array(const std::string& name, const vec3* arr, GLsizei size)
 {
 	// Yes, I know this is slow, but I'm fairly sure it isn't possible to set the entire array in a single glUniform call
 	for (size_t i = 0; i < size; i++)
-		glUniform1fv(glGetUniformLocation(ID, (name + "[" + std::to_string(i) + "]").c_str()), 1, &arr[i].data[0]);
+		glUniform1fv(glGetUniformLocation(ID, (name + "[" + std::to_string(i) + "]").c_str()), 1, &arr[i].x);
 }
 
 void Shader::SetAny(const std::string& name, const std::any value)

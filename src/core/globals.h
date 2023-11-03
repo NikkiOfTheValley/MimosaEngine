@@ -1,7 +1,7 @@
 #pragma once
 #include "log.h"
 
-class vec2;
+struct vec2;
 
 extern vec2 mousePos;
 extern bool lmbPressed;
@@ -11,7 +11,7 @@ extern bool useTextInput;
 
 extern std::string textInput;
 
-const std::string ENG_VERSION_STR = "v0.2.0";
+const std::string ENG_VERSION_STR = "v0.3.0";
 const std::string VERSION_STR = "v0.0.1";
 const std::string NAME_STR = "Example Application";
 

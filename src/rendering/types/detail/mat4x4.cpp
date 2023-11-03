@@ -48,15 +48,15 @@ void mat4x4f::lookAt(const vec3 eye, const vec3 center, const vec3 up)
 
 	identity();
 
-	data[0][0] = s.data[0];
-	data[1][0] = s.data[1];
-	data[2][0] = s.data[2];
-	data[0][1] = u.data[0];
-	data[1][1] = u.data[1];
-	data[2][1] = u.data[2];
-	data[0][2] = -f.data[0];
-	data[1][2] = -f.data[1];
-	data[2][2] = -f.data[2];
+	data[0][0] = s.x;
+	data[1][0] = s.y;
+	data[2][0] = s.z;
+	data[0][1] = u.x;
+	data[1][1] = u.y;
+	data[2][1] = u.z;
+	data[0][2] = -f.x;
+	data[1][2] = -f.y;
+	data[2][2] = -f.z;
 	data[3][0] = -dot(s, eye);
 	data[3][1] = -dot(u, eye);
 	data[3][2] = dot(f, eye);
@@ -68,9 +68,9 @@ void mat4x4f::translate(vec3 offset)
 	identity();
 	
 	// Then add in the translation offset
-	data[3][0] = offset.data[0];
-	data[3][1] = offset.data[1];
-	data[3][2] = offset.data[2];
+	data[3][0] = offset.x;
+	data[3][1] = offset.y;
+	data[3][2] = offset.z;
 }
 
 void mat4x4f::rotate(vec3 rotation)
@@ -81,9 +81,9 @@ void mat4x4f::rotate(vec3 rotation)
 	// like the original 3x3 matrix when multiplying a vector by this matrix
 	identity();
 
-	float rotX = rotation.data[0];
-	float rotY = rotation.data[1];
-	float rotZ = rotation.data[2];
+	float rotX = rotation.x;
+	float rotY = rotation.y;
+	float rotZ = rotation.z;
 
 	data[0][0] = cos(rotY) * cos(rotZ);
 	data[1][0] = cos(rotY) * sin(rotZ);

@@ -24,12 +24,12 @@ void UIManager::CreateImageElement(Texture* tex, bool isFullscreen, vec2 pos, ve
 	else
 	{
 		poly->verts = {
-			vert2d{ dim.data[0], dim.data[1], 1.f, 1.f },
-			vert2d{ 0.f,         dim.data[1], 0.f, 1.f },
-			vert2d{ 0.f,         0.f,         0.f, 0.f },
-			vert2d{ dim.data[0], 0.f,         1.f, 0.f },
-			vert2d{ dim.data[0], dim.data[1], 1.f, 1.f },
-			vert2d{ 0.f,         0.f,         0.f, 0.f } };
+			vert2d{ dim.x, dim.y, 1.f, 1.f },
+			vert2d{ 0.f,   dim.y, 0.f, 1.f },
+			vert2d{ 0.f,   0.f,   0.f, 0.f },
+			vert2d{ dim.x, 0.f,   1.f, 0.f },
+			vert2d{ dim.x, dim.y, 1.f, 1.f },
+			vert2d{ 0.f,   0.f,   0.f, 0.f } };
 	}
 	poly->position = pos;
 	poly->shader = ResourceManager::getInstance().GetShader("flatShader");

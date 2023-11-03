@@ -3,12 +3,12 @@
 
 vec3 sqrt(vec3 v)
 {
-	return vec3(sqrt(v.data[0]), sqrt(v.data[1]), sqrt(v.data[2]));
+	return vec3(sqrt(v.x), sqrt(v.y), sqrt(v.z));
 }
 
 vec3 invsqrt(vec3 v)
 {
-	return vec3(1 / sqrt(v.data[0]), 1 / sqrt(v.data[1]), 1 / sqrt(v.data[2]));
+	return vec3(1 / sqrt(v.x), 1 / sqrt(v.y), 1 / sqrt(v.z));
 }
 
 float invsqrt(float v)
@@ -33,21 +33,21 @@ inline float invsqrt_fast(float v)
 vec3 cross(vec3 a, vec3 b)
 {
 	return vec3(
-		a.data[1] * b.data[2] - b.data[1] * a.data[2],
-		a.data[2] * b.data[0] - b.data[2] * a.data[0],
-		a.data[0] * b.data[1] - b.data[0] * a.data[1]);
+		a.y * b.z - b.y * a.z,
+		a.z * b.x - b.z * a.x,
+		a.x * b.y - b.x * a.y);
 }
 
 float dot(vec3 a, vec3 b)
 {
 	vec3 tmp(a * b);
-	return tmp.data[0] + tmp.data[1] + tmp.data[2];
+	return tmp.x + tmp.y + tmp.z;
 }
 
 float dot(vec2 a, vec2 b)
 {
 	vec2 tmp(a * b);
-	return tmp.data[0] + tmp.data[1];
+	return tmp.x + tmp.y;
 }
 
 vec3 normalize(vec3 v)
@@ -74,22 +74,22 @@ vec2 normalize_fast(vec2 v)
 
 bool is_nan(vec3 v)
 {
-	return isnan(v.data[0]) || isnan(v.data[1]) || isnan(v.data[2]);
+	return isnan(v.x) || isnan(v.y) || isnan(v.z);
 }
 
 bool is_nan(vec2 v)
 {
-	return isnan(v.data[0]) || isnan(v.data[1]);
+	return isnan(v.x) || isnan(v.y);
 }
 
 float magnitude(vec3 v)
 {
-	return sqrt((v.data[0] * v.data[0]) + (v.data[1] * v.data[1]) + (v.data[2] * v.data[2]));
+	return sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
 }
 
 float magnitude(vec2 v)
 {
-	return sqrt((v.data[0] * v.data[0]) + (v.data[1] * v.data[1]));
+	return sqrt((v.x * v.x) + (v.y * v.y));
 }
 
 float angleBetween(vec3 a, vec3 b)

@@ -10,35 +10,31 @@ void PhysObj::Update(double fixedDeltaTime)
 
 phys_obj_prop PhysObj::GetProperties()
 {
-	// Just spin until the step has completed
-	//while (state->isInStep)
-	//	__nop();
-
 	phys_obj_prop prop;
 	
-	prop.pos.data[0] = state->objStateVector[index * 6];
-	prop.pos.data[1] = state->objStateVector[(index * 6) + 1];
-	prop.pos.data[2] = state->objStateVector[(index * 6) + 2];
+	prop.pos.x = state->objStateVector[index * 6];
+	prop.pos.y = state->objStateVector[(index * 6) + 1];
+	prop.pos.z = state->objStateVector[(index * 6) + 2];
 
-	prop.rot.data[0] = state->objStateVector[(index * 6) + 3];
-	prop.rot.data[1] = state->objStateVector[(index * 6) + 4];
-	prop.rot.data[2] = state->objStateVector[(index * 6) + 5];
+	prop.rot.x = state->objStateVector[(index * 6) + 3];
+	prop.rot.y = state->objStateVector[(index * 6) + 4];
+	prop.rot.z = state->objStateVector[(index * 6) + 5];
 
-	prop.accel.data[0] = state->objAccelVector[(index * 6)];
-	prop.accel.data[1] = state->objAccelVector[(index * 6) + 1];
-	prop.accel.data[2] = state->objAccelVector[(index * 6) + 2];
+	prop.accel.x = state->objAccelVector[(index * 6)];
+	prop.accel.y = state->objAccelVector[(index * 6) + 1];
+	prop.accel.z = state->objAccelVector[(index * 6) + 2];
 
-	prop.angAccel.data[0] = state->objAccelVector[(index * 6) + 3];
-	prop.angAccel.data[1] = state->objAccelVector[(index * 6) + 4];
-	prop.angAccel.data[2] = state->objAccelVector[(index * 6) + 5];
+	prop.angAccel.x = state->objAccelVector[(index * 6) + 3];
+	prop.angAccel.y = state->objAccelVector[(index * 6) + 4];
+	prop.angAccel.z = state->objAccelVector[(index * 6) + 5];
 
-	prop.vel.data[0] = state->objVelVector[(index * 6)];
-	prop.vel.data[1] = state->objVelVector[(index * 6) + 1];
-	prop.vel.data[2] = state->objVelVector[(index * 6) + 2];
+	prop.vel.x = state->objVelVector[(index * 6)];
+	prop.vel.y = state->objVelVector[(index * 6) + 1];
+	prop.vel.z = state->objVelVector[(index * 6) + 2];
 
-	prop.angVel.data[0] = state->objVelVector[(index * 6) + 3];
-	prop.angVel.data[1] = state->objVelVector[(index * 6) + 4];
-	prop.angVel.data[2] = state->objVelVector[(index * 6) + 5];
+	prop.angVel.x = state->objVelVector[(index * 6) + 3];
+	prop.angVel.y = state->objVelVector[(index * 6) + 4];
+	prop.angVel.z = state->objVelVector[(index * 6) + 5];
 
 	prop.mass = state->objPropertiesMatrix.data[index * 3][index * 3];
 
@@ -47,33 +43,29 @@ phys_obj_prop PhysObj::GetProperties()
 
 void PhysObj::SetProperties(phys_obj_prop prop)
 {
-	// Just spin until the step has completed
-	while (state->isInStep)
-		__nop();
+	state->objStateVector[index * 6] = prop.pos.x;
+	state->objStateVector[(index * 6) + 1] = prop.pos.y;
+	state->objStateVector[(index * 6) + 2] = prop.pos.z;
 
-	state->objStateVector[index * 6] = prop.pos.data[0];
-	state->objStateVector[(index * 6) + 1] = prop.pos.data[1];
-	state->objStateVector[(index * 6) + 2] = prop.pos.data[2];
+	state->objStateVector[(index * 6) + 3] = prop.rot.x;
+	state->objStateVector[(index * 6) + 4] = prop.rot.y;
+	state->objStateVector[(index * 6) + 5] = prop.rot.z;
 
-	state->objStateVector[(index * 6) + 3] = prop.rot.data[0];
-	state->objStateVector[(index * 6) + 4] = prop.rot.data[1];
-	state->objStateVector[(index * 6) + 5] = prop.rot.data[2];
+	state->objAccelVector[(index * 6)] = prop.accel.x;
+	state->objAccelVector[(index * 6) + 1] = prop.accel.y;
+	state->objAccelVector[(index * 6) + 2] = prop.accel.z;
 
-	state->objAccelVector[(index * 6)] = prop.accel.data[0];
-	state->objAccelVector[(index * 6) + 1] = prop.accel.data[1];
-	state->objAccelVector[(index * 6) + 2] = prop.accel.data[2];
+	state->objAccelVector[(index * 6) + 3] = prop.angAccel.x;
+	state->objAccelVector[(index * 6) + 4] = prop.angAccel.y;
+	state->objAccelVector[(index * 6) + 5] = prop.angAccel.z;
 
-	state->objAccelVector[(index * 6) + 3] = prop.angAccel.data[0];
-	state->objAccelVector[(index * 6) + 4] = prop.angAccel.data[1];
-	state->objAccelVector[(index * 6) + 5] = prop.angAccel.data[2];
+	state->objVelVector[(index * 6)] = prop.vel.x;
+	state->objVelVector[(index * 6) + 1] = prop.vel.y;
+	state->objVelVector[(index * 6) + 2] = prop.vel.z;
 
-	state->objVelVector[(index * 6)] = prop.vel.data[0];
-	state->objVelVector[(index * 6) + 1] = prop.vel.data[1];
-	state->objVelVector[(index * 6) + 2] = prop.vel.data[2];
-
-	state->objVelVector[(index * 6) + 3] = prop.angVel.data[0];
-	state->objVelVector[(index * 6) + 4] = prop.angVel.data[1];
-	state->objVelVector[(index * 6) + 5] = prop.angVel.data[2];
+	state->objVelVector[(index * 6) + 3] = prop.angVel.x;
+	state->objVelVector[(index * 6) + 4] = prop.angVel.y;
+	state->objVelVector[(index * 6) + 5] = prop.angVel.z;
 
 	state->objPropertiesMatrix.data[index * 3][index * 3] = prop.mass;
 }

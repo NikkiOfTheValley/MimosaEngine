@@ -124,7 +124,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	//uiManager->CreateImageElement(resourceManager->GetTexture("exampleImage"), false, vec2{ 0.25f, 0.1f }, vec2{ 0.25f, 0.25f });
 
-	uiManager->CreateImageElement(tex, false, vec2{ 0.25f, 0.2f }, vec2{ tex->w / renderer->screenDim->data[0], tex->h / renderer->screenDim->data[1] });
+	uiManager->CreateImageElement(tex, false, vec2{ 0.25f, 0.2f }, vec2{ tex->w / renderer->screenDim->x, tex->h / renderer->screenDim->y });
 
 	uiManager->CreateButtonElement("Example Button", vec2{ 0.41f, 0.36f }, vec2{ 0.38f, 0.08f }, 4,
 		[&]() {
@@ -238,9 +238,9 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 		cam.Update();
 
-		renderer->GetMesh("exampleMesh")->rotation.data[1] += 0.5f * (float)deltaTime;
+		renderer->GetMesh("exampleMesh")->rotation.y += 0.5f * (float)deltaTime;
 
-		renderer->GetMesh("exampleMesh")->position = physicsManager->GetPhysObject("test")->GetProperties().pos;
+		//renderer->GetMesh("exampleMesh")->position = physicsManager->GetPhysObject("test")->GetProperties().pos;
 
 		glfwPollEvents();
 

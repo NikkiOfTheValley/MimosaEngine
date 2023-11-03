@@ -2,10 +2,10 @@
 
 void Camera::Update()
 {
-	double xOffset = mousePos.data[0] - prevMousePos.data[0];
-	double yOffset = prevMousePos.data[1] - mousePos.data[1]; // Reversed since y-coordinates go from bottom to top
-	prevMousePos.data[0] = mousePos.data[0];
-	prevMousePos.data[1] = mousePos.data[1];
+	double xOffset = mousePos.x - prevMousePos.x;
+	double yOffset = prevMousePos.y - mousePos.y; // Reversed since y-coordinates go from bottom to top
+	prevMousePos.x= mousePos.x;
+	prevMousePos.y = mousePos.y;
 
 	float sensitivity = 0.001f;
 
@@ -16,19 +16,19 @@ void Camera::Update()
 	xOffset *= sensitivity;
 	yOffset *= sensitivity;
 
-	rot.data[2] += (float)xOffset;
-	rot.data[1] += (float)yOffset;
+	rot.z += (float)xOffset;
+	rot.y += (float)yOffset;
 
 	// Make sure that when pitch is +/- 90 degrees, screen doesn't get flipped
-	if (rot.data[1] > (float)conv::deg_to_rad(89.0f))
-		rot.data[1] = (float)conv::deg_to_rad(89.0f);
-	if (rot.data[1] < (float)conv::deg_to_rad(-89.0f))
-		rot.data[1] = (float)conv::deg_to_rad(-89.0f);
+	if (rot.y > (float)conv::deg_to_rad(89.0f))
+		rot.y = (float)conv::deg_to_rad(89.0f);
+	if (rot.y < (float)conv::deg_to_rad(-89.0f))
+		rot.y = (float)conv::deg_to_rad(-89.0f);
 
 	vec3 front;
-	front.data[0] = cos(rot.data[2]) * cos(rot.data[1]);
-	front.data[1] = sin(rot.data[1]);
-	front.data[2] = sin(rot.data[2]) * cos(rot.data[1]);
+	front.x = cos(rot.z) * cos(rot.y);
+	front.y = sin(rot.y);
+	front.z = sin(rot.z) * cos(rot.y);
 
 	int w, h;
 	glfwGetWindowSize(Renderer::getInstance().window, &w, &h);

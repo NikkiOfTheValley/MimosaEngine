@@ -11,7 +11,7 @@ TextBox::TextBox(std::string defaultStr, vec2 pos, vec2 dim, int textScale)
 	vec2 center = (pos * 2) + (dim / 2);
 	vec2* screenDim = Renderer::getInstance().screenDim;
 
-	text = new Text(str, vec2((center.data[0] + dim.data[0] / 2) - (4 * textScale * str.length() / screenDim->data[0]), center.data[1] + (4 / screenDim->data[1])), textScale);
+	text = new Text(str, vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
 
 	this->dim = dim;
 
@@ -19,12 +19,12 @@ TextBox::TextBox(std::string defaultStr, vec2 pos, vec2 dim, int textScale)
 	Polygon2D* poly = new Polygon2D();
 	poly->InitBuffers();
 	poly->verts = {
-		vert2d{ dim.data[0], dim.data[1], 1.f, 1.f },
-		vert2d{ 0.f,         dim.data[1], 0.f, 1.f },
-		vert2d{ 0.f,         0.f,         0.f, 0.f },
-		vert2d{ dim.data[0], 0.f,         1.f, 0.f },
-		vert2d{ dim.data[0], dim.data[1], 1.f, 1.f },
-		vert2d{ 0.f,         0.f,         0.f, 0.f } };
+		vert2d{ dim.x, dim.y, 1.f, 1.f },
+		vert2d{ 0.f,   dim.y, 0.f, 1.f },
+		vert2d{ 0.f,   0.f,   0.f, 0.f },
+		vert2d{ dim.x, 0.f,   1.f, 0.f },
+		vert2d{ dim.x, dim.y, 1.f, 1.f },
+		vert2d{ 0.f,   0.f,   0.f, 0.f } };
 	poly->position = pos;
 	poly->shader = ResourceManager::getInstance().GetShader("flatShader");
 	poly->texture = ResourceManager::getInstance().GetTexture("textBox");
@@ -75,7 +75,7 @@ void TextBox::Update()
 	vec2 center = (pos * 2) + (dim / 2);
 	vec2* screenDim = Renderer::getInstance().screenDim;
 
-	text = new Text(str, vec2((center.data[0] + dim.data[0] / 2) - (4 * textScale * str.length() / screenDim->data[0]), center.data[1] + (4 / screenDim->data[1])), textScale);
+	text = new Text(str, vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
 
 	ResourceManager* resourceManager = &ResourceManager::getInstance();
 
@@ -83,12 +83,12 @@ void TextBox::Update()
 	Polygon2D* poly = new Polygon2D();
 	poly->InitBuffers();
 	poly->verts = {
-		vert2d{ dim.data[0], dim.data[1], 1.f, 1.f },
-		vert2d{ 0.f,         dim.data[1], 0.f, 1.f },
-		vert2d{ 0.f,         0.f,         0.f, 0.f },
-		vert2d{ dim.data[0], 0.f,         1.f, 0.f },
-		vert2d{ dim.data[0], dim.data[1], 1.f, 1.f },
-		vert2d{ 0.f,         0.f,         0.f, 0.f } };
+		vert2d{ dim.x, dim.y, 1.f, 1.f },
+		vert2d{ 0.f,   dim.y, 0.f, 1.f },
+		vert2d{ 0.f,   0.f,   0.f, 0.f },
+		vert2d{ dim.x, 0.f,   1.f, 0.f },
+		vert2d{ dim.x, dim.y, 1.f, 1.f },
+		vert2d{ 0.f,   0.f,   0.f, 0.f } };
 	poly->position = pos;
 	poly->shader = resourceManager->GetShader("flatShader");
 	selected ? poly->texture = resourceManager->GetTexture("textBoxHighlighted") :
@@ -98,8 +98,8 @@ void TextBox::Update()
 	poly->posIsNDC = true;
 
 	// Check if the mouse is within the bounds of the text box
-	if (mousePos.data[0] / screenDim->data[0] > pos.data[0] && mousePos.data[0] / screenDim->data[0] < pos.data[0] + dim.data[0] &&
-		mousePos.data[1] / screenDim->data[1] > pos.data[1] && mousePos.data[1] / screenDim->data[1] < pos.data[1] + dim.data[1])
+	if (mousePos.x / screenDim->x > pos.x && mousePos.x / screenDim->x < pos.x + dim.x &&
+		mousePos.y / screenDim->y > pos.y && mousePos.y / screenDim->y < pos.y + dim.y)
 	{
 		// Check if the left mouse button has been pressed
 		if (lmbPressed)
