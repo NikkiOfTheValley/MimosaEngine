@@ -136,8 +136,7 @@ void Renderer::key_callback(GLFWwindow* window, int key, int /*scancode*/, int /
     }
 }
 
-#pragma warning(push)
-#pragma warning(disable: 4100)
+
 // Creates a new mesh either from a .obj file or a std::vector<vert>
 void Renderer::CreateNewMesh(
     std::string path,
@@ -174,10 +173,13 @@ void Renderer::CreateNewMesh(
     meshes.push_back(mesh);
 }
 
+#pragma warning(push)
+#pragma warning(disable: 4100)
 void Renderer::CreateNewPolygon(std::vector<vert2d> verts, std::string name, Shader* shader, Texture* texture, vec3 pos)
 {
 
 }
+#pragma warning(pop)
 
 void Renderer::AddNewPostProcessingShader(Shader* shader)
 {
@@ -233,4 +235,3 @@ void Renderer::Draw(mat4x4f viewMatrix, mat4x4f projectionMatrix)
 
     postProcessingManager->EndRendering();
 }
-#pragma warning(pop)
