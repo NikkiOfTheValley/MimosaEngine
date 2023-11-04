@@ -221,7 +221,10 @@ Polygon2D* Renderer::GetPolygon(std::string name)
 
 void Renderer::Draw(mat4x4f viewMatrix, mat4x4f projectionMatrix)
 {
-    postProcessingManager->StartRendering();
+    //postProcessingManager->StartRendering();
+
+    glClearColor(clearColorR, clearColorG, clearColorB, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
 
     for (auto& mesh : meshes)
     {
@@ -233,5 +236,5 @@ void Renderer::Draw(mat4x4f viewMatrix, mat4x4f projectionMatrix)
         poly->Draw();
     }
 
-    postProcessingManager->EndRendering();
+    //postProcessingManager->EndRendering();
 }
