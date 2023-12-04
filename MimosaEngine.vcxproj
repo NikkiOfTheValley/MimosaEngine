@@ -205,6 +205,7 @@
     <ClInclude Include="src\physics\types\collision_mesh.h" />
     <ClInclude Include="src\physics\types\constraint.h" />
     <ClInclude Include="src\physics\types\constraints\collision_constraint.h" />
+    <ClInclude Include="src\physics\types\force_generator.h" />
     <ClInclude Include="src\physics\types\large_matrix.h" />
     <ClInclude Include="src\physics\types\large_sparse_matrix.h" />
     <ClInclude Include="src\physics\types\large_vector.h" />
