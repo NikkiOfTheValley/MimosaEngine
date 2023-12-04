@@ -117,7 +117,7 @@ public:
 
 		#else
 
-		assert(rhs.size == this->size, "Size is not a multiple of 8 when executing LargeVector::operator*=(LargeMatrix) while SIMD is enabled");
+		assert(this->size % 8 == 0, "Size is not a multiple of 8 when executing LargeVector::operator*=(LargeMatrix) while SIMD is enabled");
 
 		__declspec(align(32)) float zero[8] = { 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f };
 
