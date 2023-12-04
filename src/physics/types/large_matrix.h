@@ -6,7 +6,7 @@
 // Allows the creation of a matrix of arbitrary size specified at compile-time
 // Only used in the physics engine, so it's a physics engine type
 // Data organization is column-major (i.e. [y][x])
-template<size_t _sizeX, size_t _sizeY> class LargeMatrix
+template<size_t _sizeY, size_t _sizeX> class LargeMatrix
 {
 public:
 	// Aligned to 32 bytes so SSE instructions work
