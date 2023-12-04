@@ -48,7 +48,7 @@ public:
 
 	LargeVector& operator+=(const LargeVector& rhs)
 	{
-		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator+=");
+		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator+=(LargeVector)");
 
 		for (size_t i = 0; i < size; i++)
 			this->data[i] += rhs.data[i];
@@ -66,7 +66,7 @@ public:
 
 	LargeVector& operator-=(const LargeVector& rhs)
 	{
-		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator-=");
+		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator-=(LargeVector)");
 
 		for (size_t i = 0; i < size; i++)
 			this->data[i] -= rhs.data[i];
@@ -84,7 +84,7 @@ public:
 
 	LargeVector& operator*=(const LargeVector& rhs)
 	{
-		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator*=");
+		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator*=(LargeVector)");
 
 		for (size_t i = 0; i < size; i++)
 			this->data[i] *= rhs.data[i];
@@ -117,6 +117,8 @@ public:
 
 		#else
 
+		assert(rhs.size == this->size, "Size is not a multiple of 8 when executing LargeVector::operator*=(LargeMatrix) while SIMD is enabled");
+
 		__declspec(align(32)) float zero[8] = { 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f };
 
 		for (size_t i = 0; i < size; i++)
@@ -133,8 +135,6 @@ public:
 
 				// Equivelant to result += vectorData * matData
 				result = _mm256_fmadd_ps(vectorData, matData, result);
-
-
 			}
 
 			for (size_t k = size - 1; k < rhs.sizeX - 1; k++)
@@ -157,7 +157,7 @@ public:
 
 	LargeVector& operator/=(const LargeVector& rhs)
 	{
-		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator/=");
+		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator/=(LargeVector)");
 
 		for (size_t i = 0; i < size; i++)
 			this->data[i] /= rhs.data[i];
@@ -176,7 +176,7 @@ public:
 
 	LargeVector operator+(const LargeVector& rhs)
 	{
-		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator+");
+		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator+(LargeVector)");
 
 		LargeVector<size> result = *this;
 		result += rhs;
@@ -193,7 +193,7 @@ public:
 
 	LargeVector operator-(const LargeVector& rhs)
 	{
-		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator-");
+		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator-(LargeVector)");
 
 		LargeVector<size> result = *this;
 		result -= rhs;
@@ -209,7 +209,7 @@ public:
 
 	LargeVector operator*(const LargeVector& rhs)
 	{
-		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator*");
+		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator*(LargeVector)");
 
 		LargeVector<size> result = *this;
 		result *= rhs;
@@ -239,7 +239,7 @@ public:
 
 	LargeVector operator/(const LargeVector& rhs)
 	{
-		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator/");
+		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator/(LargeVector)");
 
 		LargeVector<size> result = *this;
 		result *= rhs;
@@ -261,13 +261,13 @@ public:
 
 	void operator=(const LargeVector& rhs)
 	{
-		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator=");
+		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator=(LargeVector)");
 		data = rhs.data;
 	}
 
 	bool operator==(const LargeVector& rhs)
 	{
-		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator==");
+		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator==(LargeVector)");
 
 		for (size_t i = 0; i < size; i++)
 			if (abs(this->data[i] - rhs.data[i]) > epsilon)
@@ -277,7 +277,7 @@ public:
 
 	bool operator!=(const LargeVector& rhs)
 	{
-		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator!=");
+		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator!=(LargeVector)");
 
 		return !(this == rhs);
 	}
