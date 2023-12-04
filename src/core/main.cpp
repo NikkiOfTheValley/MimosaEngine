@@ -18,6 +18,7 @@
 
 // - Global variables -
 
+uint16_t supportedFeatures;
 float fov = 45;
 bool inUI = true;
 vec2 mousePos = vec2();
@@ -53,6 +54,124 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	logger->log("MimosaEngine " + ENG_VERSION_STR);
 	logger->log(NAME_STR + " " + VERSION_STR);
+
+	// Check what the CPU supports
+
+	#ifdef _WIN32
+
+	//  Windows
+	#define cpuid(info, x)    __cpuidex(info, x, 0)
+
+	#else
+
+	//  GCC Intrinsics
+	#include <cpuid.h>
+		void cpuid(int info[4], int InfoType) {
+			__cpuid_count(InfoType, 0, info[0], info[1], info[2], info[3]);
+		}
+
+	#endif
+
+	int info[4];
+
+	cpuid(info, 0);
+	int nIds = info[0];
+
+	cpuid(info, 0x80000000);
+	unsigned int nExIds = info[0];
+
+	if (nIds >= 0x00000001)
+	{
+		cpuid(info, 0x00000001);
+		if ((info[3] & ((int)1 << 25)) != 0) { supportedFeatures |= HW_SSE; };
+		if ((info[3] & ((int)1 << 26)) != 0) { supportedFeatures |= HW_SSE2; };
+		if ((info[2] & ((int)1 << 0)) != 0) { supportedFeatures |= HW_SSE3; };
+
+		if ((info[2] & ((int)1 << 28)) != 0) { supportedFeatures |= HW_AVX; };
+		if ((info[2] & ((int)1 << 12)) != 0) { supportedFeatures |= HW_FMA3; };
+	}
+
+	if (nIds >= 0x00000007)
+	{
+		cpuid(info, 0x00000007);
+		if ((info[1] & ((int)1 << 5)) != 0) { supportedFeatures |= HW_AVX2; };
+
+		if ((info[1] & ((int)1 << 16)) != 0) { supportedFeatures |= HW_AVX512F; };
+		if ((info[1] & ((int)1 << 28)) != 0) { supportedFeatures |= HW_AVX512CD; };
+		if ((info[1] & ((int)1 << 26)) != 0) { supportedFeatures |= HW_AVX512PF; };
+		if ((info[1] & ((int)1 << 27)) != 0) { supportedFeatures |= HW_AVX512ER; };
+		if ((info[1] & ((int)1 << 31)) != 0) { supportedFeatures |= HW_AVX512VL; };
+		if ((info[1] & ((int)1 << 30)) != 0) { supportedFeatures |= HW_AVX512BW; };
+		if ((info[1] & ((int)1 << 17)) != 0) { supportedFeatures |= HW_AVX512DQ; };
+		if ((info[2] & ((int)1 << 1)) != 0) { supportedFeatures |= HW_AVX512VBMI; };
+	}
+
+	if (nExIds >= 0x80000001)
+	{
+		cpuid(info, 0x80000001);
+
+		if ((info[3] & ((int)1 << 29)) != 0) { supportedFeatures |= HW_x64; };
+		if ((info[2] & ((int)1 << 16)) != 0) { supportedFeatures |= HW_FMA4; };
+	}
+
+	// Now check what the OS supports, and zero out the flags that have CPU support, but no OS support
+
+	cpuid(info, 1);
+
+	bool osUsesXSAVE_XRSTORE = info[2] & (1 << 27) || false;
+
+	if (osUsesXSAVE_XRSTORE && ((supportedFeatures & HW_AVX) != 0))
+	{
+		unsigned long long xcrFeatureMask = _xgetbv(_XCR_XFEATURE_ENABLED_MASK);
+		bool avxSupportedByOS = (xcrFeatureMask & 0x6) == 0x6;
+		bool avx512SupportedByOS = (xcrFeatureMask & 0xe6) == 0xe6;
+
+		if (((supportedFeatures & HW_AVX) != 0) && avxSupportedByOS != true)
+		{
+			logger->warn("AVX is supported by the CPU, but not the OS! This may cause performace issues!");
+
+			// Zero out all AVX flags
+			supportedFeatures &= ~(HW_AVX | HW_AVX2);
+		}
+
+		const uint16_t AVX512_BITMASK = HW_AVX512F | HW_AVX512CD | HW_AVX512PF | HW_AVX512ER | HW_AVX512VL | HW_AVX512BW | HW_AVX512DQ | HW_AVX512VBMI;
+
+		if (((supportedFeatures & AVX512_BITMASK) != 0) && avx512SupportedByOS != true)
+		{
+			logger->warn("AVX512 is supported by the CPU, but not the OS! This may cause performace issues!");
+
+			// Zero out all AVX512 flags
+			supportedFeatures &= ~AVX512_BITMASK;
+		}
+	}
+
+	// Output supported features
+
+	logger->log("Supported Features:");
+
+	std::stringstream output;
+
+	((supportedFeatures & HW_x64) != 0) ? output << "    x64: Yes\n" : output << "    x64: No\n";
+	
+	((supportedFeatures & HW_SSE) != 0) ? output << "[LOG]:     SSE: Yes\n" : output << "[LOG]:     SSE: No\n";
+	((supportedFeatures & HW_SSE2) != 0) ? output << "[LOG]:     SSE2: Yes\n" : output << "[LOG]:     SSE2: No\n";
+	((supportedFeatures & HW_SSE3) != 0) ? output << "[LOG]:     SSE3: Yes\n" : output << "[LOG]:     SSE3: No\n";
+	
+	((supportedFeatures & HW_AVX) != 0) ? output << "[LOG]:     AVX: Yes\n" : output << "[LOG]:     AVX: No\n";
+	((supportedFeatures & HW_AVX2) != 0) ? output << "[LOG]:     AVX2: Yes\n" : output << "[LOG]:     AVX2: No\n";
+	((supportedFeatures & HW_FMA3) != 0) ? output << "[LOG]:     FMA3: Yes\n" : output << "[LOG]:     FMA3: No\n";
+	((supportedFeatures & HW_FMA4) != 0) ? output << "[LOG]:     FMA4: Yes\n" : output << "[LOG]:     FMA4: No\n";
+	
+	((supportedFeatures & HW_AVX512F) != 0) ? output << "[LOG]:     AVX512 Foundation: Yes\n" : output << "[LOG]:     AVX512 Foundation: No\n";
+	((supportedFeatures & HW_AVX512CD) != 0) ? output << "[LOG]:     AVX512 Conflict Detection: Yes\n" : output << "[LOG]:     AVX512 Conflict Detection: No\n";
+	((supportedFeatures & HW_AVX512PF) != 0) ? output << "[LOG]:     AVX512 Prefetch: Yes\n" : output << "[LOG]:     AVX512 Prefetch: No\n";
+	((supportedFeatures & HW_AVX512ER) != 0) ? output << "[LOG]:     AVX512 Exponential + Reciprocal: Yes\n" : output << "[LOG]:     AVX512 Exponential + Reciprocal: No\n";
+	((supportedFeatures & HW_AVX512VL) != 0) ? output << "[LOG]:     AVX512 Vector Length Extensions: Yes\n" : output << "[LOG]:     AVX512 Vector Length Extensions: No\n";
+	((supportedFeatures & HW_AVX512BW) != 0) ? output << "[LOG]:     AVX512 Byte + Word: Yes\n" : output << "[LOG]:     AVX512 Byte + Word: No\n";
+	((supportedFeatures & HW_AVX512DQ) != 0) ? output << "[LOG]:     AVX512 Doubleword + Quadword: Yes\n" : output << "[LOG]:     AVX512 Doubleword + Quadword: No\n";
+	((supportedFeatures & HW_AVX512VBMI) != 0) ? output << "[LOG]:     AVX512 Vector Byte Manipulation Instructions: Yes" : output << "[LOG]:     AVX512 Vector Byte Manipulation Instructions: No";
+
+	logger->log(output.str());
 
 	TextureManager::getInstance().Init();
 	resourceManager = &ResourceManager::getInstance();
