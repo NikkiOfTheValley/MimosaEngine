@@ -206,6 +206,7 @@
     <ClInclude Include="src\physics\types\constraint.h" />
     <ClInclude Include="src\physics\types\constraints\collision_constraint.h" />
     <ClInclude Include="src\physics\types\large_matrix.h" />
+    <ClInclude Include="src\physics\types\large_sparse_matrix.h" />
     <ClInclude Include="src\physics\types\large_vector.h" />
     <ClInclude Include="src\physics\types\mlcp_solver.h" />
     <ClInclude Include="src\physics\types\ode_solver.h" />

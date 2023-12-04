@@ -2148,6 +2148,9 @@
     <ClInclude Include="src\core\accurate_timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\physics\types\large_sparse_matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\input_handler.cpp">
