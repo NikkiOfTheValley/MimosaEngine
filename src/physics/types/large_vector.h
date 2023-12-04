@@ -4,6 +4,7 @@
 #include <intrin.h>
 #include "assert.h"
 #include "large_matrix.h"
+#include "large_sparse_matrix.h"
 
 // Allows the creation of a vector of arbitrary size specified at compile-time
 // Only used in the SLE solver, so it's a physics engine type
@@ -130,7 +131,7 @@ public:
 
 			for (size_t k = 0; k < size; k += 8)
 			{
-				__m256 matData = _mm256_load_ps(&rhs.data[k][i]);
+				__m256 matData = _mm256_load_ps(&rhs.data[i][k]);
 				__m256 vectorData = _mm256_load_ps(&data[k]);
 
 				// Equivelant to result += vectorData * matData
@@ -152,6 +153,31 @@ public:
 		#endif
 
 		*this = resultVector;
+		return *this;
+	}
+
+	template<size_t matrix_size_x, size_t matrix_size_y> LargeVector& operator*=(const LargeSparseMatrix<matrix_size_x, matrix_size_y> rhs)
+	{
+		__declspec(align(32)) LargeVector<size> resultVector = *this;
+
+		for (size_t i = 0; i < size; i++)
+		{
+			float result = 0.f;
+			for (size_t k = 0; k < size; k++)
+				result += this->data[k] * rhs.data[{i, k}];
+
+			resultVector.data[i] = result;
+		}
+
+
+	#ifdef NO_SIMD
+
+	#else
+		assert(this->size % 8 == 0, "Size is not a multiple of 8 when executing LargeVector::operator*=(LargeSparseMatrix) while SIMD is enabled");
+
+	#endif
+
+		* this = resultVector;
 		return *this;
 	}
 
@@ -231,6 +257,13 @@ public:
 	}
 
 	template<size_t matrix_size_x, size_t matrix_size_y> LargeVector operator*(const LargeMatrix<matrix_size_x, matrix_size_y> rhs)
+	{
+		LargeVector<size> result = *this;
+		result *= rhs;
+		return result;
+	}
+
+	template<size_t matrix_size_x, size_t matrix_size_y> LargeVector operator*(const LargeSparseMatrix<matrix_size_x, matrix_size_y> rhs)
 	{
 		LargeVector<size> result = *this;
 		result *= rhs;
