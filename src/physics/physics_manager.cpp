@@ -53,7 +53,7 @@ void PhysicsManager::Step(double fixedDeltaTime)
 	// Run RK4
 	odeSolver.Solve(&state, (float)fixedDeltaTime);
 
-	// Call the custom update functionality on the objects last
+	// Call the custom update functionality on the objects
 	for (auto& obj : state.objects)
 		obj.Update(fixedDeltaTime);
 
@@ -62,7 +62,7 @@ void PhysicsManager::Step(double fixedDeltaTime)
 		if (obj.hasGravity)
 			state.objForceVector[(obj.index * 6) + 1] = -9.8f;
 
-	state.objForceVector -= (state.objVelVector * state.objVelVector) * -DRAG_CONSTANT;
+	//state.objForceVector -= (state.objVelVector * state.objVelVector) * -DRAG_CONSTANT;
 
 	state.isInStep = false;
 }

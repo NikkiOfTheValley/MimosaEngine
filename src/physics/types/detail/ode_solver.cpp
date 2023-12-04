@@ -25,7 +25,7 @@ obj_vel_and_accel ODESolver::Evaluate(PhysState* state, float fixedDeltaTime, co
 
 	obj_vel_and_accel output;
 	output.objVelVector = state->objVelVector + oldObjVelAndAccel.objAccelVector;
-	output.objAccelVector = (state->objForceVector * state->objPropertiesMatrix.inverseDiagonal());
+	output.objAccelVector = (state->objForceVector * state->objPropertiesMatrix.inverseDiagonal()); 
 
 	return output;
 }
