@@ -3,6 +3,7 @@
 
 struct vec2;
 
+//#define NO_SIMD
 extern vec2 mousePos;
 extern bool lmbPressed;
 

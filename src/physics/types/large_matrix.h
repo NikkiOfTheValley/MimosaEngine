@@ -59,9 +59,14 @@ public:
 	{
 		assert(sizeX == sizeY, "Non-square matrix when executing LargeMatrix::inverseDiagonal");
 
+		#ifdef NO_SIMD
 		for (size_t i = 0; i < sizeX; i++)
 			data[i][i] = 1.f / data[i][i];
+		#else
 
+		for (size_t i = 0; i < sizeX; i++)
+			data[i][i] = 1.f / data[i][i];
+		#endif
 		return *this;
 	}
 

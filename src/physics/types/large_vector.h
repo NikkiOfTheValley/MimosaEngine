@@ -104,12 +104,27 @@ public:
 	{
 		__declspec(align(32)) LargeVector<size> resultVector = *this;
 
+		#ifdef NO_SIMD
+
+		for (size_t i = 0; i < size; i++)
+		{
+			float result = 0.f;
+			for (size_t k = 0; k < size; k++)
+				result += this->data[k] * rhs.data[i][k];
+
+			resultVector.data[i] = result;
+		}
+
+		#else
+
 		__declspec(align(32)) float zero[8] = { 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f };
 
-		for (size_t i = 0; i < size; i += 8)
+		for (size_t i = 0; i < size; i++)
 		{
 
 			__m256 result = _mm256_load_ps(zero);
+
+			//__m256 result = _mm256_setzero_ps();
 
 			for (size_t k = 0; k < size; k += 8)
 			{
@@ -117,7 +132,9 @@ public:
 				__m256 vectorData = _mm256_load_ps(&data[k]);
 
 				// Equivelant to result += vectorData * matData
-				_mm256_fmadd_ps(vectorData, matData, result);
+				result = _mm256_fmadd_ps(vectorData, matData, result);
+
+
 			}
 
 			for (size_t k = size - 1; k < rhs.sizeX - 1; k++)
@@ -126,19 +143,13 @@ public:
 
 				result = _mm256_add_ps(result, matData);
 			}
+
+
+			for (size_t k = 0; k < size; k += 8)
+				_mm256_store_ps(&resultVector.data[k], result);
 		}
 
-		//for (size_t i = 0; i < size; i++)
-		//{
-		//	float result = 0.f;
-		//	for (size_t k = 0; k < size; k++)
-		//		result += this->data[k] * rhs.data[i][k];
-
-		//	for (size_t k = size - 1; k < rhs.sizeX - 1; k++)
-		//		result += rhs.data[k][i];
-
-		//	resultVector.data[i] = result;
-		//}
+		#endif
 
 		*this = resultVector;
 		return *this;

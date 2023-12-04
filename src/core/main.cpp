@@ -167,7 +167,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 	CollisionConstraint* constraint = new CollisionConstraint();
 	constraint->collisionMesh = collisionMesh;
 
-	physicsManager->CreateObject("test", { 4.f, 0.f, 2.f }, { 0.f, 0.f, 0.f }, DENSITY_CAST_IRON, constraint);
+	physicsManager->CreateObject("test", { 4.f, 0.f, 2.f }, { 0.f, 0.f, 0.f }, DENSITY_CAST_IRON, constraint, {}, { 0, 1, 0 }, {}, false);
 
 	// -- Create camera --
 
@@ -234,7 +234,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 		renderer->GetMesh("exampleMesh")->rotation.y += 0.5f * (float)deltaTime;
 
-		//renderer->GetMesh("exampleMesh")->position = physicsManager->GetPhysObject("test")->GetProperties().pos;
+		renderer->GetMesh("exampleMesh")->position = physicsManager->GetPhysObject("test")->GetProperties().pos;
 
 		glfwPollEvents();
 
