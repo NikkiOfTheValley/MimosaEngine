@@ -73,11 +73,26 @@ public:
 
 		#ifdef NO_SIMD
 		for (size_t i = 0; i < sizeX; i++)
+		{
+			if ((*this)[{i, i}] == 0)
+				continue;
+
 			(*this)[{i, i}] = 1.f / (*this)[{i, i}];
+		}
+
 		#else
 
+		// This is a weird workaround to get a constant pointer to `this`, so the (non-modifying) const [] operator can be used
+		const LargeSparseMatrix<sizeY, sizeX>* constThis = this;
+
 		for (size_t i = 0; i < sizeX; i++)
+		{
+			if ((*constThis)[{i, i}] == 0)
+				continue;
+
 			(*this)[{i, i}] = 1.f / (*this)[{i, i}];
+		}
+		
 		#endif
 		return *this;
 	}
