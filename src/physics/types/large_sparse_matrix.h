@@ -11,7 +11,7 @@ struct position
 // Allows the creation of a sparse matrix of arbitrary size specified at compile-time
 // Only used in the physics engine, so it's a physics engine type
 // Data access is column-major (i.e. [y][x])
-// Internal data format is Compressed Sparse Column
+// Internal data format is Yale (also known as Compressed Sparse Row)
 template<size_t _sizeY, size_t _sizeX> class LargeSparseMatrix
 {
 public:
@@ -19,9 +19,9 @@ public:
 	// Disable padding warnings
 	#pragma warning(disable: 4324)
 	// Aligned to 32 bytes so SSE instructions work
-	__declspec(align(32)) std::array<float, _sizeX * _sizeY> values;
-	__declspec(align(32)) std::array<size_t, _sizeX * _sizeY> rowIndex;
-	__declspec(align(32)) std::array<size_t, _sizeX + 1> columnIndex;
+	__declspec(align(32)) std::array<float, _sizeX* _sizeY> values;
+	__declspec(align(32)) std::array<size_t, _sizeX* _sizeY> columnIndex;
+	__declspec(align(32)) std::array<size_t, _sizeY + 1> rowIndex;
 	#pragma warning(pop)
 
 	static const size_t sizeX = _sizeX;
@@ -90,47 +90,47 @@ public:
 		assert(row < this->sizeY, "Row index out of bounds when executing LargeSparseMatrix::operator[]");
 		assert(col < this->sizeX, "Column index out of bounds when executing LargeSparseMatrix::operator[]");
 
-		size_t& colStart = columnIndex[col];
-		size_t& colEnd = columnIndex[col + 1];
+		size_t& rowStart = rowIndex[row];
+		size_t& rowEnd = rowIndex[row + 1];
 
-		bool justInitalizedCol = false;
+		bool justInitalizedRow = false;
 
 		// If either row index is -1, this row hasn't been set yet, so we have to initialize it
-		if (colStart == -1 || colEnd == -1)
+		if (rowStart == -1 || rowEnd == -1)
 		{
-			// The start of the row (assuming the matrix is initialized in column-major order) is always the current number of values
-			colStart = numValues;
+			// The start of the row (assuming the matrix is initialized in row-major order) is always the current number of values
+			rowStart = numValues;
 
-			// The end of the row (assuming the matrix is initialized in column-major order) is always the current number of values + 1
-			colEnd = numValues + 1;
+			// The end of the row (assuming the matrix is initialized in row-major order) is always the current number of values + 1
+			rowEnd = numValues + 1;
 
-			justInitalizedCol = true;
+			justInitalizedRow = true;
 		}
 
-		// Check if the selected row exists
-		for (size_t i = colStart; i < colEnd; i++)
+		// Check if the selected column exists
+		for (size_t i = rowStart; i < rowEnd; i++)
 		{
 			// If it does, just return a reference to the associated value
-			if (rowIndex[i] == row)
+			if (columnIndex[i] == col)
 				return values[i];
 		}
 
-		// If it doesn't, initialize the selected row
+		// If it doesn't, initialize the selected column
 
-		if (!justInitalizedCol)
+		if (!justInitalizedRow)
 		{
-			// Assuming the matrix is initialized in column-major order, we can just add one to the end index of the row,
-			// since there shouldn't be any data after the current column
-			colEnd++;
+			// Assuming the matrix is initialized in row-major order, we can just add one to the end index of the row,
+			// since there shouldn't be any data after the current row
+			rowEnd++;
 		}
 
-		// We have to subtract one from colEnd because it's actually the beginning of the next column, not the last index of the current column
-		rowIndex[colEnd - 1] = row;
+		// We have to subtract one from rowEnd because it's actually the beginning of the next row, not the last index of the current row
+		columnIndex[rowEnd - 1] = col;
 
 		// Increment numValues, since we just initialized a value
 		numValues++;
 
-		return values[colEnd - 1];
+		return values[rowEnd - 1];
 	}
 
 	constexpr float operator[](position pos) const
@@ -141,21 +141,21 @@ public:
 		assert(row < this->sizeY, "Row index out of bounds when executing LargeSparseMatrix::operator[]");
 		assert(col < this->sizeX, "Column index out of bounds when executing LargeSparseMatrix::operator[]");
 
-		size_t colStart = columnIndex[col];
-		size_t colEnd = columnIndex[col + 1];
+		size_t rowStart = rowIndex[row];
+		size_t rowEnd = rowIndex[row + 1];
 
-		// Check if the column is initialized
-		if (colStart == -1 || colEnd == -1)
+		// Check if the row is initialized
+		if (rowStart == -1 || rowEnd == -1)
 		{
 			// If it isn't, return 0
 			return 0.f;
 		}
 
-		// Check if the selected row exists
-		for (size_t i = colStart; i < colEnd; i++)
+		// Check if the selected column exists
+		for (size_t i = rowStart; i < rowEnd; i++)
 		{
 			// If it does, just return a reference to the associated value
-			if (rowIndex[i] == row)
+			if (columnIndex[i] == col)
 				return values[i];
 		}
 
