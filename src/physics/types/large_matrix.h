@@ -20,8 +20,6 @@ public:
 		{
 			arr.fill(0.f);
 		}
-
-		identity();
 	}
 
 	LargeMatrix(std::initializer_list<std::initializer_list<float>> list)

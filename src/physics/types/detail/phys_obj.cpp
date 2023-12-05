@@ -36,7 +36,7 @@ phys_obj_prop PhysObj::GetProperties()
 	prop.angVel.y = state->objVelVector[(index * 6) + 4];
 	prop.angVel.z = state->objVelVector[(index * 6) + 5];
 
-	prop.mass = state->objPropertiesMatrix.data[index * 3][index * 3];
+	prop.mass = state->objPropertiesMatrix[{index * 3, index * 3}];
 
 	return prop;
 }
@@ -67,5 +67,5 @@ void PhysObj::SetProperties(phys_obj_prop prop)
 	state->objVelVector[(index * 6) + 4] = prop.angVel.y;
 	state->objVelVector[(index * 6) + 5] = prop.angVel.z;
 
-	state->objPropertiesMatrix.data[index * 3][index * 3] = prop.mass;
+	state->objPropertiesMatrix[{index * 3, index * 3}] = prop.mass;
 }

@@ -160,13 +160,24 @@ public:
 	{
 		__declspec(align(32)) LargeVector<size> resultVector = *this;
 
-		for (size_t i = 0; i < size; i++)
+		for (size_t row = 0; row < size; row++)
 		{
 			float result = 0.f;
-			for (size_t k = 0; k < size; k++)
-				result += this->data[k] * rhs.data[{i, k}];
 
-			resultVector.data[i] = result;
+			for (size_t column = 0; column < size; column++)
+			{
+				size_t colStart = rhs.columnIndex[column];
+				size_t colEnd = rhs.columnIndex[column + 1];
+
+				// Skip over this column if it isn't initialized
+				if (colStart == -1 || colEnd == -1)
+					continue;
+
+				result += this->data[column] * rhs[{row, column}];
+			}
+				
+
+			resultVector.data[row] = result;
 		}
 
 
@@ -177,7 +188,7 @@ public:
 
 	#endif
 
-		* this = resultVector;
+		*this = resultVector;
 		return *this;
 	}
 

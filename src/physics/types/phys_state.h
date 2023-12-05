@@ -5,6 +5,7 @@
 #include "sle_solver.h"
 #include "ode_solver.h"
 #include "mlcp_solver.h"
+#include "large_sparse_matrix.h"
 
 struct PhysState
 {
@@ -40,7 +41,7 @@ struct PhysState
 	// 
 	// Where `m` is the mass of the `i`th rigid body,
 	// and I is the inertia tensor of the `i`th rigid body.
-	LargeMatrix<MAX_PHYS_OBJECTS * 6, MAX_PHYS_OBJECTS * 6> objPropertiesMatrix;
+	LargeSparseMatrix<MAX_PHYS_OBJECTS * 6, MAX_PHYS_OBJECTS * 6> objPropertiesMatrix;
 
 	// A state vector of size 6n
 	// Example vector where `n` is 2 and all object "slots" are in use:
