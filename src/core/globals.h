@@ -38,7 +38,7 @@ extern bool lmbPressed;
 extern bool inUI;
 extern bool useTextInput;
 
-extern std::string textInput;
+extern std::string* currentlySelectedText;
 
 const std::string ENG_VERSION_STR = "v0.3.0";
 const std::string VERSION_STR = "v0.0.1";

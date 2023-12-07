@@ -46,9 +46,9 @@ bool Renderer::init(uint32_t width, uint32_t height, std::function<void(GLFWwind
     glfwSetCharCallback(window,
         [](GLFWwindow* /*window*/, unsigned int codepoint)
         {
-            if (useTextInput)
+            if (useTextInput && currentlySelectedText != nullptr)
             {
-                textInput += (char)codepoint;
+                *currentlySelectedText += (char)codepoint;
             }
                 
         });
@@ -120,9 +120,9 @@ void Renderer::key_callback(GLFWwindow* window, int key, int /*scancode*/, int /
 {
     if (key == GLFW_KEY_BACKSPACE &&
         glfwGetKey(window, key) == GLFW_PRESS &&
-        useTextInput && !textInput.empty())
+        useTextInput && !currentlySelectedText->empty())
     {
-        textInput.pop_back();
+        currentlySelectedText->pop_back();
     }
         
 

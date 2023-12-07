@@ -24,7 +24,7 @@ bool inUI = true;
 vec2 mousePos = vec2();
 bool lmbPressed = false;
 bool useTextInput = false;
-std::string textInput = "";
+std::string* currentlySelectedText = nullptr;
 
 // - Local variables -
 
@@ -251,6 +251,8 @@ int main(int /*argc*/, char* /*argv[]*/)
 		});
 
 	uiManager->CreateTextBoxElement("Example Text Box", "text_box", vec2{ 0.355f, 0.5f }, vec2{ 0.28f, 0.06f }, 4);
+
+	uiManager->CreateTextBoxElement("Example Text Box 2", "text_box_2", vec2{ 0.355f, 0.58f }, vec2{ 0.28f, 0.06f }, 4);
 
 	uiManager->CreateButtonElement("Example Button 2", vec2{ 0.355f, 0.7f }, vec2{ 0.38f, 0.08f }, 4,
 		[&]() {

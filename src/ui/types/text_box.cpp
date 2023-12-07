@@ -47,6 +47,13 @@ TextBox::~TextBox()
 	}
 	text->letterPolygons.clear();
 	delete text;
+
+	// Make sure to clear currentlySelectedText and useTextInput if this TextBox is selected, so the user can't corrupt memory by typing in a deleted TextBox
+	if (selected)
+	{
+		useTextInput = false;
+		currentlySelectedText = nullptr;
+	}
 }
 
 void TextBox::Draw()
@@ -57,10 +64,6 @@ void TextBox::Draw()
 
 void TextBox::Update()
 {
-	// If this text box has been selected, then the text on the text box should match the input string
-	if (selected)
-		str = textInput;
-
 	backgroundImage->Dealloc();
 	delete backgroundImage;
 
@@ -108,6 +111,8 @@ void TextBox::Update()
 			poly->texture = resourceManager->GetTexture("textBoxHighlighted");
 			selected = true;
 			useTextInput = true;
+
+			currentlySelectedText = &str;
 		}
 	}
 	else
@@ -117,7 +122,14 @@ void TextBox::Update()
 		{
 			poly->texture = resourceManager->GetTexture("textBox");
 			selected = false;
-			useTextInput = false;
+
+			// Check if another TextBox has been selected, and if so, don't clear useTextInput or
+			// currentlySelectedText, as they have been set by the other TextBox
+			if (currentlySelectedText == &str)
+			{
+				useTextInput = false;
+				currentlySelectedText = nullptr;
+			}
 		}
 	}
 
