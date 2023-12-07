@@ -19,8 +19,8 @@ public:
 	// Disable padding warnings
 	#pragma warning(disable: 4324)
 	// Aligned to 32 bytes so SSE instructions work
-	__declspec(align(32)) std::array<float, _sizeX* _sizeY> values;
-	__declspec(align(32)) std::array<size_t, _sizeX* _sizeY> columnIndex;
+	__declspec(align(32)) std::array<float, _sizeX * _sizeY> values;
+	__declspec(align(32)) std::array<size_t, _sizeX * _sizeY> columnIndex;
 	__declspec(align(32)) std::array<size_t, _sizeY + 1> rowIndex;
 	#pragma warning(pop)
 
