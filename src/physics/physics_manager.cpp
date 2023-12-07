@@ -247,17 +247,17 @@ void PhysicsManager::CalculatePhysicalProperties(float density, const std::vecto
 
 	// First row
 	state.objPropertiesMatrix[{tensorIndex, tensorIndex}] = tensor_xx * density;
-	state.objPropertiesMatrix[{tensorIndex, tensorIndex + 1}] = tensor_xy * density;
-	state.objPropertiesMatrix[{tensorIndex, tensorIndex + 2}] = tensor_xz * density;
+	state.objPropertiesMatrix[{tensorIndex + 1, tensorIndex}] = tensor_xy * density;
+	state.objPropertiesMatrix[{tensorIndex + 2, tensorIndex}] = tensor_xz * density;
 
 	// Second row
-	state.objPropertiesMatrix[{tensorIndex + 1, tensorIndex}] = tensor_xy * density;
+	state.objPropertiesMatrix[{tensorIndex, tensorIndex + 1}] = tensor_xy * density;
 	state.objPropertiesMatrix[{tensorIndex + 1, tensorIndex + 1}] = tensor_yy * density;
-	state.objPropertiesMatrix[{tensorIndex + 1, tensorIndex + 2}] = tensor_yz * density;
+	state.objPropertiesMatrix[{tensorIndex + 2, tensorIndex + 1}] = tensor_yz * density;
 
 	// Third row
-	state.objPropertiesMatrix[{tensorIndex + 2, tensorIndex}] = tensor_xz * density;
-	state.objPropertiesMatrix[{tensorIndex + 2, tensorIndex + 1}] = tensor_yz * density;
+	state.objPropertiesMatrix[{tensorIndex, tensorIndex + 2}] = tensor_xz * density;
+	state.objPropertiesMatrix[{tensorIndex + 1, tensorIndex + 2}] = tensor_yz * density;
 	state.objPropertiesMatrix[{tensorIndex + 2, tensorIndex + 2}] = tensor_zz * density;
 
 	Logger::getInstance().log("Calculated values:\n      Mass: " + std::to_string(volume * density) + "kg\n      Volume: " + std::to_string(volume) + "m^3\n      Center Of Mass: " + (std::string)COM);

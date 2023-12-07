@@ -166,17 +166,16 @@ public:
 
 			for (size_t column = 0; column < size; column++)
 			{
-				size_t rowStart = rhs.rowIndex[row];
-				size_t rowEnd = rhs.rowIndex[row + 1];
+				size_t colStart = rhs.columnIndex[column];
+				size_t colEnd = rhs.columnIndex[column + 1];
 
-				// Skip over this row if it isn't initialized
-				if (rowStart == -1 || rowEnd == -1)
+				// Skip over this column if it isn't initialized
+				if (colStart == -1 || colEnd == -1)
 					continue;
 
 				result += this->data[column] * rhs[{row, column}];
 			}
-				
-
+			
 			resultVector.data[row] = result;
 		}
 
