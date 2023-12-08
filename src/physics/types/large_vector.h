@@ -122,7 +122,7 @@ public:
 
 		__declspec(align(32)) float zero[8] = { 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f };
 
-		for (size_t i = 0; i < size; i++)
+		for (size_t i = 0; i < size; i += 8)
 		{
 
 			__m256 result = _mm256_load_ps(zero);
@@ -158,32 +158,33 @@ public:
 
 	template<size_t matrix_size_x, size_t matrix_size_y> LargeVector& operator*=(const LargeSparseMatrix<matrix_size_x, matrix_size_y> rhs)
 	{
-		__declspec(align(32)) LargeVector<size> resultVector = *this;
-
-		for (size_t row = 0; row < size; row++)
-		{
-			float result = 0.f;
+		__declspec(align(32)) LargeVector<size> resultVector;
 
 			for (size_t column = 0; column < size; column++)
 			{
 				size_t colStart = rhs.columnIndex[column];
-				size_t colEnd = rhs.columnIndex[column + 1];
 
-				// Skip over this column if it isn't initialized
-				if (colStart == -1 || colEnd == -1)
+			if (colStart == (size_t)-1)
 					continue;
 
-				result += this->data[column] * rhs[{row, column}];
-			}
+			for (size_t i = 0; i < rhs.numElementsInColumn[column]; i++)
+			{
+				resultVector.data[rhs.rowIndex[colStart + i]] += this->data[column] * rhs.values[colStart + i];
 			
-			resultVector.data[row] = result;
+				// For each row index, generate a mask from the computed data
+
+
+				//*mm_maskstore_ps(&resultVector.data[colStart + i]);*/
+		}
 		}
 
 
 	#ifdef NO_SIMD
 
 	#else
-		assert(this->size % 8 == 0, "Size is not a multiple of 8 when executing LargeVector::operator*=(LargeSparseMatrix) while SIMD is enabled");
+		assert(this->size % 8 == 0, "Vector size is not a multiple of 8 when executing LargeVector::operator*=(LargeSparseMatrix) while SIMD is enabled");
+		assert(rhs.sizeX % 8 == 0, "Number of columns in matrix is not a multiple of 8 when executing LargeVector::operator*=(LargeSparseMatrix) while SIMD is enabled");
+		assert(rhs.sizeY % 8 == 0, "Number of rows in matrix is not a multiple of 8 when executing LargeVector::operator*=(LargeSparseMatrix) while SIMD is enabled");
 
 	#endif
 
@@ -208,7 +209,6 @@ public:
 
 		return *this;
 	}
-
 
 	LargeVector operator+(const LargeVector& rhs)
 	{

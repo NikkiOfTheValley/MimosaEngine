@@ -15,14 +15,15 @@ struct position
 template<size_t _sizeY, size_t _sizeX> class LargeSparseMatrix
 {
 public:
-	#pragma warning(push)
+#pragma warning(push)
 	// Disable padding warnings
-	#pragma warning(disable: 4324)
-	// Aligned to 32 bytes so SSE instructions work
-	__declspec(align(32)) std::array<float, _sizeX * _sizeY> values;
-	__declspec(align(32)) std::array<size_t, _sizeX * _sizeY> rowIndex;
+#pragma warning(disable: 4324)
+// Aligned to 32 bytes so SSE instructions work
+	__declspec(align(32)) std::array<float, _sizeX* _sizeY> values;
+	__declspec(align(32)) std::array<size_t, _sizeX* _sizeY> rowIndex;
 	__declspec(align(32)) std::array<size_t, _sizeX + 1> columnIndex;
-	#pragma warning(pop)
+	__declspec(align(32)) std::array<size_t, _sizeX> numElementsInColumn;
+#pragma warning(pop)
 
 	static const size_t sizeX = _sizeX;
 	static const size_t sizeY = _sizeY;
@@ -33,6 +34,7 @@ public:
 	{
 		rowIndex.fill((size_t)-1);
 		columnIndex.fill((size_t)-1);
+		numElementsInColumn.fill((size_t)0);
 		values.fill(0.f);
 	}
 
@@ -71,29 +73,53 @@ public:
 	{
 		assert(sizeX == sizeY, "Non-square matrix when executing LargeSparseMatrix::inverseDiagonal");
 
-		#ifdef NO_SIMD
-		for (size_t i = 0; i < sizeX; i++)
-		{
-			if ((*this)[{i, i}] == 0)
-				continue;
-
-			(*this)[{i, i}] = 1.f / (*this)[{i, i}];
-		}
-
-		#else
-
-		// This is a weird workaround to get a constant pointer to `this`, so the (non-modifying) const [] operator can be used
-		const LargeSparseMatrix<sizeY, sizeX>* constThis = this;
+#ifdef NO_SIMD
 
 		for (size_t i = 0; i < sizeX; i++)
 		{
-			if ((*constThis)[{i, i}] == 0)
-				continue;
+			size_t colStart = columnIndex[i];
+			size_t colEnd = columnIndex[i + 1];
 
-			(*this)[{i, i}] = 1.f / (*this)[{i, i}];
+			// Check if the column is initialized
+			if (colStart == -1 || colEnd == -1)
+			{
+				// If it isn't, skip this position
+				continue;
+			}
+
+			// Check if the selected row exists
+			for (size_t j = colStart; j < colEnd; j++)
+			{
+				// If it does, compute its reciprocal
+				if (rowIndex[j] == i)
+					values[j] = 1.f / values[j];
+			}
 		}
-		
-		#endif
+
+#else
+
+		for (size_t i = 0; i < sizeX; i++)
+		{
+			size_t colStart = columnIndex[i];
+			size_t colEnd = columnIndex[i + 1];
+
+			// Check if the column is initialized
+			if (colStart == -1 || colEnd == -1)
+			{
+				// If it isn't, skip this position
+				continue;
+			}
+
+			// Check if the selected row exists
+			for (size_t j = colStart; j < colEnd; j++)
+			{
+				// If it does, compute its reciprocal
+				if (rowIndex[j] == i)
+					values[j] = 1.f / values[j];
+			}
+		}
+
+#endif
 		return *this;
 	}
 
@@ -142,8 +168,9 @@ public:
 		// We have to subtract one from colEnd because it's actually the beginning of the next column, not the last index of the current column
 		rowIndex[colEnd - 1] = row;
 
-		// Increment numValues, since we just initialized a value
+		// Increment numValues and numValuesInColumn, since we just initialized a value
 		numValues++;
+		numElementsInColumn[col]++;
 
 		return values[colEnd - 1];
 	}
@@ -176,6 +203,16 @@ public:
 
 		// If it doesn't, return 0
 		return 0.f;
+	}
+
+	void operator=(const LargeSparseMatrix& rhs)
+	{
+		assert(rhs.sizeX == this->sizeX && rhs.sizeY == this->sizeY, "Mismatched size when executing LargeSparseMatrix::operator=(LargeSparseMatrix)");
+		this->values = rhs.values;
+		this->rowIndex = rhs.rowIndex;
+		this->columnIndex = rhs.columnIndex;
+		this->numElementsInColumn = rhs.numElementsInColumn;
+		this->numValues = rhs.numValues;
 	}
 
 	operator std::string() const
