@@ -47,6 +47,31 @@ public:
 		return *this;
 	}
 
+	/*
+	Decomposes this LargeVector to a std::array of the given vector type,
+	assuming the type has a a subscript operator and that it contains only floats
+	*/
+	template<typename vec_type> std::array<vec_type, size / (sizeof(vec_type) / sizeof(float))> decompose()
+	{
+		constexpr size_t numElemsInVecType = sizeof(vec_type) / sizeof(float);
+		constexpr size_t numVectorsInResult = size / numElemsInVecType;
+
+		std::array<vec_type, numVectorsInResult> result;
+
+		for (size_t i = 0; i < numVectorsInResult; i++)
+		{
+			vec_type vector;
+			size_t index = i * numElemsInVecType;
+
+			for (size_t j = 0; j < numElemsInVecType; j++)
+				vector[j] = data[index + j];
+
+			result[i] = vector;
+		}
+
+		return result;
+	}
+
 	LargeVector& operator+=(const LargeVector& rhs)
 	{
 		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator+=(LargeVector)");

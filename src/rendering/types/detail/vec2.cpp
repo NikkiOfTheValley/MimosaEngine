@@ -1,5 +1,6 @@
 #include "../vec2.h"
 #include "../mat4x4.h"
+#include "../physics/types/assert.h"
 
 // Implementation of vec2 default constructor from vec2.h
 vec2::vec2()
@@ -132,6 +133,12 @@ bool vec2::operator==(const vec2& rhs)
 bool vec2::operator!=(const vec2& rhs)
 {
 	return (this->x != rhs.x) && (this->y != rhs.y);
+}
+
+float& vec2::operator[](const size_t i)
+{
+	assert(i < 2, "Index out of bounds when executing vec2::operator[]");
+	return i == 0 ? x : y;
 }
 
 

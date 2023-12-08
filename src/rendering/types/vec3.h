@@ -74,7 +74,7 @@ public:
 
 	bool operator==(const vec3& rhs);
 	bool operator!=(const vec3& rhs);
-
+	float& operator[](const size_t i);
 
 	operator std::string() const;
 };

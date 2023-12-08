@@ -1,6 +1,7 @@
 #include "../vec3.h"
 #include "../mat4x4.h"
 #include "../mat3x3.h"
+#include "../physics/types/assert.h"
 
 vec3::vec3()
 {
@@ -172,6 +173,29 @@ bool vec3::operator==(const vec3& rhs)
 bool vec3::operator!=(const vec3& rhs)
 {
 	return (this->x != rhs.x) && (this->y != rhs.y) && (this->z != rhs.z);
+}
+
+float& vec3::operator[](const size_t i)
+{
+	assert(i < 3, "Index out of bounds when executing vec3::operator[]");
+	
+	switch (i)
+	{
+	case 0:
+		return x;
+		break;
+
+	case 1:
+		return y;
+		break;
+
+	case 2:
+		return z;
+		break;
+	}
+
+	// This is here for when the index is out of bounds while asserts are turned off
+	return x;
 }
 
 
