@@ -185,22 +185,22 @@ public:
 	{
 		__declspec(align(32)) LargeVector<size> resultVector;
 
-			for (size_t column = 0; column < size; column++)
-			{
-				size_t colStart = rhs.columnIndex[column];
-
+		for (size_t column = 0; column < size; column++)
+		{
+			size_t colStart = rhs.columnIndex[column];
+			
 			if (colStart == (size_t)-1)
-					continue;
+				continue;
 
 			for (size_t i = 0; i < rhs.numElementsInColumn[column]; i++)
 			{
 				resultVector.data[rhs.rowIndex[colStart + i]] += this->data[column] * rhs.values[colStart + i];
-			
+
 				// For each row index, generate a mask from the computed data
 
 
 				//*mm_maskstore_ps(&resultVector.data[colStart + i]);*/
-		}
+			}
 		}
 
 
@@ -240,7 +240,10 @@ public:
 		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator+(LargeVector)");
 
 		LargeVector<size> result = *this;
-		result += rhs;
+
+		for (size_t i = 0; i < size; i++)
+			result.data[i] += rhs.data[i];
+
 		return result;
 
 	}
@@ -248,7 +251,10 @@ public:
 	LargeVector operator+(const float rhs)
 	{
 		LargeVector<size> result = *this;
-		result += rhs;
+
+		for (size_t i = 0; i < size; i++)
+			result.data[i] += rhs;
+
 		return result;
 	}
 
@@ -257,14 +263,20 @@ public:
 		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator-(LargeVector)");
 
 		LargeVector<size> result = *this;
-		result -= rhs;
+
+		for (size_t i = 0; i < size; i++)
+			result.data[i] += rhs.data[i];
+
 		return result;
 	}
 
 	LargeVector operator-(const float rhs)
 	{
 		LargeVector<size> result = *this;
-		result -= rhs;
+		
+		for (size_t i = 0; i < size; i++)
+			result.data[i] -= rhs;
+
 		return result;
 	}
 
@@ -273,21 +285,30 @@ public:
 		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator*(LargeVector)");
 
 		LargeVector<size> result = *this;
-		result *= rhs;
+
+		for (size_t i = 0; i < size; i++)
+			result.data[i] *= rhs.data[i];
+
 		return result;
 	}
 
 	LargeVector operator*(const float rhs)
 	{
 		LargeVector<size> result = *this;
-		result *= rhs;
+
+		for (size_t i = 0; i < size; i++)
+			result.data[i] *= rhs;
+
 		return result;
 	}
 
 	LargeVector operator*(const float rhs) const
 	{
 		LargeVector<size> result = *this;
-		result *= rhs;
+
+		for (size_t i = 0; i < size; i++)
+			result.data[i] *= rhs;
+
 		return result;
 	}
 
@@ -300,9 +321,22 @@ public:
 
 	template<size_t matrix_size_x, size_t matrix_size_y> LargeVector operator*(const LargeSparseMatrix<matrix_size_x, matrix_size_y> rhs)
 	{
-		LargeVector<size> result = *this;
-		result *= rhs;
-		return result;
+		__declspec(align(32)) LargeVector<size> resultVector;
+
+		for (size_t column = 0; column < size; column++)
+		{
+			size_t colStart = rhs.columnIndex[column];
+
+			if (colStart == (size_t)-1)
+				continue;
+
+			for (size_t i = 0; i < rhs.numElementsInColumn[column]; i++)
+			{
+				resultVector.data[rhs.rowIndex[colStart + i]] += this->data[column] * rhs.values[colStart + i];
+			}
+		}
+
+		return resultVector;
 	}
 
 	LargeVector operator/(const LargeVector& rhs)
@@ -317,7 +351,10 @@ public:
 	LargeVector operator/(const float rhs)
 	{
 		LargeVector<size> result = *this;
-		result *= rhs;
+
+		for (size_t i = 0; i < size; i++)
+			result.data[i] /= rhs;
+
 		return result;
 	}
 
