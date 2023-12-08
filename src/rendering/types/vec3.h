@@ -5,18 +5,17 @@
 #include "../core/globals.h"
 
 /*
-Predefine class so no circular dependency is
-required between vec3.h and mat4x4.h
+Predefine matrix classes so no circular dependency is
+required between headers
 */
 
 class mat4x4f;
+class mat3x3f;
 
 struct vec3
 {
 public:
 	// The components of the vector
-	//float data[3];
-
 	float x;
 	float y;
 	float z;
@@ -45,6 +44,8 @@ public:
 
 	vec3& operator*=(const mat4x4f rhs);
 
+	vec3& operator*=(const mat3x3f rhs);
+
 	vec3& operator/=(const vec3& rhs);
 
 	vec3& operator/=(const float rhs);
@@ -63,6 +64,8 @@ public:
 	friend vec3 operator*(const vec3& lhs, const float rhs);
 
 	friend vec3 operator*(const vec3& lhs, const mat4x4f rhs);
+
+	friend vec3 operator*(const vec3& lhs, const mat3x3f rhs);
 
 	friend vec3 operator/(const vec3& lhs, const vec3& rhs);
 

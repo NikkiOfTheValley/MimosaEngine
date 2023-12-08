@@ -2154,6 +2154,9 @@
     <ClInclude Include="src\physics\types\large_sparse_matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\rendering\types\mat3x3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\input_handler.cpp">
@@ -2258,9 +2261,6 @@
     <ClCompile Include="src\physics\types\detail\ode_solver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\physics\types\detail\assert.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\physics\types\detail\collision_mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -2268,6 +2268,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\core\accurate_timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\types\detail\mat3x3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

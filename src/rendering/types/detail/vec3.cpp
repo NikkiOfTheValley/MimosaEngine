@@ -1,5 +1,6 @@
 #include "../vec3.h"
 #include "../mat4x4.h"
+#include "../mat3x3.h"
 
 vec3::vec3()
 {
@@ -80,6 +81,15 @@ vec3& vec3::operator*=(const mat4x4f rhs)
 	return *this;
 }
 
+vec3& vec3::operator*=(const mat3x3f rhs)
+{
+	this->x = this->x * rhs.data[0][0] + this->y * rhs.data[0][1] + this->z * rhs.data[0][2];
+	this->y = this->x * rhs.data[1][0] + this->y * rhs.data[1][1] + this->z * rhs.data[1][2];
+	this->z = this->x * rhs.data[2][0] + this->y * rhs.data[2][1] + this->z * rhs.data[2][2];
+
+	return *this;
+}
+
 vec3& vec3::operator/=(const vec3& rhs)
 {
 	this->x /= rhs.x;
@@ -135,6 +145,13 @@ vec3 operator*(const vec3& lhs, const mat4x4f rhs)
 		lhs.x * rhs.data[2][0] + lhs.y * rhs.data[2][1] + lhs.z * rhs.data[2][2] + 1 * rhs.data[2][3]};
 }
 
+vec3 operator*(const vec3& lhs, const mat3x3f rhs)
+{
+	return vec3{
+		lhs.x * rhs.data[0][0] + lhs.y * rhs.data[0][1] + lhs.z * rhs.data[0][2],
+		lhs.x * rhs.data[1][0] + lhs.y * rhs.data[1][1] + lhs.z * rhs.data[1][2],
+		lhs.x * rhs.data[2][0] + lhs.y * rhs.data[2][1] + lhs.z * rhs.data[2][2] };
+}
 
 vec3 operator/(const vec3& lhs, const vec3& rhs)
 {

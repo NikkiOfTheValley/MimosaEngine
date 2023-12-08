@@ -146,7 +146,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <FloatingPointExceptions>false</FloatingPointExceptions>
     </ClCompile>
     <Link>
@@ -175,6 +175,7 @@
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -222,6 +223,7 @@
     <ClInclude Include="src\rendering\types\conversion.h" />
     <ClInclude Include="src\rendering\types\dynamic_texture.h" />
     <ClInclude Include="src\rendering\types\image.h" />
+    <ClInclude Include="src\rendering\types\mat3x3.h" />
     <ClInclude Include="src\rendering\types\material.h" />
     <ClInclude Include="src\rendering\types\obj_loader.h" />
     <ClInclude Include="src\rendering\types\vec2.h" />
@@ -916,7 +918,6 @@
     <ClCompile Include="src\physics\types\constraints\collision_constraint.cpp" />
     <ClCompile Include="src\physics\types\constraints\constraint.cpp" />
     <ClCompile Include="src\physics\physics_manager.cpp" />
-    <ClCompile Include="src\physics\types\detail\assert.cpp" />
     <ClCompile Include="src\physics\types\detail\collision_mesh.cpp" />
     <ClCompile Include="src\physics\types\detail\ode_solver.cpp" />
     <ClCompile Include="src\physics\types\detail\phys_obj.cpp" />
@@ -927,6 +928,7 @@
     <ClCompile Include="src\rendering\types\detail\camera.cpp" />
     <ClCompile Include="src\rendering\types\detail\conversion.cpp" />
     <ClCompile Include="src\rendering\types\detail\image.cpp" />
+    <ClCompile Include="src\rendering\types\detail\mat3x3.cpp" />
     <ClCompile Include="src\rendering\types\detail\material.cpp" />
     <ClCompile Include="src\rendering\types\detail\obj_loader.cpp" />
     <ClCompile Include="src\rendering\types\detail\vec2.cpp" />

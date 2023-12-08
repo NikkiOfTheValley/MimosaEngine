@@ -5,18 +5,17 @@
 #include "../core/globals.h"
 
 /*
-Predefine class so no circular dependency is
-required between vec3.h and mat4x4.h
+Predefine matrix classes so no circular dependency is
+required between headers
 */
 
 class mat4x4f;
+class mat3x3f;
 
 struct vec2
 {
 public:
 	// The components of the vector
-	//float data[2];
-
 	float x;
 	float y;
 
