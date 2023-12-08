@@ -16,6 +16,7 @@ struct PhysState
 	size_t objIndex = 0;
 	std::array<PhysObj, MAX_PHYS_OBJECTS> objects;
 	std::array<Constraint*, MAX_PHYS_OBJECTS * MAX_CONSTRAINTS_PER_PHYS_OBJ> objConstraints;
+	//std::array<mat4x4f, MAX_PHYS_OBJECTS> objInertiaMatrices;
 
 	std::unordered_map<std::string, size_t> nameToObjIndex;
 
@@ -42,6 +43,13 @@ struct PhysState
 	// Where `m` is the mass of the `i`th rigid body,
 	// and I is the inertia tensor of the `i`th rigid body.
 	LargeSparseMatrix<MAX_PHYS_OBJECTS * 6, MAX_PHYS_OBJECTS * 6> objPropertiesMatrix;
+	LargeSparseMatrix<MAX_PHYS_OBJECTS * 6, MAX_PHYS_OBJECTS * 6> objPropertiesMatrixInverse;
+
+	// A mass vector of size 3n
+	// Example matrix where `n` is 2 and all object "slots" are in use:
+	// {m1, m1, m1, m2, m2, m2}
+	// Where `m` is the mass of the `i`th rigid body.
+	LargeVector<MAX_PHYS_OBJECTS * 3> objMass;
 
 	// A state vector of size 6n
 	// Example vector where `n` is 2 and all object "slots" are in use:

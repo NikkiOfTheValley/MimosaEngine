@@ -26,5 +26,7 @@ private:
 	obj_vel_and_accel k3;
 	obj_vel_and_accel k4;
 
-	obj_vel_and_accel Evaluate(PhysState* state, float fixedDeltaTime, const obj_vel_and_accel& oldObjVelAndAccel);
+	LargeVector<MAX_PHYS_OBJECTS * 6> tempObjStateVector;
+
+	void Evaluate(PhysState* state, float fixedDeltaTime, const obj_vel_and_accel& oldObjVelAndAccel, obj_vel_and_accel& output);
 };

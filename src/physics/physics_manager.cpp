@@ -101,6 +101,10 @@ void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float de
 	// Calculate inertia tensor and mass for this object
 	CalculatePhysicalProperties(density, collisionConstraint->collisionMesh.GetVerts());
 
+	// Since objPropertiesMatrix was just modified by CalculatePhysicalProperties, we have to update its inverse
+	state.objPropertiesMatrixInverse = state.objPropertiesMatrix;
+	state.objPropertiesMatrixInverse.inverseDiagonal();
+
 	size_t startingIndex = state.objIndex * (MAX_CONSTRAINTS_PER_PHYS_OBJ - 1);
 
 	// The first constraint is always the collision constraint
@@ -244,6 +248,8 @@ void PhysicsManager::CalculatePhysicalProperties(float density, const std::vecto
 	state.objPropertiesMatrix[{state.objIndex * 3, state.objIndex * 3}] = volume * density;
 	state.objPropertiesMatrix[{(state.objIndex * 3) + 1, (state.objIndex * 3) + 1}] = volume * density;
 	state.objPropertiesMatrix[{(state.objIndex * 3) + 2, (state.objIndex * 3) + 2}] = volume * density;
+
+	state.objMass[state.objIndex * 3] = volume * density;
 
 	// First row
 	state.objPropertiesMatrix[{tensorIndex, tensorIndex}] = tensor_xx * density;
