@@ -14,57 +14,32 @@ std::vector<std::string> split(const std::string s, char delim)
 	return result;
 }
 
-std::vector<vert> obj_loader::LoadOBJ(std::string path)
+std::vector<std::string> splitBySubstring(const std::string s, std::string substring)
 {
-	namespace fs = std::filesystem;
-	using namespace std::chrono;
+	std::vector<std::string> result;
+	std::string inputCopy = s;
 
+	size_t pos = 0;
+	while ((pos = inputCopy.find(substring)) != std::string::npos) {
+		result.push_back(inputCopy.substr(0, pos));
+		inputCopy.erase(0, pos + substring.length());
+	}
+
+	result.push_back(inputCopy);
+
+	return result;
+}
+
+/*
+Helper function for LoadOBJ
+Loads a mesh from a section of an OBJ file
+*/
+std::vector<vert> LoadMeshFromOBJLines(std::vector<std::string> lines, std::string path, std::string name)
+{
 	Logger* logger = &Logger::getInstance();
 
-	logger->log("Loading OBJ file " + path);
-	auto loadStart = std::chrono::steady_clock::now();
-
-	// - Read OBJ File -
-
-	// Verify that the OBJ file does exist and is a file
-	if (!fs::is_regular_file(path)) { logger->err("File " + path + " does not exist or is not a file"); return {}; }
-
-	// Open the OBJ file (binary is fastest)
-	std::ifstream file(std::filesystem::absolute(path), std::ios::binary);
-	
-	// Make sure the file is open
-	if (!file) { logger->err("Failed to open OBJ file " + path); return {}; }
-
-	std::string fileAsString;
-
-	// Read the OBJ file
-
-	file.seekg(0, std::ios::end); // Jump to the end of the file to determine file size
-	fileAsString.resize(file.tellg()); // Resize string accordingly
-	file.seekg(0, std::ios::beg); // Seek to beginning
-	file.read(fileAsString.data(), fileAsString.size()); // Read the file
-
-	// Close the file
-	file.close();
-
-
-	// - Parse OBJ File -
-
-	// Split into a std::vector<std::string> of the lines
-
-	std::vector<std::string> lines = split(fileAsString, '\n');
-
-	// Get rid of empty lines and comments
-
-	std::vector<std::string> tempLines;
-	for (auto& line : lines)
-		if (!line.empty() && line[0] != '#')
-			tempLines.push_back(line);
-
-	lines = tempLines;
-
 	// Parse OBJ file into vert positions, UVs (if they exist), normals (if they exist), and faces
-	
+
 	// This code uses https://people.computing.clemson.edu/~dhouse/courses/405/docs/brief-obj-file-format.html
 	// as a reference.
 
@@ -76,7 +51,7 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 		size_t, /* Vertex index */
 		size_t, /* UV index */
 		size_t  /* Vertex normal index */
-	>>> faces;
+		>>> faces;
 
 	bool hasNormals = false;
 	bool hasUVs = false;
@@ -92,7 +67,7 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 				std::stof(lineSplitBySpaces[1]),
 				std::stof(lineSplitBySpaces[2]),
 				lineSplitBySpaces.size() < 4 ? NAN : std::stof(lineSplitBySpaces[3])
-			};
+		};
 
 
 		// Can't use a switch case here, strings don't work in switch cases
@@ -129,7 +104,7 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 		else if (lineSplitBySpaces[0] == "f")
 		{
 			std::vector<std::tuple<size_t, size_t, size_t>> face;
-			
+
 			for (auto& elemAsString : lineSplitBySpaces)
 			{
 				// Ignore the "f" at the beginning, as it isn't data
@@ -211,8 +186,94 @@ std::vector<vert> obj_loader::LoadOBJ(std::string path)
 		verts.insert(std::end(verts), std::begin(newFaceVerts), std::end(newFaceVerts));
 	}
 
+	return verts;
+}
+
+
+std::vector<std::vector<vert>> obj_loader::LoadOBJ(std::string path)
+{
+	namespace fs = std::filesystem;
+	using namespace std::chrono;
+
+	Logger* logger = &Logger::getInstance();
+
+	logger->log("Loading OBJ file " + path);
+	auto loadStart = std::chrono::steady_clock::now();
+
+	// - Read OBJ File -
+
+	// Verify that the OBJ file does exist and is a file
+	if (!fs::is_regular_file(path)) { logger->err("File " + path + " does not exist or is not a file"); return {}; }
+
+	// Open the OBJ file (binary is fastest)
+	std::ifstream file(std::filesystem::absolute(path), std::ios::binary);
+	
+	// Make sure the file is open
+	if (!file) { logger->err("Failed to open OBJ file " + path); return {}; }
+
+	std::string fileAsString;
+
+	// Read the OBJ file
+
+	file.seekg(0, std::ios::end); // Jump to the end of the file to determine file size
+	fileAsString.resize(file.tellg()); // Resize string accordingly
+	file.seekg(0, std::ios::beg); // Seek to beginning
+	file.read(fileAsString.data(), fileAsString.size()); // Read the file
+
+	// Close the file
+	file.close();
+
+	// - Parse OBJ File -
+
+	// Split OBJ file into seperate objects (defined by "o NAME" in the file)
+	std::vector<std::string> objects = splitBySubstring(fileAsString, "o ");
+
+	// Remove the first object, as it's not actually an object, and is just the text before the first object definition
+	objects.erase(objects.begin());
+
+	// Split each object into lines and get the name of the object
+	std::vector<std::pair<std::vector<std::string>, std::string>> objectsAsLines;
+
+	for (auto& obj : objects)
+	{
+		// Split into a std::vector<std::string> of the lines
+		std::vector<std::string> objLines = split(obj, '\n');
+
+		std::string name = objLines[0];
+
+		objLines.erase(objLines.begin());
+		
+		objectsAsLines.push_back(std::make_pair(objLines, name));
+	}
+
+	// Get rid of empty lines and comments
+
+	for (auto& objLines : objectsAsLines)
+	{
+		std::vector<std::string> tempLines;
+		for (auto& line : objLines.first)
+			if (!line.empty() && line[0] != '#')
+				tempLines.push_back(line);
+
+		objLines.first = tempLines;
+	}
+
+	// Iterate over each object and create a mesh from it
+	std::vector<std::vector<vert>> meshes;
+
+	for (auto& obj : objectsAsLines)
+	{
+		meshes.push_back(LoadMeshFromOBJLines(obj.first, path, obj.second));
+	}
+
 	float timeToLoadInMS = ((float)duration_cast<microseconds>(std::chrono::steady_clock::now() - loadStart).count() / 1000);
 
-	logger->log("Finished loading OBJ file " + path + ", took " + std::to_string(timeToLoadInMS) + "ms and has " + std::to_string(verts.size() / 3) + " tris.");
-	return verts;
+	size_t numTris = 0;
+	for (auto& mesh : meshes)
+		numTris += mesh.size() / 3;
+
+	logger->log("Finished loading OBJ file " + path + ". Took " + std::to_string(timeToLoadInMS) + "ms, has " +
+			    std::to_string(meshes.size()) + " object(s), and contains " + std::to_string(numTris) + "tris.");
+
+	return meshes;
 }

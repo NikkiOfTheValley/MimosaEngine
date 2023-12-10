@@ -2,8 +2,9 @@
 #include "../rendering/types/vec.h"
 #include <vector>
 
-// Prefefine Mesh so we don't have to `#include` it
+// Prefefine Mesh and PhysObj so we don't have to `include` them
 class Mesh;
+class PhysObj;
 
 struct collision_vert
 {
@@ -14,18 +15,23 @@ struct collision_vert
 // Defines a given collision
 struct collision
 {
-	
+	vec3 collisionPoint;
+
+	PhysObj* collidingObjA;
+	PhysObj* collidingObjB;
 };
 
 class CollisionMesh
 {
 public:
-	// This operator is very slow for large meshes, don't use it in preformace-critical locations!
-	void operator=(const Mesh& rhs);
+	// The OBJ needs to be in the format of a bunch of convex "blocks" if the original model is concave
+	void LoadFromOBJ(std::string path);
 
-	const std::vector<collision_vert> GetVerts();
+	// This function is very slow for large blocks, don't use it in preformace-critical locations!
+	void AddBlock(const Mesh& mesh);
+
+	const std::vector<std::vector<collision_vert>>& GetBlocks();
 
 private:
-
-	std::vector<collision_vert> verts;
+	std::vector<std::vector<collision_vert>> convexBlocks;
 };

@@ -5,5 +5,6 @@
 
 namespace obj_loader
 {
-	std::vector<vert> LoadOBJ(std::string path);
+	// Returns a vector of the meshes in the given OBJ file
+	std::vector<std::vector<vert>> LoadOBJ(std::string path);
 }

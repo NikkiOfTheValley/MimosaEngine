@@ -283,7 +283,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// -- Create physics objects --
 
 	CollisionMesh collisionMesh;
-	collisionMesh = *renderer->GetMesh("exampleMesh");
+	collisionMesh.LoadFromOBJ("assets/torus.obj");
 
 	CollisionConstraint* constraint = new CollisionConstraint();
 	constraint->collisionMesh = collisionMesh;
