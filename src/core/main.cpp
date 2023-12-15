@@ -285,10 +285,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 	CollisionMesh collisionMesh;
 	collisionMesh.LoadFromOBJ("assets/torus.obj");
 
-	CollisionConstraint* constraint = new CollisionConstraint();
-	constraint->collisionMesh = collisionMesh;
-
-	physicsManager->CreateObject("test", { 4.f, 0.f, 2.f }, { 0.f, 0.f, 0.f }, DENSITY_CAST_IRON, constraint, {}, { 0, 1, 0 }, {}, false);
+	physicsManager->CreateObject("test", { 4.f, 0.f, 2.f }, { 0.f, 0.f, 0.f }, DENSITY_CAST_IRON, collisionMesh);
 
 	// -- Create camera --
 

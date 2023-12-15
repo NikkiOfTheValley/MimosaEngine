@@ -11,7 +11,7 @@ public:
 	// Starts the simulation
 	void Start();
 
-	void CreateObject(std::string name, vec3 pos, vec3 rot, float density, CollisionConstraint* collisionConstraint, std::vector<Constraint*> constraints = {}, vec3 vel = vec3(), vec3 angVel = vec3(), bool hasGravity = true, bool isPinned = false);
+	void CreateObject(std::string name, vec3 pos, vec3 rot, float density, CollisionMesh& collisionMesh, std::vector<Constraint*> constraints = {}, std::function<void(double /* fixedDeltaTime */)> updateFunc = nullptr, vec3 vel = vec3(), vec3 angVel = vec3(), bool hasGravity = true, bool isPinned = false);
 
 	PhysObj* GetPhysObject(std::string name);
 

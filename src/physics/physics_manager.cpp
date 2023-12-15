@@ -67,7 +67,7 @@ void PhysicsManager::Step(double fixedDeltaTime)
 	state.isInStep = false;
 }
 
-void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float density, CollisionConstraint* collisionConstraint, std::vector<Constraint*> constraints, vec3 vel, vec3 angVel, bool hasGravity, bool isPinned)
+void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float density, CollisionMesh& collisionMesh, std::vector<Constraint*> constraints, vec3 vel, vec3 angVel, bool hasGravity, bool isPinned)
 {
 	if (state.objIndex >= MAX_PHYS_OBJECTS)
 	{
@@ -106,9 +106,6 @@ void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float de
 	state.objPropertiesMatrixInverse.inverseDiagonal();
 
 	size_t startingIndex = state.objIndex * (MAX_CONSTRAINTS_PER_PHYS_OBJ - 1);
-
-	// The first constraint is always the collision constraint
-	state.objConstraints[startingIndex] = collisionConstraint;
 
 	for (auto constraint : constraints)
 	{
