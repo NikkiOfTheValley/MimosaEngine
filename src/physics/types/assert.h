@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <sstream>
+#include <intrin.h>
 #include "../core/log.h"
 
 #ifndef NDEBUG
@@ -12,6 +13,7 @@
             output << "Assertion `" #condition "` failed in " << __FILE__ << " line " << __LINE__ << ": " << message; \
             Logger::getInstance().err(output.str()); \
             Logger::getInstance().dumpLog(); \
+            __debugbreak(); \
             exit(-200); \
         } \
         _Pragma("warning(pop)"); \
