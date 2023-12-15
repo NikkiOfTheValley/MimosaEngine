@@ -32,6 +32,7 @@ private:
 	MLCPSolver mlcpSolver;
 	SLESolver sleSolver;
 	ODESolver odeSolver;
+	CollisionDetector collisionDetector;
 
 	unsigned int timer = 0;
 };

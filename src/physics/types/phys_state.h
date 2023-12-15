@@ -5,6 +5,7 @@
 #include "sle_solver.h"
 #include "ode_solver.h"
 #include "mlcp_solver.h"
+#include "collision_handler.h"
 #include "large_sparse_matrix.h"
 #include "../rendering/types/mat3x3.h"
 

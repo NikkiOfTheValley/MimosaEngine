@@ -203,6 +203,7 @@
     <ClInclude Include="src\networking\m_net\tsqueue.h" />
     <ClInclude Include="src\physics\phys_globals.h" />
     <ClInclude Include="src\physics\types\assert.h" />
+    <ClInclude Include="src\physics\types\collision_handler.h" />
     <ClInclude Include="src\physics\types\collision_mesh.h" />
     <ClInclude Include="src\physics\types\constraint.h" />
     <ClInclude Include="src\physics\types\constraints\collision_constraint.h" />
@@ -918,6 +919,7 @@
     <ClCompile Include="src\physics\types\constraints\collision_constraint.cpp" />
     <ClCompile Include="src\physics\types\constraints\constraint.cpp" />
     <ClCompile Include="src\physics\physics_manager.cpp" />
+    <ClCompile Include="src\physics\types\detail\collision_handler.cpp" />
     <ClCompile Include="src\physics\types\detail\collision_mesh.cpp" />
     <ClCompile Include="src\physics\types\detail\ode_solver.cpp" />
     <ClCompile Include="src\physics\types\detail\phys_obj.cpp" />

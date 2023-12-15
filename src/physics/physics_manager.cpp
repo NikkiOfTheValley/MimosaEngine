@@ -50,6 +50,9 @@ void PhysicsManager::Step(double fixedDeltaTime)
 	// Solve equality constraints
 	//sleSolver.Solve(&state);
 
+	// Check for collisions
+	
+
 	// Run RK4
 	odeSolver.Solve(&state, (float)fixedDeltaTime,
 		[](PhysState* /*initialState*/, obj_state& /*state*/, double /*fixedDeltaTime*/)
@@ -67,7 +70,7 @@ void PhysicsManager::Step(double fixedDeltaTime)
 	// Call the custom update functionality on the objects
 	for (auto& obj : state.objects)
 		if (obj.index <= MAX_PHYS_OBJECTS)
-		obj.Update(fixedDeltaTime);
+			obj.Update(fixedDeltaTime);
 
 	// Calculate gravity
 	for (auto& obj : state.objects)
@@ -80,7 +83,7 @@ void PhysicsManager::Step(double fixedDeltaTime)
 	state.isInStep = false;
 }
 
-void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float density, CollisionMesh& collisionMesh, std::vector<Constraint*> constraints, vec3 vel, vec3 angVel, bool hasGravity, bool isPinned)
+void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float density, CollisionMesh& collisionMesh, std::vector<Constraint*> constraints, std::function<void(double /* fixedDeltaTime */)> updateFunc, vec3 vel, vec3 angVel, bool hasGravity, bool isPinned)
 {
 	if (state.objIndex >= MAX_PHYS_OBJECTS)
 	{
@@ -255,8 +258,6 @@ void PhysicsManager::CalculatePhysicalProperties(float density, const std::vecto
 	float tensor_xy = -(integrals[7] - volume * COM.x * COM.y);
 	float tensor_yz = -(integrals[8] - volume * COM.y * COM.z);
 	float tensor_xz = -(integrals[9] - volume * COM.z * COM.x);
-
-	size_t tensorIndex = (state.objIndex * 6) + 3;
 
 	// Set mass
 	//state.objPropertiesMatrix[{state.objIndex * 3, state.objIndex * 3}] = volume * density;

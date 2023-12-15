@@ -12,15 +12,6 @@ struct collision_vert
 	vec3 normal;
 };
 
-// Defines a given collision
-struct collision
-{
-	vec3 collisionPoint;
-
-	PhysObj* collidingObjA;
-	PhysObj* collidingObjB;
-};
-
 class CollisionMesh
 {
 public:
