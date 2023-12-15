@@ -5,6 +5,7 @@
 #include "assert.h"
 #include "large_matrix.h"
 #include "large_sparse_matrix.h"
+#include "../core/globals.h"
 
 // Allows the creation of a vector of arbitrary size specified at compile-time
 // Only used in the SLE solver, so it's a physics engine type
@@ -360,6 +361,7 @@ public:
 
 	constexpr float& operator[](const size_t i)
 	{
+
 		assert(i < this->size, "Index out of bounds when executing LargeVector::operator[]");
 		return data[i];
 	}

@@ -48,21 +48,34 @@ void PhysicsManager::Step(double fixedDeltaTime)
 	state.isInStep = true;
 
 	// Solve equality constraints
-	sleSolver.Solve(&state);
+	//sleSolver.Solve(&state);
 
 	// Run RK4
-	odeSolver.Solve(&state, (float)fixedDeltaTime);
+	odeSolver.Solve(&state, (float)fixedDeltaTime,
+		[](PhysState* /*initialState*/, obj_state& /*state*/, double /*fixedDeltaTime*/)
+		{
+			force_and_torque forceAndTorque;
+
+			//forceAndTorque.forceVector -= (state.objVelVector * state.objVelVector) * DRAG_CONSTANT;
+
+			return forceAndTorque;
+		}, &sleSolver);
+
+	// Zero out force vector
+	state.objForceVector.data.fill(0.f);
 
 	// Call the custom update functionality on the objects
 	for (auto& obj : state.objects)
+		if (obj.index <= MAX_PHYS_OBJECTS)
 		obj.Update(fixedDeltaTime);
 
 	// Calculate gravity
 	for (auto& obj : state.objects)
-		if (obj.hasGravity)
-			state.objForceVector[(obj.index * 6) + 1] = -9.8f;
+		if (obj.hasGravity && obj.index <= MAX_PHYS_OBJECTS)
+			state.objForceVector[(obj.index * 3) + 1] += -9.8f * state.objMass[obj.index * 3];
 
-	//state.objForceVector -= (state.objVelVector * state.objVelVector) * -DRAG_CONSTANT;
+	// Apply drag
+	state.objForceVector -= (state.objVelVector * state.objVelVector) * DRAG_CONSTANT * (float)fixedDeltaTime;
 
 	state.isInStep = false;
 }
@@ -77,33 +90,34 @@ void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float de
 
 	// - Create the object and set various properties from the arguments -
 
-	PhysObj obj = PhysObj(&state, state.objIndex, hasGravity);
+	PhysObj obj = PhysObj(&state, state.objIndex, hasGravity, updateFunc);
 
-	state.objVelVector[state.objIndex * 6] = vel.x;
-	state.objVelVector[(state.objIndex * 6) + 1] = vel.y;
-	state.objVelVector[(state.objIndex * 6) + 2] = vel.z;
+	state.objVelVector[state.objIndex * 3] = vel.x;
+	state.objVelVector[(state.objIndex * 3) + 1] = vel.y;
+	state.objVelVector[(state.objIndex * 3) + 2] = vel.z;
 
-	state.objVelVector[(state.objIndex * 6) + 3] = angVel.x;
-	state.objVelVector[(state.objIndex * 6) + 4] = angVel.y;
-	state.objVelVector[(state.objIndex * 6) + 5] = angVel.z;
+	state.objAngVelVector[(state.objIndex * 3)] = angVel.x;
+	state.objAngVelVector[(state.objIndex * 3) + 1] = angVel.y;
+	state.objAngVelVector[(state.objIndex * 3) + 2] = angVel.z;
 
 	obj.hasGravity = hasGravity;
 	state.nameToObjIndex[name] = state.objIndex;
+	obj.collisionMesh = collisionMesh;
 
-	state.objStateVector[state.objIndex * 6] = pos.x;
-	state.objStateVector[(state.objIndex * 6) + 1] = pos.y;
-	state.objStateVector[(state.objIndex * 6) + 2] = pos.z;
+	state.objPositionVector[state.objIndex * 3] = pos.x;
+	state.objPositionVector[(state.objIndex * 3) + 1] = pos.y;
+	state.objPositionVector[(state.objIndex * 3) + 2] = pos.z;
 
-	state.objStateVector[(state.objIndex * 6) + 3] = rot.x;
-	state.objStateVector[(state.objIndex * 6) + 4] = rot.y;
-	state.objStateVector[(state.objIndex * 6) + 5] = rot.z;
+	state.objRotationVector[state.objIndex * 3] = rot.x;
+	state.objRotationVector[(state.objIndex * 3) + 1] = rot.y;
+	state.objRotationVector[(state.objIndex * 3) + 2] = rot.z;
 
 	// Calculate inertia tensor and mass for this object
-	CalculatePhysicalProperties(density, collisionConstraint->collisionMesh.GetVerts());
+	CalculatePhysicalProperties(density, collisionMesh.GetBlocks()[0]);
 
 	// Since objPropertiesMatrix was just modified by CalculatePhysicalProperties, we have to update its inverse
-	state.objPropertiesMatrixInverse = state.objPropertiesMatrix;
-	state.objPropertiesMatrixInverse.inverseDiagonal();
+	//state.objPropertiesMatrixInverse = state.objPropertiesMatrix;
+	//state.objPropertiesMatrixInverse.inverseDiagonal();
 
 	size_t startingIndex = state.objIndex * (MAX_CONSTRAINTS_PER_PHYS_OBJ - 1);
 
@@ -146,9 +160,12 @@ PhysObj* PhysicsManager::GetPhysObject(std::string name)
 	return &state.objects[state.nameToObjIndex[name]];
 }
 
-void PhysicsManager::ApplyForce(std::string name, vec3 /*force*/)
+void PhysicsManager::ApplyForce(std::string name, vec3 force)
 {
-	//GetPhysObject(name)->accel += force;
+	size_t index = GetPhysObject(name)->index * 3;
+	state.objForceVector[index] += force.x;
+	state.objForceVector[index + 1] += force.y;
+	state.objForceVector[index + 2] += force.z;
 }
 
 void PhysicsManager::ApplyTorque(std::string name, vec3 /*torque*/)
@@ -242,26 +259,28 @@ void PhysicsManager::CalculatePhysicalProperties(float density, const std::vecto
 	size_t tensorIndex = (state.objIndex * 6) + 3;
 
 	// Set mass
-	state.objPropertiesMatrix[{state.objIndex * 3, state.objIndex * 3}] = volume * density;
-	state.objPropertiesMatrix[{(state.objIndex * 3) + 1, (state.objIndex * 3) + 1}] = volume * density;
-	state.objPropertiesMatrix[{(state.objIndex * 3) + 2, (state.objIndex * 3) + 2}] = volume * density;
+	//state.objPropertiesMatrix[{state.objIndex * 3, state.objIndex * 3}] = volume * density;
+	//state.objPropertiesMatrix[{(state.objIndex * 3) + 1, (state.objIndex * 3) + 1}] = volume * density;
+	//state.objPropertiesMatrix[{(state.objIndex * 3) + 2, (state.objIndex * 3) + 2}] = volume * density;
 
 	state.objMass[state.objIndex * 3] = volume * density;
+	state.objMass[(state.objIndex * 3) + 1] = volume * density;
+	state.objMass[(state.objIndex * 3) + 2] = volume * density;
 
-	// First row
-	state.objPropertiesMatrix[{tensorIndex, tensorIndex}] = tensor_xx * density;
-	state.objPropertiesMatrix[{tensorIndex + 1, tensorIndex}] = tensor_xy * density;
-	state.objPropertiesMatrix[{tensorIndex + 2, tensorIndex}] = tensor_xz * density;
+	// Set inertia tensor
+	state.objInertiaMatrices[state.objIndex].data[0][0] = tensor_xx * density;
+	state.objInertiaMatrices[state.objIndex].data[1][1] = tensor_yy * density;
+	state.objInertiaMatrices[state.objIndex].data[2][2] = tensor_zz * density;
 
-	// Second row
-	state.objPropertiesMatrix[{tensorIndex, tensorIndex + 1}] = tensor_xy * density;
-	state.objPropertiesMatrix[{tensorIndex + 1, tensorIndex + 1}] = tensor_yy * density;
-	state.objPropertiesMatrix[{tensorIndex + 2, tensorIndex + 1}] = tensor_yz * density;
+	// Since an inertia tensor is symmetric, we need to set both (1, 2) and (2, 1) since we only calculated (1, 2)
+	state.objInertiaMatrices[state.objIndex].data[0][1] = tensor_xy * density;
+	state.objInertiaMatrices[state.objIndex].data[1][0] = tensor_xy * density;
 
-	// Third row
-	state.objPropertiesMatrix[{tensorIndex, tensorIndex + 2}] = tensor_xz * density;
-	state.objPropertiesMatrix[{tensorIndex + 1, tensorIndex + 2}] = tensor_yz * density;
-	state.objPropertiesMatrix[{tensorIndex + 2, tensorIndex + 2}] = tensor_zz * density;
+	state.objInertiaMatrices[state.objIndex].data[1][2] = tensor_yz * density;
+	state.objInertiaMatrices[state.objIndex].data[2][1] = tensor_yz * density;
+
+	state.objInertiaMatrices[state.objIndex].data[0][2] = tensor_xz * density;
+	state.objInertiaMatrices[state.objIndex].data[2][0] = tensor_xz * density;
 
 	Logger::getInstance().log("Calculated values:\n      Mass: " + std::to_string(volume * density) + "kg\n      Volume: " + std::to_string(volume) + "m^3\n      Center Of Mass: " + (std::string)COM);
 	

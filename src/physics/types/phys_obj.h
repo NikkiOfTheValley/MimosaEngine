@@ -7,6 +7,7 @@
 #include <functional>
 
 struct PhysState;
+class CollisionMesh;
 
 struct phys_obj_prop
 {
@@ -31,6 +32,8 @@ public:
 
 	size_t index;
 	bool hasGravity;
+
+	CollisionMesh collisionMesh;
 
 	void Update(double fixedDeltaTime);
 

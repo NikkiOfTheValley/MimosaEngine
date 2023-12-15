@@ -2,9 +2,9 @@
 
 const size_t MAX_PHYS_OBJECTS = 256;
 const size_t MAX_CONSTRAINTS_PER_PHYS_OBJ = 32;
-const unsigned int PHYS_FPS = 60;
+const unsigned int PHYS_FPS = 10000;
 
-const float DRAG_CONSTANT = 0.8f;
+const float DRAG_CONSTANT = 0.000000000004f;
 
 // Densities of various materials in kg/m^3
 const float DENSITY_CAST_IRON = 7200;

@@ -1,9 +1,5 @@
 #include "../constraint.h"
-#include "../phys_obj.h"
 
 // Blank constraint, does nothing
 
-void Constraint::Apply(PhysObj* /*obj*/)
-{
-
-}
+void Constraint::Calculate(PhysState*, LargeVector<MAX_PHYS_OBJECTS * 3>, LargeVector<MAX_PHYS_OBJECTS * 3>, double) {}
