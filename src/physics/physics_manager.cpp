@@ -32,8 +32,10 @@ void PhysicsManager::Start()
 
 			BlockForNanoseconds((long long)(((1.f / (float)PHYS_FPS) - stepTime) * 1000000000));
 
-			if (timer == PHYS_FPS)
+			if (timer == PHYS_FPS / 4)
 			{
+				Logger::getInstance().log(state.objects[0].GetProperties().vel);
+
 				Logger::getInstance().log("deltaTime: " + std::to_string(deltaTime * 1000) + "ms |  stepTime: " + std::to_string(stepTime * 1000) + "ms | SPS: " + std::to_string(((int)ceil(1.f / deltaTime))));
 				timer = 0;
 			}
@@ -47,11 +49,8 @@ void PhysicsManager::Step(double fixedDeltaTime)
 {
 	state.isInStep = true;
 
-	// Solve equality constraints
-	//sleSolver.Solve(&state);
-
 	// Check for collisions
-	
+	collisionHandler.HandleCollisions(&state);
 
 	// Run RK4
 	odeSolver.Solve(&state, (float)fixedDeltaTime,
@@ -75,10 +74,10 @@ void PhysicsManager::Step(double fixedDeltaTime)
 	// Calculate gravity
 	for (auto& obj : state.objects)
 		if (obj.hasGravity && obj.index <= MAX_PHYS_OBJECTS)
-			state.objForceVector[(obj.index * 3) + 1] += -9.8f * state.objMass[obj.index * 3];
+			state.objForceVector[(obj.index * 3) + 1] += -9.8f * state.objMass[obj.index * 3] * (float)fixedDeltaTime;
 
 	// Apply drag
-	state.objForceVector -= (state.objVelVector * state.objVelVector) * DRAG_CONSTANT * (float)fixedDeltaTime;
+	//state.objForceVector -= (state.objVelVector * state.objVelVector) * DRAG_CONSTANT * (float)fixedDeltaTime;
 
 	state.isInStep = false;
 }
@@ -260,10 +259,6 @@ void PhysicsManager::CalculatePhysicalProperties(float density, const std::vecto
 	float tensor_xz = -(integrals[9] - volume * COM.z * COM.x);
 
 	// Set mass
-	//state.objPropertiesMatrix[{state.objIndex * 3, state.objIndex * 3}] = volume * density;
-	//state.objPropertiesMatrix[{(state.objIndex * 3) + 1, (state.objIndex * 3) + 1}] = volume * density;
-	//state.objPropertiesMatrix[{(state.objIndex * 3) + 2, (state.objIndex * 3) + 2}] = volume * density;
-
 	state.objMass[state.objIndex * 3] = volume * density;
 	state.objMass[(state.objIndex * 3) + 1] = volume * density;
 	state.objMass[(state.objIndex * 3) + 2] = volume * density;

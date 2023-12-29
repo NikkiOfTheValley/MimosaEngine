@@ -102,3 +102,35 @@ float angleBetweenNormalized(vec3 a, vec3 b)
 {
 	return acos(dot(a, b));
 }
+
+float squaredDist(vec3 a, vec3 b)
+{
+	float squaredDistX = (b.x - a.x) * (b.x - a.x);
+	float squaredDistY = (b.y - a.y) * (b.y - a.y);
+	float squaredDistZ = (b.z - a.z) * (b.z - a.z);
+
+	return squaredDistX + squaredDistY + squaredDistZ;
+}
+
+float squaredDist(vec2 a, vec2 b)
+{
+	float squaredDistX = (b.x - a.x) * (b.x - a.x);
+	float squaredDistY = (b.y - a.y) * (b.y - a.y);
+
+	return squaredDistX + squaredDistY;
+}
+
+float dist(vec3 a, vec3 b)
+{
+	return sqrt(squaredDist(a, b));
+}
+
+float dist(vec2 a, vec2 b)
+{
+	return sqrt(squaredDist(a, b));
+}
+
+vec3 tripleProduct(vec3 a, vec3 b, vec3 c)
+{
+	return cross(a, cross(b, c));
+}

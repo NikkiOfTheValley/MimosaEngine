@@ -43,6 +43,6 @@ void ODESolver::Evaluate(
 
 	force_and_torque forceAndTorque = forceFunction(initialState, output, fixedDeltaTime);
 
-	output.objAccelVector = initialState->objForceVector + forceAndTorque.forceVector / initialState->objMass;
-	output.objAngAccelVector = initialState->objTorqueVector + forceAndTorque.torqueVector / initialState->objMass;
+	output.objAccelVector = (initialState->objForceVector + forceAndTorque.forceVector) / initialState->objMass;
+	output.objAngAccelVector = (initialState->objTorqueVector + forceAndTorque.torqueVector) / initialState->objMass;
 }

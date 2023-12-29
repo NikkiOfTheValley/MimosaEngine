@@ -26,7 +26,9 @@ struct phys_obj_prop
 class PhysObj
 {
 public:
-	PhysObj() {};
+	PhysObj() {
+		this->index = (size_t)-1;
+	};
 
 	PhysObj(PhysState* state, size_t index, bool hasGravity, std::function<void(double /* fixedDeltaTime */)> updateFunc = nullptr) : state(state), index(index), hasGravity(hasGravity), updateFunc(updateFunc) {};
 

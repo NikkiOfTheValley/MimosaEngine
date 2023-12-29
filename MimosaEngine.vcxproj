@@ -176,6 +176,9 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <MinimalRebuild>false</MinimalRebuild>
+      <OpenMPSupport>
+      </OpenMPSupport>
+      <AdditionalOptions>/openmp:experimental </AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -187,6 +190,7 @@
       <StackReserveSize>41943040</StackReserveSize>
       <StackCommitSize>
       </StackCommitSize>
+      <AdditionalOptions>/openmp:experimental</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

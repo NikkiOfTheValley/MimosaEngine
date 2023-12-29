@@ -1,11 +1,13 @@
 #pragma once
 #include "../constraint.h"
-#include "../collision_mesh.h"
+#include "../collision_handler.h"
 
 class CollisionConstraint : public Constraint
 {
 public:
-	CollisionMesh collisionMesh;
+	collision collision;
 
-	void Apply(PhysObj* obj);
+	virtual void Calculate(PhysState* state, LargeVector<MAX_PHYS_OBJECTS * 3> objPosVector, LargeVector<MAX_PHYS_OBJECTS * 3> objRotVector, double fixedDeltaTime);
+
+	ConstraintType Type();
 };
