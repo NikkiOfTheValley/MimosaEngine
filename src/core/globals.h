@@ -3,6 +3,11 @@
 
 struct vec2;
 
+// Some definitions for various exit codes
+#define EXIT_FATAL_ERR -100
+#define EXIT_ASSERT_FAIL -200
+
+
 //#define NO_SIMD
 
 // The CPU must be x64 for SIMD to work, so we need it as a flag

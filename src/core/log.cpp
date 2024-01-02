@@ -1,4 +1,5 @@
 #include "log.h"
+#include "globals.h"
 
 // Default constructor, sets output to true
 Logger::Logger()
@@ -83,7 +84,7 @@ void Logger::fatal(std::string str)
 
 	this->dumpLog();
 	__debugbreak();
-	exit(-100);
+	exit(EXIT_FATAL_ERR);
 }
 
 // Dumps the log to the working directory. Returns true if successful

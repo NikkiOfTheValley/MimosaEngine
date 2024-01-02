@@ -3,6 +3,7 @@
 #include <sstream>
 #include <intrin.h>
 #include "../core/log.h"
+#include "../core/globals.h"
 
 #ifndef NDEBUG
 #define assert(condition, message) \
@@ -14,7 +15,7 @@
             Logger::getInstance().err(output.str()); \
             Logger::getInstance().dumpLog(); \
             __debugbreak(); \
-            exit(-200); \
+            exit(EXIT_ASSERT_FAIL); \
         } \
         _Pragma("warning(pop)"); \
     } while(false)
