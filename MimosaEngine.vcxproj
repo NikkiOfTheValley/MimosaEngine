@@ -178,7 +178,6 @@
       <MinimalRebuild>false</MinimalRebuild>
       <OpenMPSupport>
       </OpenMPSupport>
-      <AdditionalOptions>/openmp:experimental </AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -198,8 +197,8 @@
     <ClInclude Include="src\core\globals.h" />
     <ClInclude Include="src\core\input_handler.h" />
     <ClInclude Include="src\core\log.h" />
-    <ClInclude Include="src\core\material_manager.h" />
-    <ClInclude Include="src\core\resource_manager.h" />
+    <ClInclude Include="src\rendering\material_manager.h" />
+    <ClInclude Include="src\rendering\resource_manager.h" />
     <ClInclude Include="src\networking\m_net\common.h" />
     <ClInclude Include="src\networking\m_net\connection.h" />
     <ClInclude Include="src\networking\m_net\device_interface.h" />
@@ -915,8 +914,8 @@
     <ClCompile Include="src\core\input_handler.cpp" />
     <ClCompile Include="src\core\log.cpp" />
     <ClCompile Include="src\core\main.cpp" />
-    <ClCompile Include="src\core\material_manager.cpp" />
-    <ClCompile Include="src\core\resource_manager.cpp" />
+    <ClCompile Include="src\rendering\material_manager.cpp" />
+    <ClCompile Include="src\rendering\resource_manager.cpp" />
     <ClCompile Include="src\networking\m_net\connection.cpp" />
     <ClCompile Include="src\networking\m_net\device_interface.cpp" />
     <ClCompile Include="src\networking\m_net\message.cpp" />

@@ -1,7 +1,7 @@
 #pragma once
 #include "polygon.h"
 #include "shader.h"
-#include "../core/resource_manager.h"
+#include "../resource_manager.h"
 
 class Text
 {

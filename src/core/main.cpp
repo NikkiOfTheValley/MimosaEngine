@@ -7,10 +7,10 @@
 #include "input_handler.h"
 #include <stb_image.h>
 #include "../rendering/types/text.h"
-#include "resource_manager.h"
+#include "../rendering/resource_manager.h"
 #include "../ui/ui_manager.h"
 #include "../rendering/types/camera.h"
-#include "material_manager.h"
+#include "../rendering/material_manager.h"
 #include "../rendering/texture_manager.h"
 #include "../physics/physics_manager.h"
 #include "../rendering/types/obj_loader.h"

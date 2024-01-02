@@ -1,7 +1,7 @@
 #pragma once
-#include "../../rendering/types/vec.h"
-#include "../../rendering/types/text.h"
-#include "../core/resource_manager.h"
+#include "../rendering/types/vec.h"
+#include "../rendering/types/text.h"
+#include "../rendering/resource_manager.h"
 #include <functional>
 #include "button.h"
 

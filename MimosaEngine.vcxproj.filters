@@ -24,7 +24,7 @@
     <ClInclude Include="src\core\log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\resource_manager.h">
+    <ClInclude Include="src\rendering\resource_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\networking\m_net\common.h">
@@ -2106,7 +2106,7 @@
     <ClInclude Include="src\rendering\types\material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\material_manager.h">
+    <ClInclude Include="src\rendering\material_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering\post_processing_manager.h">
@@ -2171,7 +2171,7 @@
     <ClCompile Include="src\core\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\resource_manager.cpp">
+    <ClCompile Include="src\rendering\resource_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\networking\m_net\connection.cpp">
@@ -2237,7 +2237,7 @@
     <ClCompile Include="src\rendering\types\detail\material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\material_manager.cpp">
+    <ClCompile Include="src\rendering\material_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\rendering\post_processing_manager.cpp">
