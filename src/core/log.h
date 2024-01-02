@@ -43,6 +43,9 @@ public:
 	// Prints '[ERR]: str' in red text (indicates an error)
 	void err(std::string str);
 
+	// Prints '[FATAL]: str' in red text (indicates an fatal error), then exits 
+	void fatal(std::string str);
+
 	// Dumps the log to the working directory. Returns true if successful
 	bool dumpLog();
 

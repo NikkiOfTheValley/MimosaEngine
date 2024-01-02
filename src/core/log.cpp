@@ -63,6 +63,29 @@ void Logger::err(std::string str)
 	m_log->append("[ERR]: " + str + "\n");
 }
 
+void Logger::fatal(std::string str)
+{
+	if (output)
+	{
+		// Draw the "[FATAL]: " text white
+		std::cout << "[FATAL]: ";
+
+		// Draw str red
+		HANDLE c = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(c, FOREGROUND_RED);
+
+		std::cout << str << "\n";
+
+		SetConsoleTextAttribute(c, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	}
+
+	m_log->append("[FATAL]: " + str + "\n");
+
+	this->dumpLog();
+	__debugbreak();
+	exit(-100);
+}
+
 // Dumps the log to the working directory. Returns true if successful
 bool Logger::dumpLog()
 {
