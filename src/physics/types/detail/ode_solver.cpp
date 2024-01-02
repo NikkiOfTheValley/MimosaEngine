@@ -38,8 +38,8 @@ void ODESolver::Evaluate(
 
 	impulse constraintImpulse = solver->SolveConstraints(initialState, tempObjPosVector, tempObjRotVector, fixedDeltaTime);
 
-	output.objVelVector = (initialState->objVelVector + oldState.objAccelVector + constraintImpulse.velocityImpulse) * fixedDeltaTime;
-	output.objAngVelVector = (initialState->objAngVelVector + oldState.objAngAccelVector + constraintImpulse.angularVelocityImpulse) * fixedDeltaTime;
+	output.objVelVector = (initialState->objVelVector + oldState.objAccelVector + constraintImpulse.velocityImpulse);
+	output.objAngVelVector = (initialState->objAngVelVector + oldState.objAngAccelVector + constraintImpulse.angularVelocityImpulse);
 
 	force_and_torque forceAndTorque = forceFunction(initialState, output, fixedDeltaTime);
 
