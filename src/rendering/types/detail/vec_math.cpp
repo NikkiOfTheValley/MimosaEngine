@@ -134,3 +134,59 @@ vec3 tripleProduct(vec3 a, vec3 b, vec3 c)
 {
 	return cross(a, cross(b, c));
 }
+
+vec3 barycentricTriangle(vec3 a, vec3 b, vec3 c, vec3 point)
+{
+	// This code is from Chister Ericson's book "Real-Time Collision Detection"
+
+	vec3 v0 = b - a;
+	vec3 v1 = c - a;
+	vec3 v2 = point - a;
+
+	float d00 = dot(v0, v0);
+	float d01 = dot(v0, v1);
+	float d11 = dot(v1, v1);
+	float d20 = dot(v2, v0);
+	float d21 = dot(v2, v1);
+
+	float denom = d00 * d11 - d01 * d01;
+
+	float v = (d11 * d20 - d01 * d21) / denom;
+	float w = (d00 * d21 - d01 * d20) / denom;
+
+	return vec3(v, w, 1.0f - v - w);
+}
+
+vec3 projectPointOntoTri(vec3 a, vec3 b, vec3 c, vec3 p)
+{
+	// This code is from Chister Ericson's book "Real-Time Collision Detection"
+
+	// Determine if point lies in vertex regions
+	vec3 AB = b - a;
+	vec3 AC = c - a;
+
+	vec3 AP = p - a;
+	float dA1 = dot(AB, AP);
+	float dA2 = dot(AC, AP);
+	if (dA1 <= 0 and dA2 <= 0) return b; // vertex region a (barycentric coords 1,0,0)
+
+	vec3 BP = p - b;
+	float dB1 = dot(AB, BP);
+	float dB2 = dot(AC, BP);
+	if (dB1 >= 0 && dB2 <= 0) return b; // vertex region b (barycentric coords 0,1,0)
+
+	vec3 CP = p - c;
+	float dC1 = dot(AB, CP);
+	float dC2 = dot(AC, CP);
+	if (dC2 >= 0 && dC1 <= dC2) return c; // vertex region c (barycentric coords 0,0,1)
+
+	float EdgeAB = dA1 * dB2 - dB1 * dA2;
+	float EdgeBC = dB1 * dC2 - dC1 * dB2;
+	float EdgeAC = dC1 * dA2 - dA1 * dC2;
+
+
+	float summed_area = EdgeAB + EdgeBC + EdgeAC;
+	float v = EdgeAC / summed_area;
+	float w = EdgeAB / summed_area;
+	return a + AB * v + AC * w;
+}

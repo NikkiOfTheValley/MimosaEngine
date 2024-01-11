@@ -32,9 +32,9 @@ void PhysicsManager::Start()
 
 			BlockForNanoseconds((long long)(((1.f / (float)PHYS_FPS) - stepTime) * 1000000000));
 
-			if (timer == PHYS_FPS / 4)
+			if (timer == PHYS_FPS)
 			{
-				Logger::getInstance().log(state.objects[0].GetProperties().vel);
+				Logger::getInstance().log(state.objects[0].GetProperties().pos);
 
 				Logger::getInstance().log("deltaTime: " + std::to_string(deltaTime * 1000) + "ms |  stepTime: " + std::to_string(stepTime * 1000) + "ms | SPS: " + std::to_string(((int)ceil(1.f / deltaTime))));
 				timer = 0;
@@ -74,7 +74,9 @@ void PhysicsManager::Step(double fixedDeltaTime)
 	// Calculate gravity
 	for (auto& obj : state.objects)
 		if (obj.hasGravity && obj.index <= MAX_PHYS_OBJECTS)
-			state.objForceVector[(obj.index * 3) + 1] += -9.8f * state.objMass[obj.index * 3] * (float)fixedDeltaTime;
+			state.objForceVector[(obj.index * 3) + 1] += -9.8f * state.objMass[(obj.index * 3) + 1] * (float)fixedDeltaTime;
+
+
 
 	// Apply drag
 	//state.objForceVector -= (state.objVelVector * state.objVelVector) * DRAG_CONSTANT * (float)fixedDeltaTime;

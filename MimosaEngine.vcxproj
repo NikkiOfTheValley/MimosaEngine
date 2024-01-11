@@ -951,7 +951,38 @@
     <ClCompile Include="src\vendor\glad\glad.c" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\example.frag" />
+    <None Include="assets\example.vert" />
+    <None Include="assets\examplePostProcessingShader.frag" />
+    <None Include="assets\examplePostProcessingShader.vert" />
+    <None Include="assets\flatShader.frag" />
+    <None Include="assets\flatShader.vert" />
+    <None Include="assets\passthrough.frag" />
+    <None Include="assets\passthrough.vert" />
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="assets\cube.obj">
+      <FileType>Document</FileType>
+    </Text>
+    <Text Include="assets\example.obj">
+      <FileType>Document</FileType>
+    </Text>
+    <Text Include="assets\floor.obj">
+      <FileType>Document</FileType>
+    </Text>
+    <Text Include="assets\torus.obj">
+      <FileType>Document</FileType>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\button-highlighted.png" />
+    <Image Include="assets\button.png" />
+    <Image Include="assets\example.png" />
+    <Image Include="assets\example2.png" />
+    <Image Include="assets\font.png" />
+    <Image Include="assets\text-box-highlighted.png" />
+    <Image Include="assets\text-box.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

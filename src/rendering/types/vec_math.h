@@ -49,3 +49,12 @@ float dist(vec3 a, vec3 b);
 float dist(vec2 a, vec2 b);
 
 vec3 tripleProduct(vec3 a, vec3 b, vec3 c);
+
+// Returns the barycentric coordinates of `point` for the triangle a, b, c
+vec3 barycentricTriangle(vec3 a, vec3 b, vec3 c, vec3 point);
+
+/*
+Returns the point p projected onto the triangle a, b, c.
+Assumes the point is within the triangle for performance reasons.
+*/
+vec3 projectPointOntoTri(vec3 a, vec3 b, vec3 c, vec3 p);

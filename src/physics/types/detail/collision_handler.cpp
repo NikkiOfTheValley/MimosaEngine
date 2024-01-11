@@ -55,15 +55,21 @@ void CollisionHandler::HandleCollisions(PhysState* state)
 						collision.collidingObjA = &objA;
 						collision.collidingObjB = &objB;
 						
-						//state->objVelVector.data[(objA.index * 3) + 1] = 0.f;
-						//state->objAccelVector.data[(objA.index * 3) + 1] = 0.f;
-						//state->objForceVector.data[(objA.index * 3) + 1] = 0.f;
-						//state->objPositionVector.data[(objA.index * 3) + 1] = 0.f;
+						state->objVelVector.data[(objA.index * 3) + 1] = 0.f;
+						state->objAccelVector.data[(objA.index * 3) + 1] = 0.f;
+						state->objForceVector.data[(objA.index * 3) + 1] = 0.f;
+						state->objPositionVector.data[(objA.index * 3) + 1] = 0.f;
 
 						epa_collision_info epa_info = EPA(info, blockA, objAProperties.pos, objAProperties.rot, blockB, objBProperties.pos, objBProperties.rot);
 
+						collision.initialPositionOffset = objAProperties.pos - objBProperties.pos;
+						collision.initialRotationOffset = objAProperties.rot - objBProperties.rot;
+
 						collision.contactPointA = epa_info.contactPointA;
 						collision.contactPointB = epa_info.contactPointB;
+						 
+						//Logger::getInstance().log("contact point A: " + (std::string)epa_info.contactPointA);
+						//Logger::getInstance().log("contact point B: " + (std::string)epa_info.contactPointB);
 
 						collision.contactNormal = epa_info.contactNormal;
 						collision.collisionDepth = epa_info.collisionDepth;
@@ -120,7 +126,7 @@ void CollisionHandler::HandleCollisions(PhysState* state)
 vec3 CollisionHandler::GetSupport(const std::vector<collision_vert>& block, vec3 objPos, vec3 objRot, vec3 dir)
 {
 	vec3 farthestVert;
-	float farthestDistance = -INFINITY;
+	float farthestDistance = FLT_MIN;
 
 	mat3x3f blockRotationMatrix;
 	blockRotationMatrix.rotate(objRot);
@@ -143,13 +149,20 @@ vec3 CollisionHandler::GetSupport(const std::vector<collision_vert>& block, vec3
 
 bool CollisionHandler::AddSupport(
 	std::vector<vec3>& simplex,
+	std::vector<vec3>& supportA,
+	std::vector<vec3>& supportB,
 	const std::vector<collision_vert>& blockA, vec3 blockAPos, vec3 blockARot,
 	const std::vector<collision_vert>& blockB, vec3 blockBPos, vec3 blockBRot,
 	vec3 dir)
 {
-	vec3 newVert = GetSupport(blockA, blockAPos, blockARot, dir) - GetSupport(blockB, blockBPos, blockBRot, dir * -1.f);
+	vec3 newSupportA = GetSupport(blockA, blockAPos, blockARot, dir);
+	vec3 newSupportB = GetSupport(blockB, blockBPos, blockBRot, dir * -1.f);;
+
+	vec3 newVert = newSupportA - newSupportB;
 
 	simplex.push_back(newVert);
+	supportA.push_back(newSupportA);
+	supportB.push_back(newSupportB);
 
 	return dot(dir, newVert) >= 0;
 }
@@ -159,6 +172,13 @@ gjk_collision_info CollisionHandler::GJK(
 	const std::vector<collision_vert>& blockB, vec3 blockBPos, vec3 blockBRot)
 {
 	std::vector<vec3> simplex;
+
+	// The results from the support function for object A
+	std::vector<vec3> supportA;
+
+	// The results from the support function for object B
+	std::vector<vec3> supportB;
+
 
 	// Pre-rotate the blocks so the GetSupport function doesn't have to do a matrix-vector multiplication for every vert
 
@@ -182,7 +202,7 @@ gjk_collision_info CollisionHandler::GJK(
 	vec3 dir = blockAPos - blockBPos;
 
 	// If the AddSupport function returns false, the blocks cannot be colliding, so we should exit early
-	if (!AddSupport(simplex, blockARotated, blockAPos, blockARot, blockBRotated, blockBPos, blockBRot, dir))
+	if (!AddSupport(simplex, supportA, supportB, blockARotated, blockAPos, blockARot, blockBRotated, blockBPos, blockBRot, dir))
 	{
 		// We don't need to specify the simplex, as EPA won't be used if the blocks aren't colliding
 		gjk_collision_info info;
@@ -195,7 +215,7 @@ gjk_collision_info CollisionHandler::GJK(
 	// Flip direction
 	dir *= -1.f;
 
-	if (!AddSupport(simplex, blockARotated, blockAPos, blockARot, blockBRotated, blockBPos, blockBRot, dir))
+	if (!AddSupport(simplex, supportA, supportB, blockARotated, blockAPos, blockARot, blockBRotated, blockBPos, blockBRot, dir))
 	{
 		gjk_collision_info info;
 		info.colliding = false;
@@ -218,7 +238,7 @@ gjk_collision_info CollisionHandler::GJK(
 	// The direction should be the line perpendicular to the line ab in the direction of the origin
 	dir = tripleProduct(ab, a0, ab);
 
-	if (!AddSupport(simplex, blockARotated, blockAPos, blockARot, blockBRotated, blockBPos, blockBRot, dir))
+	if (!AddSupport(simplex, supportA, supportB, blockARotated, blockAPos, blockARot, blockBRotated, blockBPos, blockBRot, dir))
 	{
 		gjk_collision_info info;
 		info.colliding = false;
@@ -247,7 +267,7 @@ gjk_collision_info CollisionHandler::GJK(
 	if (dot(dir, a0) < 0)
 		dir *= -1.f;
 
-	if (!AddSupport(simplex, blockARotated, blockAPos, blockARot, blockBRotated, blockBPos, blockBRot, dir))
+	if (!AddSupport(simplex, supportA, supportB, blockARotated, blockAPos, blockARot, blockBRotated, blockBPos, blockBRot, dir))
 	{
 		gjk_collision_info info;
 		info.colliding = false;
@@ -287,9 +307,20 @@ gjk_collision_info CollisionHandler::GJK(
 			// If the origin is "outside" of the triangle formed by abd, move c to the
 			// support vertex in the direction of the triangle's normal, as it is useless in this case
 
-			c = GetSupport(blockARotated, blockAPos, blockARot, dir) - GetSupport(blockBRotated, blockBPos, blockBRot, dir * -1.f);
+			// TODO: Refactor this mess to use AddSupport rather than reimplementing it 3 times
+
+			vec3 newSupportA = GetSupport(blockARotated, blockAPos, blockARot, dir);
+			vec3 newSupportB = GetSupport(blockBRotated, blockBPos, blockBRot, dir * -1.f);
+
+			c = newSupportA - newSupportB;
 			simplex.erase(simplex.begin() + 2);
 			simplex.push_back(c);
+
+			supportA.erase(supportA.begin() + 2);
+			supportA.push_back(newSupportA);
+
+			supportB.erase(supportB.begin() + 2);
+			supportB.push_back(newSupportB);
 
 			// If c didn't pass the origin, then the simplex cannot possibly contain the origin, so we exit early
 			if (dot(dir, c) >= 0)
@@ -305,9 +336,18 @@ gjk_collision_info CollisionHandler::GJK(
 			// If the origin is "outside" of the triangle formed by bcd, move a to the
 			// support vertex in the direction of the triangle's normal, as it is useless in this case
 
-			a = GetSupport(blockARotated, blockAPos, blockARot, dir) - GetSupport(blockBRotated, blockBPos, blockBRot, dir * -1.f);
+			vec3 newSupportA = GetSupport(blockARotated, blockAPos, blockARot, dir);
+			vec3 newSupportB = GetSupport(blockBRotated, blockBPos, blockBRot, dir * -1.f);
+
+			a = newSupportA - newSupportB;
 			simplex.erase(simplex.begin());
 			simplex.push_back(a);
+
+			supportA.erase(supportA.begin());
+			supportA.push_back(newSupportA);
+
+			supportB.erase(supportB.begin());
+			supportB.push_back(newSupportB);
 				
 			// If a didn't pass the origin, then the simplex cannot possibly contain the origin, so we exit early
 			if (dot(dir, a) >= 0)
@@ -323,9 +363,18 @@ gjk_collision_info CollisionHandler::GJK(
 			// If the origin is "outside" of the triangle formed by cad, move b to the
 			// support vertex in the direction of the triangle's normal, as it is useless in this case
 
-			b = GetSupport(blockARotated, blockAPos, blockARot, dir) - GetSupport(blockBRotated, blockBPos, blockBRot, dir * -1.f);
+			vec3 newSupportA = GetSupport(blockARotated, blockAPos, blockARot, dir);
+			vec3 newSupportB = GetSupport(blockBRotated, blockBPos, blockBRot, dir * -1.f);
+
+			b = newSupportA - newSupportB;
 			simplex.erase(simplex.begin() + 1);
 			simplex.push_back(b);
+
+			supportA.erase(supportA.begin() + 1);
+			supportA.push_back(newSupportA);
+
+			supportB.erase(supportB.begin() + 1);
+			supportB.push_back(newSupportB);
 
 			// If b didn't pass the origin, then the simplex cannot possibly contain the origin, so we exit early
 			if (dot(dir, b) >= 0)
@@ -344,25 +393,126 @@ gjk_collision_info CollisionHandler::GJK(
 			gjk_collision_info info;
 			info.colliding = true;
 			info.resultSimplex = simplex;
+			info.resultSupportA = supportA;
+			info.resultSupportB = supportB;
 
 			return info;
 		}
 	}
 }
 
-// Get the closest face to the origin for the given block
-std::vector<size_t> CollisionHandler::GetClosestFace(const std::vector<collision_vert>& /*block*/, vec3 /*blockPos*/, vec3 /*objRot*/)
+std::vector<std::pair<vec3, float>> CollisionHandler::GetFaceNormalsAndDistance(const std::vector<vec3>& polytope, const std::vector<size_t>& faceIndices)
 {
+	std::vector<std::pair<vec3, float>> result;
 
+	for (size_t i = 0; i < faceIndices.size(); i += 3)
+	{
+		vec3 a = polytope[faceIndices[i]];
+		vec3 b = polytope[faceIndices[i + 1]];
+		vec3 c = polytope[faceIndices[i + 2]];
+
+		//vec3 ac = c - a;
+		//vec3 ab = b - a;
+		//vec3 normal = cross(ac, ab);
+
+		vec3 normal = cross(b - a, c - a);
+		float distance = dot(normal, a);
+
+		// Flip normal and distance if the winding isn't correct
+		if (distance < 0)
+		{
+			normal *= -1.f;
+			distance *= -1.f;
+		}
+
+		if (std::isnan(distance))
+		{
+			Logger::getInstance().err("Distance to origin is NaN in GetFaceNormalsAndDistance! Face index is " + std::to_string(i) +
+				", normal is " + (std::string)normal + ", and triangle coords are " + (std::string)a + " | " + (std::string)b + " | " + (std::string)c);
+			continue;
+		}
+			
+
+		result.emplace_back(normal, distance);
+	}
+
+	return result;
+}
+
+std::pair<size_t, float> CollisionHandler::GetClosestFace(const std::vector<std::pair<vec3, float>>& normalsAndDistance)
+{
+	size_t closestFaceIndex = (size_t)-1;
+	float closestDistance = FLT_MAX;
+
+	//Logger::getInstance().log("gcf");
+
+	for (size_t i = 0; i < normalsAndDistance.size(); i++)
+	{
+		float distance = normalsAndDistance[i].second;
+
+		if (std::isnan(distance))
+			Logger::getInstance().fatal("Distance to origin for the closest face in EPA is NaN!");
+
+		if (distance < closestDistance)
+		{
+			closestFaceIndex = i;
+			closestDistance = distance;
+		}
+	}
+
+	if (closestFaceIndex == -1)
+	{
+		Logger::getInstance().fatal("There is no closest face to the origin! This shouldn't be possible! If you see this error, tell me immediately!");
+	}
+		
+
+	return std::make_pair(closestFaceIndex, closestDistance);
+}
+
+void CollisionHandler::AddEdgeIfUnique(std::vector<std::pair<size_t, size_t>>& uniqueEdges, const std::vector<size_t>& faceIndices, size_t a, size_t b)
+{
+	// Attempt to find the edge a, b in uniqueEdges
+	auto edgeAB = std::find(
+		uniqueEdges.begin(),
+		uniqueEdges.end(),
+		std::make_pair(faceIndices[b], faceIndices[a])
+	);
+
+	// If it is found, remove the existing edge
+	if (edgeAB != uniqueEdges.end())
+		uniqueEdges.erase(edgeAB);
+	else
+	// If it isn't found, add it
+		uniqueEdges.emplace_back(faceIndices[a], faceIndices[b]);
 }
 
 epa_collision_info CollisionHandler::EPA(
 	gjk_collision_info info,
-	const std::vector<collision_vert>& /*blockA*/, vec3 /*blockAPos*/, vec3 /*blockARot*/,
-	const std::vector<collision_vert>& /*blockB*/, vec3 /*blockBPos*/, vec3 /*blockBRot*/)
+	const std::vector<collision_vert>& blockA, vec3 blockAPos, vec3 blockARot,
+	const std::vector<collision_vert>& blockB, vec3 blockBPos, vec3 blockBRot)
 {
-	// We initialize the polytope to the final simplex from GJK, as that is a good starting point
+	// Pre-rotate the blocks
+
+	mat3x3f blockARotationMatrix;
+	mat3x3f blockBRotationMatrix;
+
+	blockARotationMatrix.rotate(blockARot);
+	blockBRotationMatrix.rotate(blockBRot);
+
+	std::vector<collision_vert> blockARotated = blockA;
+	std::vector<collision_vert> blockBRotated = blockB;
+
+	for (auto& vertA : blockARotated)
+		vertA.pos = vertA.pos * blockARotationMatrix;
+
+	for (auto& vertB : blockBRotated)
+		vertB.pos = vertB.pos * blockBRotationMatrix;
+
+
+	// We initialize the polytope and support information to the final simplex from GJK, as that is a good starting point
 	std::vector<vec3> polytope = info.resultSimplex;
+	std::vector<vec3> supportA = info.resultSupportA;
+	std::vector<vec3> supportB = info.resultSupportB;
 
 	// We also need a way of defining each face (triangle) of the polytope,
 	// as the result from GJK doesn't include face information
@@ -375,9 +525,160 @@ epa_collision_info CollisionHandler::EPA(
 		1, 3, 2
 	};
 
+	std::vector<std::pair<vec3, float>> normalsAndDistance = GetFaceNormalsAndDistance(polytope, faceIndices);
+
+	vec3 closestNormal = vec3();
+	float closestDistance = FLT_MAX;
+	size_t closestFace = (size_t)-1;
+
+	// Iterate until a closest face to the origin on the Minkowski difference has been found, but limit it
+	// to 100 iterations to keep from locking up the physics engine if some weird geometry causes an infinite loop
+
+	size_t iterations = 100;
+	while (closestDistance == FLT_MAX && iterations > 0)
+	{
+		closestFace = GetClosestFace(normalsAndDistance).first;
+
+		closestNormal = normalsAndDistance[closestFace].first;
+		closestDistance = normalsAndDistance[closestFace].second;
+
+		// Calculate a new support point in the direction of the face's normal, to check for any faces on the
+		// Minkowski difference which aren't part of the existing polytope that may be closer to the origin
+
+		vec3 newSupportA = GetSupport(blockARotated, blockAPos, blockARot, closestNormal);
+		vec3 newSupportB = GetSupport(blockBRotated, blockBPos, blockBRot, closestNormal * -1.f);
+		vec3 support = newSupportA - newSupportB;
+
+		float supportDistance = dot(closestNormal, support);
 
 
+		// If the difference between closestDistance and supportDistance exceeds COLLISION_EPSILON,
+		// then the support vertex is closer to the origin than the old closestDistance, so we need to
+		// recalculate the polytope and update the closestNormal and closestDistance.
+		// If the difference doesn't exceed COLLISION_EPSILON, we exit the loop, as we have found
+		// the closest face to the origin.
+		if (abs(supportDistance - closestDistance) > COLLISION_EPSILON)
+		{
+			// Set closestDistance to FLT_MAX so the loop doesn't exit
+			closestDistance = FLT_MAX;
 
+			// Remove every face that's pointing in the same direction as the support point,
+			// while keeping track of the unique edges that are removed
+			
+			std::vector<std::pair<size_t, size_t>> uniqueEdges;
 
-	return {};
+			for (size_t i = 0; i < normalsAndDistance.size(); i++)
+			{
+				vec3 normal = normalsAndDistance[i].first;
+
+				// if (dot(normal, support) > 0)
+
+				// Check if the current face's normal is pointing in the same
+				// direction as the support
+				if (dot(normalsAndDistance[i].first, support) > dot(normalsAndDistance[i].first, polytope[faceIndices[i * 3]]))
+				{
+					size_t faceIndex = i * 3;
+					auto faceIndexAsIterator = faceIndices.begin() + faceIndex;
+
+					// Add the 3 edges of the face if they're unique, and remove any existing edges if a duplicate is found
+					AddEdgeIfUnique(uniqueEdges, faceIndices, faceIndex,     faceIndex + 1);
+					AddEdgeIfUnique(uniqueEdges, faceIndices, faceIndex + 1, faceIndex + 2);
+					AddEdgeIfUnique(uniqueEdges, faceIndices, faceIndex + 2, faceIndex    );
+
+					// Remove the face and its normal and distance
+
+					faceIndices.erase(faceIndexAsIterator, faceIndexAsIterator + 2);
+					normalsAndDistance.erase(normalsAndDistance.begin() + i);
+
+					// I'm not sure why we need to iterate over the same face twice, but we do, apparently...
+					i--;
+				}
+			}
+
+			// Get the new faces required to repair the polytope
+
+			std::vector<size_t> newFaceIndices;
+
+			// Add a new face based on each unique edge 
+			for (std::pair<size_t, size_t> edge : uniqueEdges)
+			{
+				newFaceIndices.push_back(edge.first);
+				newFaceIndices.push_back(edge.second);
+				newFaceIndices.push_back(polytope.size());
+			}
+
+			// Add the support point
+			polytope.push_back(support);
+			supportA.push_back(newSupportA);
+			supportB.push_back(newSupportB);
+
+			//Logger::getInstance().log("newNormalsAndDistance");
+
+			// We only need the normals for the new faces, so we only calculate those to save a bit of CPU time
+			std::vector<std::pair<vec3, float>> newNormalsAndDistance = GetFaceNormalsAndDistance(polytope, newFaceIndices);
+
+			//Logger::getInstance().log("gcf newNormalsAndDistance");
+
+			// We also only changed the new faces, so we only need to calculate the new closest face based on the new faces
+			size_t newClosestFace = GetClosestFace(newNormalsAndDistance).first;
+
+			//Logger::getInstance().log("gcf oldClosestDistance");
+
+			// Get the old closest distance, as it was overwritten by previous code
+			float oldClosestDistance = GetClosestFace(normalsAndDistance).second;
+			
+			// If the new face is closer to the origin than oldClosestDistance, set the closest face to the new face,
+			// correcting for the fact that the new face will be added to the end of the normalsAndDistance vector
+			if (newNormalsAndDistance[newClosestFace].second < oldClosestDistance)
+				closestFace = newClosestFace + normalsAndDistance.size();
+
+			faceIndices.insert(faceIndices.end(), newFaceIndices.begin(), newFaceIndices.end());
+			normalsAndDistance.insert(normalsAndDistance.end(), newNormalsAndDistance.begin(), newNormalsAndDistance.end());
+		}
+
+		iterations--;
+	}
+
+	if (iterations <= 0)
+	{
+		Logger::getInstance().warn(
+			"EPA iteration limit reached! This is probably a result of trying to calculate collisions for very complex or invalid geometry! This will cause broken collisions!"
+		);
+	}
+
+	epa_collision_info epa_info;
+	 
+	epa_info.contactNormal = closestNormal;
+
+	// We add COLLISION_EPSILON to the depth to push objects slightly away from each other, to decrease the likelihood of
+	// small collisions that don't affect the final result much and just waste CPU time
+	epa_info.collisionDepth = closestDistance + COLLISION_EPSILON;
+
+	vec3 closestTriA = polytope[faceIndices[(closestFace * 3)]];
+	vec3 closestTriB = polytope[faceIndices[(closestFace * 3) + 1]];
+	vec3 closestTriC = polytope[faceIndices[(closestFace * 3) + 2]];
+
+	vec3 closestPoint = projectPointOntoTri(closestTriA, closestTriB, closestTriC, vec3(0, 0, 0));
+	vec3 closestPointBarycentric = barycentricTriangle(closestTriA, closestTriB, closestTriC, closestPoint);
+
+	// The contact points are a linear combination of the support points using the closest point in barycentric
+	// coordinates relative to the closest triangle
+
+	epa_info.contactPointA =
+		(supportA[faceIndices[(closestFace * 3)]] * closestPointBarycentric.x) +
+		(supportA[faceIndices[(closestFace * 3) + 1]] * closestPointBarycentric.y) +
+		(supportA[faceIndices[(closestFace * 3) + 2]] * closestPointBarycentric.z);
+
+	epa_info.contactPointB =
+		(supportB[faceIndices[(closestFace * 3)]] * closestPointBarycentric.x) +
+		(supportB[faceIndices[(closestFace * 3) + 1]] * closestPointBarycentric.y) +
+		(supportB[faceIndices[(closestFace * 3) + 2]] * closestPointBarycentric.z);
+
+	// Convert contact points to world space
+	
+	// We already rotated the simplex/polytope in GJK and in this function, so we only need to translate the contact points
+	epa_info.contactPointA += blockAPos;
+	epa_info.contactPointB += blockBPos;
+
+	return epa_info;
 }

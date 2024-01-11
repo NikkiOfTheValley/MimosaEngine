@@ -270,7 +270,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// -- Create meshes --
 
 	renderer->CreateNewMesh(
-		"assets/torus.obj",
+		"assets/cube.obj",
 		"exampleMesh",
 		materialManager.GetMaterial("exampleMaterial"),
 		vec3{ 4.f, 0.f, 2.f });
@@ -279,19 +279,32 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// data is never sent to the GPU
 	renderer->UpdateMesh("exampleMesh");
 	
+	renderer->CreateNewMesh(
+		"assets/floor.obj",
+		"floor",
+		materialManager.GetMaterial("exampleMaterial"),
+		vec3{ 4.f, -10.f, 2.f });
+
+	renderer->UpdateMesh("floor");
+
 
 	// -- Create physics objects --
 
-	CollisionMesh collisionMesh;
-	collisionMesh.LoadFromOBJ("assets/torus.obj");
+	CollisionMesh collisionMeshTorus;
+	collisionMeshTorus.LoadFromOBJ("assets/cube.obj");
 
-	physicsManager->CreateObject("test", { 4.f, 0.f, 2.f }, { 0.f, 0.f, 0.f }, DENSITY_CAST_IRON, collisionMesh);
+	physicsManager->CreateObject("test", { 4.f, 0.f, 2.f }, normalize({ 0.7f, 0.9f, 0.7f }), DENSITY_CAST_IRON, collisionMeshTorus);
+
+	CollisionMesh collisionMeshFloor;
+	collisionMeshFloor.LoadFromOBJ("assets/floor.obj");
+
+	physicsManager->CreateObject("floor", { 4.f, -10.f, 2.f }, { 0.f, 0.f, 0.f }, DENSITY_CAST_IRON, collisionMeshFloor, {}, nullptr, vec3(), vec3(), false);
 
 	// -- Create camera --
 
 	Camera cam;
 	cam.fov = 90.f;
-	cam.pos = vec3{ 0, 0, 0 };
+	cam.pos = vec3{ -10, 0, 0 };
 	
 	bool lastStateOfF2 = false;
 
@@ -350,9 +363,11 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 		cam.Update();
 
-		renderer->GetMesh("exampleMesh")->rotation.y += 0.5f * (float)deltaTime;
+		renderer->GetMesh("exampleMesh")->rotation = physicsManager->GetPhysObject("test")->GetProperties().rot;
 
 		renderer->GetMesh("exampleMesh")->position = physicsManager->GetPhysObject("test")->GetProperties().pos;
+
+		renderer->GetMesh("floor")->position = physicsManager->GetPhysObject("floor")->GetProperties().pos;
 
 		glfwPollEvents();
 

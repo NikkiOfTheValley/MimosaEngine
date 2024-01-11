@@ -2282,5 +2282,42 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+    <None Include="assets\example.frag" />
+    <None Include="assets\example.vert" />
+    <None Include="assets\examplePostProcessingShader.frag" />
+    <None Include="assets\examplePostProcessingShader.vert" />
+    <None Include="assets\flatShader.frag" />
+    <None Include="assets\flatShader.vert" />
+    <None Include="assets\passthrough.frag" />
+    <None Include="assets\passthrough.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\button-highlighted.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\example.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\example2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\font.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\text-box.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\text-box-highlighted.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="assets\torus.obj" />
+    <Text Include="assets\floor.obj" />
+    <Text Include="assets\example.obj" />
+    <Text Include="assets\cube.obj" />
   </ItemGroup>
 </Project>
