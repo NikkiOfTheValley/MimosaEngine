@@ -1,7 +1,7 @@
 #include "../collision_mesh.h"
 #include "../assert.h"
-#include "../rendering/types/mesh.h"
-#include "../rendering/types/obj_loader.h"
+#include "rendering/types/mesh.h"
+#include "rendering/types/obj_loader.h"
 
 // The OBJ needs to be in the format of a bunch of convex "blocks" if the original model is concave
 void CollisionMesh::LoadFromOBJ(std::string path)

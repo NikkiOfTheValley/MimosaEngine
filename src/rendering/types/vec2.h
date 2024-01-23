@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 #include <sstream>
-#include "../core/log.h"
-#include "../core/globals.h"
+#include "core/log.h"
+#include "core/globals.h"
 
 /*
 Predefine matrix classes so no circular dependency is

@@ -1,6 +1,6 @@
 #include "../material.h"
 #include "../../renderer.h"
-#include "../rendering/resource_manager.h"
+#include "rendering/resource_manager.h"
 #include "../mesh.h"
 
 Material::Material(

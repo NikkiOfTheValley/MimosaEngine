@@ -1,6 +1,6 @@
 #pragma once
-#include "../rendering/renderer.h"
-#include "../rendering/types/vec.h"
+#include "rendering/renderer.h"
+#include "rendering/types/vec.h"
 #include "math/conversion.h"
 
 class InputHandler

@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "../rendering/types/vec3.h"
+#include "rendering/types/vec3.h"
 #include "constraint.h"
 #include "collision_mesh.h"
 #include "constraints/collision_constraint.h"

@@ -1,6 +1,6 @@
 #pragma once
-#include "../rendering/types/texture.h"
-#include "../rendering/types/shader.h"
+#include "rendering/types/texture.h"
+#include "rendering/types/shader.h"
 #include <unordered_map>
 
 // The ResourceManager is a Singleton because more than one thing accesses it while also needing global state

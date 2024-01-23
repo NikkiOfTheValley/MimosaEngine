@@ -1,5 +1,5 @@
 #pragma once
-#include "../rendering/types/vec.h"
+#include "rendering/types/vec.h"
 #include "collision_mesh.h"
 
 struct PhysState;

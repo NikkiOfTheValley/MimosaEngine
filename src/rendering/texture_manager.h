@@ -1,6 +1,6 @@
 #pragma once
 #include "types/texture.h"
-#include "../rendering/types/vec.h"
+#include "rendering/types/vec.h"
 #include <vector>
 #include <unordered_map>
 #include "types/dynamic_texture.h"

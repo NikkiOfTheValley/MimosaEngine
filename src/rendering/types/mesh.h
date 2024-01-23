@@ -3,9 +3,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "vec.h"
-#include "../core/globals.h"
+#include "core/globals.h"
 #include "../renderer.h"
-#include "conversion.h"
+#include "math/conversion.h"
 #include "material.h"
 
 

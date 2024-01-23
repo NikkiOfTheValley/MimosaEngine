@@ -1,6 +1,6 @@
 #pragma once
-#include "../rendering/types/polygon.h"
-#include "../rendering/types/text.h"
+#include "rendering/types/polygon.h"
+#include "rendering/types/text.h"
 #include "types/button.h"
 #include "types/text_box.h"
 

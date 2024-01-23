@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include "../core/globals.h"
+#include "core/globals.h"
 #include <functional>
 #include "types/vec.h"
 

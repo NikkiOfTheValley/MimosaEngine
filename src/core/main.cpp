@@ -1,19 +1,19 @@
 #include <chrono>
 #include <thread>
 #include "globals.h"
-#include "../rendering/renderer.h"
-#include "../rendering/types/shader.h"
-#include "../rendering/types/mesh.h"
+#include "rendering/renderer.h"
+#include "rendering/types/shader.h"
+#include "rendering/types/mesh.h"
 #include "input_handler.h"
 #include <stb_image.h>
-#include "../rendering/types/text.h"
-#include "../rendering/resource_manager.h"
-#include "../ui/ui_manager.h"
-#include "../rendering/types/camera.h"
-#include "../rendering/material_manager.h"
-#include "../rendering/texture_manager.h"
-#include "../physics/physics_manager.h"
-#include "../rendering/types/obj_loader.h"
+#include "rendering/types/text.h"
+#include "rendering/resource_manager.h"
+#include "ui/ui_manager.h"
+#include "rendering/types/camera.h"
+#include "rendering/material_manager.h"
+#include "rendering/texture_manager.h"
+#include "physics/physics_manager.h"
+#include "rendering/types/obj_loader.h"
 #include "accurate_timer.h"
 
 // - Global variables -

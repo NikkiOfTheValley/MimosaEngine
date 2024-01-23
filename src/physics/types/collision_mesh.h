@@ -1,5 +1,5 @@
 #pragma once
-#include "../rendering/types/vec.h"
+#include "rendering/types/vec.h"
 #include <vector>
 
 // Prefefine Mesh and PhysObj so we don't have to `include` them

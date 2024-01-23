@@ -4,9 +4,9 @@
 #include <GLFW/glfw3.h>
 #include "vec.h"
 #include "shader.h"
-#include "../core/globals.h"
+#include "core/globals.h"
 #include "../renderer.h"
-#include "conversion.h"
+#include "math/conversion.h"
 #include "texture.h"
 
 struct vert2d

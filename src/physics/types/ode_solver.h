@@ -1,6 +1,6 @@
 #pragma once
 #include "../phys_globals.h"
-#include "../core/globals.h"
+#include "core/globals.h"
 #include "large_vector.h"
 #include <functional>
 

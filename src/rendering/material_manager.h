@@ -1,5 +1,5 @@
 #pragma once
-#include "../rendering/types/material.h"
+#include "rendering/types/material.h"
 #include <unordered_map>
 
 class MaterialManager

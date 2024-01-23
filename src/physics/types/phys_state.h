@@ -7,7 +7,7 @@
 #include "mlcp_solver.h"
 #include "collision_handler.h"
 #include "large_sparse_matrix.h"
-#include "../rendering/types/mat3x3.h"
+#include "rendering/types/mat3x3.h"
 
 struct PhysState
 {

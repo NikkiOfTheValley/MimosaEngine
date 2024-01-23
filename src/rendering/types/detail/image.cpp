@@ -1,6 +1,6 @@
 #include <stb_image.h>
 #include <glad/glad.h>
-#include "../core/log.h"
+#include "core/log.h"
 #include "../image.h"
 
 Image::Image(std::string path, bool isRGBA)

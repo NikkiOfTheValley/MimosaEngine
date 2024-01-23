@@ -1,7 +1,7 @@
 #pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "../core/globals.h"
+#include "core/globals.h"
 #include "image.h"
 #include "vec.h"
 

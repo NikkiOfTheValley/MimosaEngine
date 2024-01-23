@@ -1,5 +1,5 @@
 #include "physics_manager.h"
-#include "../core/accurate_timer.h"
+#include "core/accurate_timer.h"
 
 PhysicsManager::PhysicsManager()
 {

@@ -2,8 +2,8 @@
 #include <string>
 #include <sstream>
 #include <intrin.h>
-#include "../core/log.h"
-#include "../core/globals.h"
+#include "core/log.h"
+#include "core/globals.h"
 
 #ifndef NDEBUG
 #define assert(condition, message) \
