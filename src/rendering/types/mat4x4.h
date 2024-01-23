@@ -1,6 +1,6 @@
 #pragma once
 #include "vec.h"
-#include "conversion.h"
+#include "math/conversion.h"
 #include <numbers>
 #include <string>
 #include <sstream>

@@ -140,7 +140,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\vendor;$(ProjectDir)src\vendor\asio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\vendor;$(SolutionDir)src\vendor\asio;$(SolutionDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -167,7 +167,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\vendor;$(ProjectDir)src\vendor\asio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\vendor;$(SolutionDir)src\vendor\asio;$(SolutionDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
@@ -193,6 +193,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\math\conversion.h" />
+    <ClInclude Include="src\math\formatting_util.h" />
     <ClInclude Include="src\core\accurate_timer.h" />
     <ClInclude Include="src\core\globals.h" />
     <ClInclude Include="src\core\input_handler.h" />
@@ -224,7 +226,6 @@
     <ClInclude Include="src\rendering\renderer.h" />
     <ClInclude Include="src\rendering\texture_manager.h" />
     <ClInclude Include="src\rendering\types\camera.h" />
-    <ClInclude Include="src\rendering\types\conversion.h" />
     <ClInclude Include="src\rendering\types\dynamic_texture.h" />
     <ClInclude Include="src\rendering\types\image.h" />
     <ClInclude Include="src\rendering\types\mat3x3.h" />
@@ -914,6 +915,7 @@
     <ClCompile Include="src\core\input_handler.cpp" />
     <ClCompile Include="src\core\log.cpp" />
     <ClCompile Include="src\core\main.cpp" />
+    <ClCompile Include="src\math\detail\conversion.cpp" />
     <ClCompile Include="src\rendering\material_manager.cpp" />
     <ClCompile Include="src\rendering\resource_manager.cpp" />
     <ClCompile Include="src\networking\m_net\connection.cpp" />

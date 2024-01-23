@@ -42,9 +42,6 @@
     <ClInclude Include="src\networking\m_net\tsqueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\rendering\types\conversion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\rendering\types\vec_math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -2160,6 +2157,12 @@
     <ClInclude Include="src\physics\types\collision_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\math\formatting_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\conversion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\input_handler.cpp">
@@ -2277,6 +2280,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\physics\types\detail\collision_handler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\detail\conversion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
