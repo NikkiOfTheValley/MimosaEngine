@@ -168,7 +168,7 @@ vec3 projectPointOntoTri(vec3 a, vec3 b, vec3 c, vec3 p)
 	vec3 AP = p - a;
 	float dA1 = dot(AB, AP);
 	float dA2 = dot(AC, AP);
-	if (dA1 <= 0 and dA2 <= 0) return b; // vertex region a (barycentric coords 1,0,0)
+	if (dA1 <= 0 and dA2 <= 0) return a; // vertex region a (barycentric coords 1,0,0)
 
 	vec3 BP = p - b;
 	float dB1 = dot(AB, BP);
