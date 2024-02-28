@@ -52,7 +52,7 @@ public:
 	/*
 	   Serializes the given std::any into a string.
 	   Allowed types are:
-	   std::string, int, float, double, & bool
+	   std::string, int, float, double, and bool
 	*/
 	std::string serialize(std::any input);
 

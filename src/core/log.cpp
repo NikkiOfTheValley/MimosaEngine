@@ -83,7 +83,10 @@ void Logger::fatal(std::string str)
 	m_log->append("[FATAL]: " + str + "\n");
 
 	this->dumpLog();
+
+	if (IsDebuggerPresent())
 	__debugbreak();
+
 	exit(EXIT_FATAL_ERR);
 }
 
