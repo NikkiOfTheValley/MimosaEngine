@@ -31,10 +31,9 @@ impulse SLESolver::SolveConstraints(
 
 			constraint->Calculate(initialState, objPosVector, objRotVector, fixedDeltaTime);
 
-			LargeMatrix<6, 4> constraintJacobian = constraint->jacobian;
+			std::unique_ptr<LargeMatrix<4, 6>> constraintJacobianTransposed = constraint->jacobian.transpose();
 
-
-
+			
 
 
 

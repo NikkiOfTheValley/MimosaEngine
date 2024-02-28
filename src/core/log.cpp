@@ -4,7 +4,7 @@
 // Default constructor, sets output to true
 Logger::Logger()
 {
-	output = true;
+	output = DO_LOG_OUTPUT;
 	m_log = new std::string();
 }
 
@@ -85,7 +85,7 @@ void Logger::fatal(std::string str)
 	this->dumpLog();
 
 	if (IsDebuggerPresent())
-	__debugbreak();
+		__debugbreak();
 
 	exit(EXIT_FATAL_ERR);
 }

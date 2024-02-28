@@ -10,6 +10,9 @@ struct vec2;
 
 //#define NO_SIMD
 
+// Enable console logging in the defualt logger
+#define DO_LOG_OUTPUT true
+
 // The CPU must be x64 for SIMD to work, so we need it as a flag
 const uint16_t HW_x64 = 1;
 

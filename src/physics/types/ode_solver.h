@@ -55,4 +55,6 @@ private:
 		obj_state& output,
 		std::function<force_and_torque(PhysState* initialState, obj_state& state, double fixedDeltaTime)> forceFunction,
 		SLESolver* solver);
+
+	bool haveDisplayedWarning = false;
 };

@@ -2,6 +2,7 @@
 #include <array>
 #include <sstream>
 #include "assert.h"
+#include <memory>
 
 // Allows the creation of a matrix of arbitrary size specified at compile-time
 // Only used in the physics engine, so it's a physics engine type
@@ -24,7 +25,7 @@ public:
 
 	LargeMatrix(std::initializer_list<std::initializer_list<float>> list)
 	{
-		assert(this->sizeY == list.size(), "Mismatched row count when executing )LargeMatrix::LargeMatrix");
+		assert(this->sizeY == list.size(), "Mismatched row count when executing LargeMatrix::LargeMatrix");
 
 		size_t i = 0;
 		for (auto column : list)
@@ -61,6 +62,18 @@ public:
 			data[i][i] = 1.f / data[i][i];
 
 		return *this;
+	}
+
+	// Returns this matrice's transpose. Warning, very slow for large matrices!
+	std::unique_ptr<LargeMatrix<sizeX, sizeY>> transpose()
+	{
+		std::unique_ptr<LargeMatrix<sizeX, sizeY>> transposed = std::make_unique<LargeMatrix<sizeX, sizeY>>();
+
+		for (size_t i = 0; i < sizeY; i++)
+			for (size_t k = 0; k < sizeX; k++)
+				transposed->data[k][i] = this->data[i][k];
+
+		return transposed;
 	}
 
 	operator std::string() const

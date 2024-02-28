@@ -1,6 +1,7 @@
 #include "../collision_handler.h"
 #include "../phys_state.h"
 #include "../phys_obj.h"
+#include "debug/obj_writer.h"
 
 void CollisionHandler::HandleCollisions(PhysState* state)
 {
@@ -48,17 +49,11 @@ void CollisionHandler::HandleCollisions(PhysState* state)
 					if (info.colliding)
 					{
 						//Logger::getInstance().log("detected collision");
-						//Logger::getInstance().log("objA pos: " + (std::string)objAProperties.pos);
 
 						collision collision;
 						collision.colliding = true;
 						collision.collidingObjA = &objA;
 						collision.collidingObjB = &objB;
-						
-						state->objVelVector.data[(objA.index * 3) + 1] = 0.f;
-						state->objAccelVector.data[(objA.index * 3) + 1] = 0.f;
-						state->objForceVector.data[(objA.index * 3) + 1] = 0.f;
-						state->objPositionVector.data[(objA.index * 3) + 1] = 0.f;
 
 						epa_collision_info epa_info = EPA(info, blockA, objAProperties.pos, objAProperties.rot, blockB, objBProperties.pos, objBProperties.rot);
 
@@ -70,6 +65,8 @@ void CollisionHandler::HandleCollisions(PhysState* state)
 						 
 						//Logger::getInstance().log("contact point A: " + (std::string)epa_info.contactPointA);
 						//Logger::getInstance().log("contact point B: " + (std::string)epa_info.contactPointB);
+
+						//Logger::getInstance().log("collision depth: " + std::to_string(epa_info.collisionDepth));
 
 						collision.contactNormal = epa_info.contactNormal;
 						collision.collisionDepth = epa_info.collisionDepth;
@@ -89,6 +86,22 @@ void CollisionHandler::HandleCollisions(PhysState* state)
 						collision.contactTangent2 = contactTangent2;
 
 						collisions.push_back(collision);
+
+
+						PhysObj* cube;
+						objA.index == 0 ? cube = &objA : cube = &objB;
+
+						//Logger::getInstance().log(collision.contactNormal);
+
+						vec3 positionOffset = collision.contactNormal * collision.collisionDepth;
+
+						state->objPositionVector.data[(cube->index * 3) + 0] += positionOffset.x;
+						state->objPositionVector.data[(cube->index * 3) + 1] += positionOffset.y;
+						state->objPositionVector.data[(cube->index * 3) + 2] += positionOffset.z;
+
+						//state->objVelVector.data[(cube->index * 3) + 1] *= -1.f;
+
+						//Logger::getInstance().log(cube->GetProperties().pos);
 					}
 				}
 			}
@@ -156,7 +169,7 @@ bool CollisionHandler::AddSupport(
 	vec3 dir)
 {
 	vec3 newSupportA = GetSupport(blockA, blockAPos, blockARot, dir);
-	vec3 newSupportB = GetSupport(blockB, blockBPos, blockBRot, dir * -1.f);;
+	vec3 newSupportB = GetSupport(blockB, blockBPos, blockBRot, dir * -1.f);
 
 	vec3 newVert = newSupportA - newSupportB;
 
@@ -415,7 +428,12 @@ std::vector<std::pair<vec3, float>> CollisionHandler::GetFaceNormalsAndDistance(
 		//vec3 ab = b - a;
 		//vec3 normal = cross(ac, ab);
 
-		vec3 normal = cross(b - a, c - a);
+		vec3 normal = normalize(cross(b - a, c - a));
+
+		if (is_nan(normal))
+			Logger::getInstance().err("Element of normal is NaN in GetFaceNormalsAndDistance! Face index is " + std::to_string(i) +
+				", and triangle coords are " + (std::string)a + " | " + (std::string)b + " | " + (std::string)c);
+
 		float distance = dot(normal, a);
 
 		// Flip normal and distance if the winding isn't correct
@@ -444,7 +462,8 @@ std::pair<size_t, float> CollisionHandler::GetClosestFace(const std::vector<std:
 	size_t closestFaceIndex = (size_t)-1;
 	float closestDistance = FLT_MAX;
 
-	//Logger::getInstance().log("gcf");
+	if (normalsAndDistance.size() == 0)
+		Logger::getInstance().fatal("normalsAndDistance.size() == 0");
 
 	for (size_t i = 0; i < normalsAndDistance.size(); i++)
 	{
@@ -461,9 +480,7 @@ std::pair<size_t, float> CollisionHandler::GetClosestFace(const std::vector<std:
 	}
 
 	if (closestFaceIndex == -1)
-	{
-		Logger::getInstance().fatal("There is no closest face to the origin! This shouldn't be possible! If you see this error, tell me immediately!");
-	}
+		Logger::getInstance().fatal("There is no closest face to the origin! This shouldn't be possible!");
 		
 
 	return std::make_pair(closestFaceIndex, closestDistance);
@@ -537,11 +554,16 @@ epa_collision_info CollisionHandler::EPA(
 	size_t iterations = 100;
 	while (closestDistance == FLT_MAX && iterations > 0)
 	{
+
+
 		closestFace = GetClosestFace(normalsAndDistance).first;
 
 		closestNormal = normalsAndDistance[closestFace].first;
 		closestDistance = normalsAndDistance[closestFace].second;
 
+#ifndef NDEBUG
+		obj::WriteOBJ("polytope" + std::to_string(iterations) + ".obj", polytope, faceIndices);
+#endif
 		// Calculate a new support point in the direction of the face's normal, to check for any faces on the
 		// Minkowski difference which aren't part of the existing polytope that may be closer to the origin
 
@@ -571,8 +593,6 @@ epa_collision_info CollisionHandler::EPA(
 			{
 				vec3 normal = normalsAndDistance[i].first;
 
-				// if (dot(normal, support) > 0)
-
 				// Check if the current face's normal is pointing in the same
 				// direction as the support
 				if (dot(normalsAndDistance[i].first, support) > dot(normalsAndDistance[i].first, polytope[faceIndices[i * 3]]))
@@ -590,7 +610,6 @@ epa_collision_info CollisionHandler::EPA(
 					faceIndices.erase(faceIndexAsIterator, faceIndexAsIterator + 2);
 					normalsAndDistance.erase(normalsAndDistance.begin() + i);
 
-					// I'm not sure why we need to iterate over the same face twice, but we do, apparently...
 					i--;
 				}
 			}
@@ -612,17 +631,11 @@ epa_collision_info CollisionHandler::EPA(
 			supportA.push_back(newSupportA);
 			supportB.push_back(newSupportB);
 
-			//Logger::getInstance().log("newNormalsAndDistance");
-
 			// We only need the normals for the new faces, so we only calculate those to save a bit of CPU time
 			std::vector<std::pair<vec3, float>> newNormalsAndDistance = GetFaceNormalsAndDistance(polytope, newFaceIndices);
 
-			//Logger::getInstance().log("gcf newNormalsAndDistance");
-
 			// We also only changed the new faces, so we only need to calculate the new closest face based on the new faces
 			size_t newClosestFace = GetClosestFace(newNormalsAndDistance).first;
-
-			//Logger::getInstance().log("gcf oldClosestDistance");
 
 			// Get the old closest distance, as it was overwritten by previous code
 			float oldClosestDistance = GetClosestFace(normalsAndDistance).second;
@@ -635,6 +648,11 @@ epa_collision_info CollisionHandler::EPA(
 			faceIndices.insert(faceIndices.end(), newFaceIndices.begin(), newFaceIndices.end());
 			normalsAndDistance.insert(normalsAndDistance.end(), newNormalsAndDistance.begin(), newNormalsAndDistance.end());
 		}
+
+#ifndef NDEBUG
+		Logger::getInstance().log(std::to_string(closestDistance));
+		Logger::getInstance().log("");
+#endif
 
 		iterations--;
 	}
@@ -659,6 +677,7 @@ epa_collision_info CollisionHandler::EPA(
 	vec3 closestTriC = polytope[faceIndices[(closestFace * 3) + 2]];
 
 	vec3 closestPoint = projectPointOntoTri(closestTriA, closestTriB, closestTriC, vec3(0, 0, 0));
+
 	vec3 closestPointBarycentric = barycentricTriangle(closestTriA, closestTriB, closestTriC, closestPoint);
 
 	// The contact points are a linear combination of the support points using the closest point in barycentric
@@ -677,8 +696,8 @@ epa_collision_info CollisionHandler::EPA(
 	// Convert contact points to world space
 	
 	// We already rotated the simplex/polytope in GJK and in this function, so we only need to translate the contact points
-	epa_info.contactPointA += blockAPos;
-	epa_info.contactPointB += blockBPos;
+	epa_info.contactPointA -= blockAPos;
+	epa_info.contactPointB -= blockBPos;
 
 	return epa_info;
 }

@@ -2,8 +2,11 @@
 
 const size_t MAX_PHYS_OBJECTS = 256;
 const size_t MAX_CONSTRAINTS_PER_PHYS_OBJ = 32;
-const unsigned int PHYS_FPS = 1000;
+const unsigned int PHYS_FPS = 40000;
 const float COLLISION_EPSILON = 0.001f;
+
+#define ODE_SOLVER_TYPE_EULER
+//#define ODE_SOLVER_TYPE_RK4
 
 const bool WARN_ON_SIM_LAG = false;
 

@@ -279,7 +279,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// We have to update the mesh before drawing it, otherwise the mesh
 	// data is never sent to the GPU
 	renderer->UpdateMesh("exampleMesh");
-	
+
 	renderer->CreateNewMesh(
 		"assets/floor.obj",
 		"floor",
@@ -287,14 +287,14 @@ int main(int /*argc*/, char* /*argv[]*/)
 		vec3{ 4.f, -10.f, 2.f });
 
 	renderer->UpdateMesh("floor");
-
+	
 
 	// -- Create physics objects --
 
-	CollisionMesh collisionMeshTorus;
-	collisionMeshTorus.LoadFromOBJ("assets/cube.obj");
+	CollisionMesh collisionMeshCube;
+	collisionMeshCube.LoadFromOBJ("assets/cube.obj");
 
-	physicsManager->CreateObject("test", { 4.f, 0.f, 2.f }, normalize({ 0.7f, 0.9f, 0.7f }), DENSITY_CAST_IRON, collisionMeshTorus);
+	physicsManager->CreateObject("test", { 4.f, 0.f, 5.f }, { 0.f, 0.f, 0.f }, DENSITY_WOOD, collisionMeshCube);
 
 	CollisionMesh collisionMeshFloor;
 	collisionMeshFloor.LoadFromOBJ("assets/floor.obj");
@@ -369,6 +369,10 @@ int main(int /*argc*/, char* /*argv[]*/)
 		renderer->GetMesh("exampleMesh")->position = physicsManager->GetPhysObject("test")->GetProperties().pos;
 
 		renderer->GetMesh("floor")->position = physicsManager->GetPhysObject("floor")->GetProperties().pos;
+		
+		// This makes no sense. Somehow, the floor mesh ends up 1 unit below where it should
+		// be in the physics engine.
+		renderer->GetMesh("floor")->position.y--;
 
 		glfwPollEvents();
 
@@ -382,7 +386,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 		frameTime = deltaTime;
 		if (enableFPSLimiter && (1.f / (float)setFPS) > frameTime)
 			deltaTime += (1.f / (float)setFPS) - frameTime;
-
+		
 		if (enableFPSLimiter)
 			BlockForNanoseconds(long long(((1.f / (double)(setFPS)) - frameTime) * conv::SEC_TO_NANOSEC));
 

@@ -26,14 +26,13 @@ void PhysicsManager::Start()
 			Step(fixedDeltaTime);
 
 			auto endOfStep = high_resolution_clock::now();
-			auto stepTime = ((double)duration_cast<nanoseconds>(endOfStep - startOfStep).count() / 1000000000);
-
+			auto stepTime = ((double)duration_cast<nanoseconds>(endOfStep - startOfStep).count() * conv::NANOSEC_TO_SEC);
+			
 			if (stepTime > fixedDeltaTime && WARN_ON_SIM_LAG)
 				Logger::getInstance().warn("Simulation behind by " + std::to_string((stepTime - fixedDeltaTime) * conv::SEC_TO_NANOSEC) + "ns");
 
 			BlockForNanoseconds((long long)((fixedDeltaTime - stepTime) * conv::SEC_TO_NANOSEC));
-
-			BlockForNanoseconds((long long)(((1.f / (float)PHYS_FPS) - stepTime) * 1000000000));
+			
 
 			if (timer == PHYS_FPS)
 			{
@@ -95,12 +94,14 @@ void PhysicsManager::Step(double fixedDeltaTime)
 	// Calculate gravity
 	for (auto& obj : state.objects)
 		if (obj.hasGravity && obj.index <= MAX_PHYS_OBJECTS)
-			state.objForceVector[(obj.index * 3) + 1] += -9.8f * state.objMass[(obj.index * 3) + 1] * (float)fixedDeltaTime;
+			state.objForceVector[(obj.index * 3) + 1] += (float)(-9.8f * state.objMass[(obj.index * 3) + 1] * (float)fixedDeltaTime);
 
 
 
 	// Apply drag
-	//state.objForceVector -= (state.objVelVector * state.objVelVector) * DRAG_CONSTANT * (float)fixedDeltaTime;
+	//state.objForceVector -= DRAG_CONSTANT * (float)fixedDeltaTime;
+
+	state.objVelVector = state.objVelVector - (state.objVelVector * 0.05f) - ((state.objVelVector * state.objVelVector) * 0.01f);
 
 	state.isInStep = false;
 }
