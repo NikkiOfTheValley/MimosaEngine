@@ -1,5 +1,6 @@
 #include "physics_manager.h"
 #include "core/accurate_timer.h"
+#include "math/formatting_util.h"
 
 PhysicsManager::PhysicsManager()
 {
@@ -18,27 +19,47 @@ void PhysicsManager::Start()
 
 			auto startOfStep = high_resolution_clock::now();
 
+			float fixedDeltaTime = 1.f / (float)PHYS_FPS;
+
 			// Large time steps (which would happen when the update rate is low) 
 			// cause instability, so just assume the physics is running at full speed
-			Step(1.f / (float)PHYS_FPS);
+			Step(fixedDeltaTime);
 
 			auto endOfStep = high_resolution_clock::now();
 			auto stepTime = ((double)duration_cast<nanoseconds>(endOfStep - startOfStep).count() / 1000000000);
 
-			auto deltaTime = stepTime;
+			if (stepTime > fixedDeltaTime && WARN_ON_SIM_LAG)
+				Logger::getInstance().warn("Simulation behind by " + std::to_string((stepTime - fixedDeltaTime) * conv::SEC_TO_NANOSEC) + "ns");
 
-			if ((1.f / (float)PHYS_FPS) > stepTime)
-				deltaTime += (1.f / (float)PHYS_FPS) - stepTime;
+			BlockForNanoseconds((long long)((fixedDeltaTime - stepTime) * conv::SEC_TO_NANOSEC));
 
 			BlockForNanoseconds((long long)(((1.f / (float)PHYS_FPS) - stepTime) * 1000000000));
 
 			if (timer == PHYS_FPS)
 			{
-				Logger::getInstance().log(state.objects[0].GetProperties().pos);
+				double totalStepTime = 0.0;
+				double averageStepTime = 0.0;
+				double worstStepTime = 0.0;
 
-				Logger::getInstance().log("deltaTime: " + std::to_string(deltaTime * 1000) + "ms |  stepTime: " + std::to_string(stepTime * 1000) + "ms | SPS: " + std::to_string(((int)ceil(1.f / deltaTime))));
+				for (auto& value : stepTimeOverLastSecond)
+				{
+					if (value > worstStepTime)
+						worstStepTime = value;
+
+					totalStepTime += value;
+				}
+
+				averageStepTime = totalStepTime / max((double)stepTimeOverLastSecond.size(), 1);
+
+				Logger::getInstance().log(
+					"fixedDeltaTime: " + math::floatToString((float)fixedDeltaTime * conv::SEC_TO_MICROSEC, 4) + "us "
+					"|  stepTime: "+ math::floatToString((float)averageStepTime * conv::SEC_TO_MICROSEC, 4) + "us "
+					"| avgUpdateRate: " + std::to_string(((int)ceil(1.f / (max(averageStepTime, fixedDeltaTime)) / 1000))) + "kHz "
+					"| worstUpdateRate: " + std::to_string(((int)ceil(1.f / (max(worstStepTime, fixedDeltaTime)) / 1000))) + "kHz");
 				timer = 0;
 			}
+
+			stepTimeOverLastSecond[timer] = stepTime;
 
 			timer++;
 		}

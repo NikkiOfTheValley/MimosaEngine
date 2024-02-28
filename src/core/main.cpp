@@ -15,6 +15,7 @@
 #include "physics/physics_manager.h"
 #include "rendering/types/obj_loader.h"
 #include "accurate_timer.h"
+#include "math/formatting_util.h"
 
 // - Global variables -
 
@@ -383,11 +384,14 @@ int main(int /*argc*/, char* /*argv[]*/)
 			deltaTime += (1.f / (float)setFPS) - frameTime;
 
 		if (enableFPSLimiter)
-			BlockForNanoseconds(long long(((1.f / (double)(setFPS)) - frameTime) * 1000000000));
+			BlockForNanoseconds(long long(((1.f / (double)(setFPS)) - frameTime) * conv::SEC_TO_NANOSEC));
 
 		FPS = 1 / deltaTime;
 		if ((int)counter % setFPS == 0)
-			logger->log("deltaTime: " + std::to_string(deltaTime * 1000) + "ms | frameTime: " + std::to_string(frameTime * 1000) + "ms | FPS: " + std::to_string(((int)ceil(FPS) + (int)ceil(prevFPS)) / 2));
+			logger->log(
+				"deltaTime: " + math::floatToString((float)deltaTime * conv::SEC_TO_MILLISEC, 4) + "ms "
+				"| frameTime: " + math::floatToString((float)frameTime * conv::SEC_TO_MILLISEC, 4) + "ms "
+				"| FPS: " + std::to_string(((int)ceil(FPS) + (int)ceil(prevFPS)) / 2));
 		
 
 		prevFPS = FPS;

@@ -918,6 +918,7 @@
     <ClCompile Include="src\core\main.cpp" />
     <ClCompile Include="src\debug\detail\obj_writer.cpp" />
     <ClCompile Include="src\math\detail\conversion.cpp" />
+    <ClCompile Include="src\math\detail\formatting_util.cpp" />
     <ClCompile Include="src\rendering\material_manager.cpp" />
     <ClCompile Include="src\rendering\resource_manager.cpp" />
     <ClCompile Include="src\networking\m_net\connection.cpp" />

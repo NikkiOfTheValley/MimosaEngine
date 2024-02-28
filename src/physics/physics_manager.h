@@ -35,4 +35,6 @@ private:
 	CollisionHandler collisionHandler;
 
 	unsigned int timer = 0;
+
+	std::array<double, PHYS_FPS> stepTimeOverLastSecond;
 };

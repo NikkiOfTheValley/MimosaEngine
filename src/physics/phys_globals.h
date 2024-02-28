@@ -5,6 +5,8 @@ const size_t MAX_CONSTRAINTS_PER_PHYS_OBJ = 32;
 const unsigned int PHYS_FPS = 1000;
 const float COLLISION_EPSILON = 0.001f;
 
+const bool WARN_ON_SIM_LAG = false;
+
 const float DRAG_CONSTANT = 0.3f;
 
 // Densities of various materials in kg/m^3

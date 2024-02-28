@@ -2189,9 +2189,6 @@
     <ClCompile Include="src\networking\m_net\message.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\types\detail\conversion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\rendering\types\detail\vec_math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -2286,6 +2283,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\math\detail\conversion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\detail\formatting_util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\debug\detail\obj_writer.cpp">
