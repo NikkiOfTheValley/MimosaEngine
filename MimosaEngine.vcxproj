@@ -193,6 +193,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\debug\obj_writer.h" />
     <ClInclude Include="src\math\conversion.h" />
     <ClInclude Include="src\math\formatting_util.h" />
     <ClInclude Include="src\core\accurate_timer.h" />
@@ -915,6 +916,7 @@
     <ClCompile Include="src\core\input_handler.cpp" />
     <ClCompile Include="src\core\log.cpp" />
     <ClCompile Include="src\core\main.cpp" />
+    <ClCompile Include="src\debug\detail\obj_writer.cpp" />
     <ClCompile Include="src\math\detail\conversion.cpp" />
     <ClCompile Include="src\rendering\material_manager.cpp" />
     <ClCompile Include="src\rendering\resource_manager.cpp" />

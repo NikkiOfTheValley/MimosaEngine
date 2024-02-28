@@ -6,7 +6,7 @@
 // The OBJ needs to be in the format of a bunch of convex "blocks" if the original model is concave
 void CollisionMesh::LoadFromOBJ(std::string path)
 {
-	std::vector<std::vector<vert>> objects = obj_loader::LoadOBJ(path);
+	std::vector<std::vector<vert>> objects = obj::LoadOBJ(path);
 
 	// Convert objects to blocks
 	for (auto& obj : objects)

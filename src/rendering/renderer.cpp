@@ -146,7 +146,7 @@ void Renderer::CreateNewMesh(
     vec3 rot)
 {
     material->RegisterNewMesh(name);
-    Mesh* mesh = new Mesh(obj_loader::LoadOBJ(path)[0], material);
+    Mesh* mesh = new Mesh(obj::LoadOBJ(path)[0], material);
     mesh->InitBuffers();
     mesh->position = pos;
     mesh->rotation = rot;

@@ -190,7 +190,7 @@ std::vector<vert> LoadMeshFromOBJLines(std::vector<std::string> lines, std::stri
 }
 
 
-std::vector<std::vector<vert>> obj_loader::LoadOBJ(std::string path)
+std::vector<std::vector<vert>> obj::LoadOBJ(std::string path)
 {
 	namespace fs = std::filesystem;
 	using namespace std::chrono;
@@ -273,7 +273,7 @@ std::vector<std::vector<vert>> obj_loader::LoadOBJ(std::string path)
 		numTris += mesh.size() / 3;
 
 	logger->log("Finished loading OBJ file " + path + ". Took " + std::to_string(timeToLoadInMS) + "ms, has " +
-			    std::to_string(meshes.size()) + " object(s), and contains " + std::to_string(numTris) + "tris.");
+			    std::to_string(meshes.size()) + " object(s), and contains " + std::to_string(numTris) + " tris.");
 
 	return meshes;
 }

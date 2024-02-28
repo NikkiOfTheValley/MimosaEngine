@@ -2163,6 +2163,9 @@
     <ClInclude Include="src\math\conversion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\debug\obj_writer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\input_handler.cpp">
@@ -2283,6 +2286,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\math\detail\conversion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\debug\detail\obj_writer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
