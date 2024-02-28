@@ -2157,6 +2157,15 @@
     <ClInclude Include="src\physics\types\collision_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\parallel\parallel_processing_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\parallel\parallel_processing_impl_opencl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\parallel\parallel_processing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\math\formatting_util.h">
       <Filter>Header Files</Filter>
     </ClInclude>

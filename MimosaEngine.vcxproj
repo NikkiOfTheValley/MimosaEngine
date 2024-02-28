@@ -196,6 +196,9 @@
     <ClInclude Include="src\debug\obj_writer.h" />
     <ClInclude Include="src\math\conversion.h" />
     <ClInclude Include="src\math\formatting_util.h" />
+    <ClInclude Include="src\parallel\parallel_processing.h" />
+    <ClInclude Include="src\parallel\parallel_processing_manager.h" />
+    <ClInclude Include="src\parallel\parallel_processing_impl_opencl.h" />
     <ClInclude Include="src\core\accurate_timer.h" />
     <ClInclude Include="src\core\globals.h" />
     <ClInclude Include="src\core\input_handler.h" />
@@ -936,7 +939,6 @@
     <ClCompile Include="src\rendering\renderer.cpp" />
     <ClCompile Include="src\rendering\texture_manager.cpp" />
     <ClCompile Include="src\rendering\types\detail\camera.cpp" />
-    <ClCompile Include="src\rendering\types\detail\conversion.cpp" />
     <ClCompile Include="src\rendering\types\detail\image.cpp" />
     <ClCompile Include="src\rendering\types\detail\mat3x3.cpp" />
     <ClCompile Include="src\rendering\types\detail\material.cpp" />
