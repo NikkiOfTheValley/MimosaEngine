@@ -274,11 +274,13 @@ int main(int /*argc*/, char* /*argv[]*/)
 		"assets/cube.obj",
 		"exampleMesh",
 		materialManager.GetMaterial("exampleMaterial"),
-		vec3{ 4.f, 0.f, 2.f });
+		vec3{ 4.f, 5.f, 2.f });
 
-	// We have to update the mesh before drawing it, otherwise the mesh
-	// data is never sent to the GPU
-	renderer->UpdateMesh("exampleMesh");
+	renderer->CreateNewMesh(
+		"assets/cube.obj",
+		"exampleMesh2",
+		materialManager.GetMaterial("exampleMaterial"),
+		vec3{ 4.f, 5.f, 2.f });
 
 	renderer->CreateNewMesh(
 		"assets/floor.obj",

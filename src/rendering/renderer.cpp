@@ -153,6 +153,8 @@ void Renderer::CreateNewMesh(
 
     nameToMeshIndex[name] = meshes.size();
     meshes.push_back(mesh);
+
+    mesh->UpdateMesh();
 }
 
 // Creates a new mesh either from a .obj file or a std::vector<vert>
@@ -171,6 +173,8 @@ void Renderer::CreateNewMesh(
 
     nameToMeshIndex[name] = meshes.size();
     meshes.push_back(mesh);
+
+    mesh->UpdateMesh();
 }
 
 #pragma warning(push)
@@ -224,7 +228,7 @@ void Renderer::Draw(mat4x4f viewMatrix, mat4x4f projectionMatrix)
     //postProcessingManager->StartRendering();
 
     glClearColor(clearColorR, clearColorG, clearColorB, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (auto& mesh : meshes)
     {
