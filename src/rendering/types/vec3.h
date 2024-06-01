@@ -72,6 +72,9 @@ public:
 	friend vec3 operator/(const vec3& lhs, const float rhs);
 
 
+	friend vec3 operator-(const vec3& lhs);
+
+
 	bool operator==(const vec3& rhs);
 	bool operator!=(const vec3& rhs);
 	float& operator[](const size_t i);

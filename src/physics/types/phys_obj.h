@@ -34,6 +34,7 @@ public:
 
 	size_t index;
 	bool hasGravity;
+	bool isPinned;
 
 	CollisionMesh collisionMesh;
 

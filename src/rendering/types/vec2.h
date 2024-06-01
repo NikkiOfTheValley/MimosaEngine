@@ -63,6 +63,9 @@ public:
 	friend vec2 operator/(const vec2& lhs, const float rhs);
 
 
+	friend vec2 operator-(const vec2& lhs);
+
+
 	bool operator==(const vec2& rhs);
 	bool operator!=(const vec2& rhs);
 	float& operator[](const size_t i);

@@ -125,6 +125,12 @@ vec2 operator/(const vec2& lhs, const float rhs)
 }
 
 
+vec2 operator-(const vec2& lhs)
+{
+	return vec2{ -lhs.x, -lhs.y };
+}
+
+
 bool vec2::operator==(const vec2& rhs)
 {
 	return (this->x == rhs.x) && (this->y == rhs.y);

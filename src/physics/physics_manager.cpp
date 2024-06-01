@@ -127,6 +127,7 @@ void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float de
 	state.objAngVelVector[(state.objIndex * 3) + 2] = angVel.z;
 
 	obj.hasGravity = hasGravity;
+	obj.isPinned = isPinned;
 	state.nameToObjIndex[name] = state.objIndex;
 	obj.collisionMesh = collisionMesh;
 
@@ -164,11 +165,6 @@ void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float de
 
 		if (!wasConstraintSet)
 			Logger::getInstance().err("Failed to set constraint because the number of constraints is >= MAX_CONSTRAINTS_PER_PHYS_OBJ");
-	}
-
-	if (isPinned)
-	{
-		// TODO: Add pinning constraints here (or just don't add forces at all via a bool? Could make it more stable..)
 	}
 
 	state.objects[state.objIndex] = obj;

@@ -6,6 +6,7 @@
 #include "large_matrix.h"
 #include "large_sparse_matrix.h"
 #include "core/globals.h"
+#include "rendering/types/vec.h"
 
 // Allows the creation of a vector of arbitrary size specified at compile-time
 // Only used in the SLE solver, so it's a physics engine type
@@ -361,9 +362,20 @@ public:
 
 	constexpr float& operator[](const size_t i)
 	{
-
 		assert(i < this->size, "Index out of bounds when executing LargeVector::operator[]");
 		return data[i];
+	}
+
+	// Returns the vector type at index i, assuming the type has a a subscript operator and that it contains only floats
+	template<typename vec_type> vec_type* GetVector(size_t i)
+	{
+		// assert() doesn't count as using the variable when in Release mode, so we suppress the warning
+#pragma warning(suppress:4189)
+		constexpr size_t numElemsInVecType = sizeof(vec_type) / sizeof(float);
+
+		assert(i < this->size - numElemsInVecType, "Index out of bounds when executing LargeVector::GetVector()");
+
+		return (vec_type*)&data[i];
 	}
 
 	void operator=(const LargeVector& rhs)

@@ -165,6 +165,12 @@ vec3 operator/(const vec3& lhs, const float rhs)
 }
 
 
+vec3 operator-(const vec3& lhs)
+{
+	return vec3{ -lhs.x, -lhs.y, -lhs.z };
+}
+
+
 bool vec3::operator==(const vec3& rhs)
 {
 	return (this->x == rhs.x) && (this->y == rhs.y) && (this->z == rhs.z);
