@@ -6,18 +6,27 @@
 class Text
 {
 public:
-	std::vector<Polygon2D> letterPolygons;
-
-	Text(std::string text, vec2 pos, int scale);
+	Text(std::string text, vec2 pos, int scale, bool isStatic = false);
 
 	void Update();
 
 	void UpdateText(std::string newText);
 
+	void UpdatePosition(vec2 newPos, int newScale);
+
 	void Draw();
 
+	void DeallocPolygons();
+
 private:
-	int scale;
 	vec2 pos;
+	int scale;
+	bool isStatic;
 	std::string text;
+
+	std::vector<Polygon2D> letterPolygons;
+	bool polygonsStale;
+
+	void GenerateText(std::string text, vec2 pos, int scale);
+	void GenerateTextStatic(std::string text, vec2 pos, int scale);
 };

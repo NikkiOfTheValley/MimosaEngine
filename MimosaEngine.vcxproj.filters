@@ -2112,9 +2112,6 @@
     <ClInclude Include="src\physics\physics_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\rendering\types\dynamic_texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\rendering\texture_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>

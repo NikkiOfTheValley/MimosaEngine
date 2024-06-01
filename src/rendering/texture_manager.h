@@ -3,7 +3,6 @@
 #include "rendering/types/vec.h"
 #include <vector>
 #include <unordered_map>
-#include "types/dynamic_texture.h"
 
 // The TextureManager is a Singleton because more than one thing accesses it while also needing global state
 
@@ -20,17 +19,21 @@ public:
 	void Init();
 
 	void AddTexture(std::string path, std::string name, bool isRGBA, bool useNearestNeighbor);
+	void AddImage(Image* img, std::string name, bool isRGBA, bool useNearestNeighbor);
 	void RemoveTexture(std::string name);
 
 	// Returns the UV coordinates in the atlas that correspond to the given texture name
 	std::pair<vec2, vec2> GetTextureLocation(std::string name);
 
 	vec2 GetAtlasDimensions();
-	DynamicTexture* GetAtlasAsTexture();
 
 	TextureManager(TextureManager const&) = delete;
 	void operator=(TextureManager const&) = delete;
 
+	Texture* textureAtlasTexture;
+
+	// An atlas of all used textures. Allows more than 16 textures to be in use at once
+	Image* textureAtlas;
 private:
 	TextureManager() { textureAtlas = nullptr; textureAtlasTexture = nullptr; };
 
@@ -40,18 +43,17 @@ private:
 	// Check if the given texture location (in pixels) is within the bounds of the atlas
 	bool CheckInBounds(std::pair<vec2, vec2> image);
 
+	// Resizes the texture atlas according to the given texture
+	void ResizeAtlas(Image* tex, vec2 texLocation);
+
 	// Updates the `textureAtlasTexture` DynamicTexture
 	void UpdateAtlasTexture();
 
-	// An atlas of all used textures. Allows more than 16 textures to be in use at once
-	Image* textureAtlas;
-
-	DynamicTexture* textureAtlasTexture;
+public:
 
 	// Holds every texture's coordinates (in pixels)
 	std::vector<std::pair<vec2, vec2>> textureCoords;
 
 	// Maps texture names to indices
 	std::unordered_map<std::string, size_t> nameToTexCoordIndex;
-
 };

@@ -4,6 +4,12 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+/*
+Used to label textures created from `Image`s.
+Since an Image doesn't have a path, we have to give the texture an ID instead
+ */
+static size_t globalIDCounter = 0;
+
 Texture::Texture(std::string path, bool isRGBA, bool useNearestNeighbor)
 {
 	this->isRGBA = isRGBA;
@@ -45,7 +51,9 @@ Texture::Texture(std::string path, bool isRGBA, bool useNearestNeighbor)
 Texture::Texture(Image* image, bool useNearestNeighbor)
 {
 	this->isRGBA = isRGBA;
-	this->path = "tex:" + std::to_string(rand());
+	this->path = "tex:" + std::to_string(globalIDCounter);
+	globalIDCounter++;
+
 	this->useNearestNeighbor = useNearestNeighbor;
 
 	glGenTextures(1, &texture);
@@ -77,20 +85,47 @@ Texture::Texture(Image* image, bool useNearestNeighbor)
 	}
 }
 
-Texture::Texture(std::pair<vec2, vec2> /*atlasLoc*/)
+Texture::Texture(std::pair<vec2, vec2> atlasLoc)
 {
-	//w = abs(atlasLoc.first.data[0] - atlasLoc.second.data[0]) * TextureManager::getInstance().GetAtlasDimensions().data[0];
-	//h = abs(atlasLoc.first.data[1] - atlasLoc.second.data[1]) * TextureManager::getInstance().GetAtlasDimensions().data[1];
+	w = (int)abs((atlasLoc.first.x - atlasLoc.second.x) * TextureManager::getInstance().GetAtlasDimensions().x);
+	h = (int)abs((atlasLoc.first.y - atlasLoc.second.y) * TextureManager::getInstance().GetAtlasDimensions().y);
+
+	this->location = atlasLoc;
+	this->isAtlasTexture = true;
+}
+
+// Gets the location of this texture in the atlas, if the texture is an atlased texture.
+std::pair<vec2, vec2> Texture::GetLocation()
+{
+	if (!this->isAtlasTexture)
+	{
+		Logger::getInstance().warn("Attempted to get the atlas location of a non-atlas texture! This will cause broken textures!");
+		return { vec2(), vec2() };
+	}
+
+	return this->location;
 }
 
 // Use this texture
 void Texture::Bind(int id)
 {
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glActiveTexture(GL_TEXTURE0 + id);
+	if (isAtlasTexture)
+	{
+		TextureManager::getInstance().textureAtlasTexture->Bind(id);
+	}
+	else
+	{
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glActiveTexture(GL_TEXTURE0 + id);
+	}
 }
 
 bool Texture::IsRGBA()
 {
 	return isRGBA;
+}
+
+bool Texture::IsAtlasTexture()
+{
+	return isAtlasTexture;
 }

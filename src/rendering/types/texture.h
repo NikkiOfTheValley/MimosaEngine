@@ -17,7 +17,7 @@ class Texture
 	// then please open a PR or open an issue explaining said better way.
 
 	bool isAtlasTexture = false;
-	std::pair<vec2, vec2> location = { vec2(), vec2() };
+	std::pair<vec2, vec2> location = { vec2(-1, -1), vec2(-1, -1) };
 
 public:
 	Texture(std::string path, bool isRGBA, bool useNearestNeighbor);
@@ -26,10 +26,15 @@ public:
 
 	Texture(std::pair<vec2, vec2> atlasLoc);
 
+	// Gets the location of this texture in the atlas, if the texture is an atlased texture.
+	std::pair<vec2, vec2> GetLocation();
+
 	// Use this texture
 	void Bind(int id);
 
 	bool IsRGBA();
+
+	bool IsAtlasTexture();
 
 	int w;
 	int h;

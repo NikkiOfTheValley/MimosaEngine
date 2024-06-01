@@ -1,4 +1,5 @@
 #include "text_box.h"
+#include <rendering/texture_manager.h>
 
 TextBox::TextBox(std::string defaultStr, vec2 pos, vec2 dim, int textScale)
 {
@@ -41,11 +42,7 @@ TextBox::~TextBox()
 	backgroundImage->Dealloc();
 	delete backgroundImage;
 
-	for (auto& p : text->letterPolygons)
-	{
-		p.Dealloc();
-	}
-	text->letterPolygons.clear();
+	text->DeallocPolygons();
 	delete text;
 
 	// Make sure to clear currentlySelectedText and useTextInput if this TextBox is selected, so the user can't corrupt memory by typing in a deleted TextBox
@@ -67,12 +64,7 @@ void TextBox::Update()
 	backgroundImage->Dealloc();
 	delete backgroundImage;
 
-	for (auto& p : text->letterPolygons)
-	{
-		p.Dealloc();
-	}
-	text->letterPolygons.clear();
-
+	text->DeallocPolygons();
 	delete text;
 
 	vec2 center = (pos * 2) + (dim / 2);
@@ -99,6 +91,7 @@ void TextBox::Update()
 	poly->uvIsNDC = true;
 	poly->vertIsNDC = true;
 	poly->posIsNDC = true;
+
 
 	// Check if the mouse is within the bounds of the text box
 	if (mousePos.x / screenDim->x > pos.x && mousePos.x / screenDim->x < pos.x + dim.x &&

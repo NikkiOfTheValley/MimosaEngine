@@ -6,7 +6,7 @@
 Image::Image(std::string path, bool isRGBA)
 {
 	this->isRGBA = isRGBA;
-	this-> path = path;
+	this->path = path;
 
 	// Load and generate the texture
 	int nrChannels;
@@ -37,7 +37,7 @@ void Image::Blit(Image* dest, size_t srcX, size_t srcY, size_t srcWidth, size_t 
 	}
 
 	if (srcX + srcWidth > w || srcY + srcHeight > h || destX + srcWidth > dest->w || destY + srcHeight > dest->h)
-		Logger::getInstance().err("Failed to blit Image " + path + " to Image " + dest->path + " as the image bounds are out of range");
+		Logger::getInstance().err("Failed to blit Image " + path + " to Image " + dest->path + " as the blitted portion is outside of one or both of the Image(s)");
 
 
 	for (size_t y = 0; y < srcHeight; y++)

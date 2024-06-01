@@ -43,7 +43,7 @@ void UIManager::CreateImageElement(Texture* tex, bool isFullscreen, vec2 pos, ve
 }
 
 // Creates a new text element in the current UI state
-void UIManager::CreateTextElement(std::string str, std::string name, vec2 pos, int scale)
+void UIManager::CreateTextElement(std::string str, std::string name, vec2 pos, int scale, bool isStatic)
 {
 	if (!curState)
 	{
@@ -51,7 +51,7 @@ void UIManager::CreateTextElement(std::string str, std::string name, vec2 pos, i
 		return;
 	}
 
-	Text* text = new Text(str, pos, scale);
+	Text* text = new Text(str, pos, scale, isStatic);
 
 	std::pair<Text*, std::string> textElement = std::pair{text, name};
 	curState->textElements.push_back(textElement);

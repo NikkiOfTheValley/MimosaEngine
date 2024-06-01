@@ -174,7 +174,6 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	logger->log(output.str());
 
-	TextureManager::getInstance().Init();
 	resourceManager = &ResourceManager::getInstance();
 	uiManager = new UIManager();
 	physicsManager = new PhysicsManager();
@@ -185,6 +184,8 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	if (!renderer->init(800, 600, inputHandler.mouse_callback, inputHandler.key_callback))
 		return -1;
+
+	TextureManager::getInstance().Init();
 
 	// -- Load assets --
 
@@ -209,20 +210,6 @@ int main(int /*argc*/, char* /*argv[]*/)
 	resourceManager->LoadShader("assets/examplePostProcessingShader.vert", "assets/examplePostProcessingShader.frag", "examplePostProcessingShader");
 	renderer->AddNewPostProcessingShader(resourceManager->GetShader("examplePostProcessingShader"));
 
-	Image* img = new Image("assets/font.png", true);
-
-	uint32_t* data = new uint32_t[16 * 16];
-
-	std::memset(data, 0, 16 * 16 * sizeof(uint32_t));
-
-
-	Image* dest = new Image(data, 16, 16, true);
-
-	img->Blit(dest, 16, 0, 16, 8, 0, 0);
-
-	Texture* tex = new Texture(dest, true);
-
-
 	// -- Create materials --
 
 	materialManager.CreateMaterial("exampleMaterial", "exampleShader", "exampleImage2");
@@ -240,20 +227,20 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	uiManager->CreateTextElement("Dynamic Example Text", "example", vec2{ 0.05f, 0.066f }, 4);
 
-	uiManager->CreateTextElement("Static Example Text", "example_static", vec2{ 0.05f, 0.15f }, 4);
+	uiManager->CreateTextElement("Static Example Text", "example_static", vec2{0.05f, 0.15f}, 4, true);
 
-	//uiManager->CreateImageElement(resourceManager->GetTexture("exampleImage"), false, vec2{ 0.25f, 0.1f }, vec2{ 0.25f, 0.25f });
+	Texture* tex = new Texture(TextureManager::getInstance().textureAtlas, true);
 
-	uiManager->CreateImageElement(tex, false, vec2{ 0.25f, 0.2f }, vec2{ tex->w / renderer->screenDim->x, tex->h / renderer->screenDim->y });
+	uiManager->CreateImageElement(tex, false, vec2{ 0.0f, 0.0f }, vec2{ tex->w / renderer->screenDim->x, tex->h / renderer->screenDim->y });
 
 	uiManager->CreateButtonElement("Example Button", vec2{ 0.41f, 0.36f }, vec2{ 0.38f, 0.08f }, 4,
 		[&]() {
 			uiManager->UpdateTextElement("example", "Dynamic Example Text 2");
 		});
 
-	uiManager->CreateTextBoxElement("Example Text Box", "text_box", vec2{ 0.355f, 0.5f }, vec2{ 0.28f, 0.06f }, 4);
+	uiManager->CreateTextBoxElement("Example Text Box", "text_box", vec2{ 0.355f, 0.5f }, vec2{ 0.38f, 0.06f }, 4);
 
-	uiManager->CreateTextBoxElement("Example Text Box 2", "text_box_2", vec2{ 0.355f, 0.58f }, vec2{ 0.28f, 0.06f }, 4);
+	uiManager->CreateTextBoxElement("Example Text Box 2", "text_box_2", vec2{ 0.355f, 0.58f }, vec2{ 0.45f, 0.06f }, 4);
 
 	uiManager->CreateButtonElement("Example Button 2", vec2{ 0.355f, 0.7f }, vec2{ 0.38f, 0.08f }, 4,
 		[&]() {
@@ -287,8 +274,6 @@ int main(int /*argc*/, char* /*argv[]*/)
 		"floor",
 		materialManager.GetMaterial("exampleMaterial"),
 		vec3{ 4.f, -10.f, 2.f });
-
-	renderer->UpdateMesh("floor");
 	
 
 	// -- Create physics objects --
@@ -296,12 +281,14 @@ int main(int /*argc*/, char* /*argv[]*/)
 	CollisionMesh collisionMeshCube;
 	collisionMeshCube.LoadFromOBJ("assets/cube.obj");
 
-	physicsManager->CreateObject("test", { 4.f, 0.f, 5.f }, { 0.f, 0.f, 0.f }, DENSITY_WOOD, collisionMeshCube);
+	physicsManager->CreateObject("test", { 4.f, 5.f, 2.001f }, { 0.f, 0.f, 0.f }, DENSITY_WOOD, collisionMeshCube, {}, nullptr, vec3(), vec3(), false);
+
+	physicsManager->CreateObject("test2", { 4.f, 5.f, 3.001f }, { 0.f, 0.f, 0.f }, DENSITY_WOOD, collisionMeshCube);
 
 	CollisionMesh collisionMeshFloor;
 	collisionMeshFloor.LoadFromOBJ("assets/floor.obj");
 
-	physicsManager->CreateObject("floor", { 4.f, -10.f, 2.f }, { 0.f, 0.f, 0.f }, DENSITY_CAST_IRON, collisionMeshFloor, {}, nullptr, vec3(), vec3(), false);
+	physicsManager->CreateObject("floor", { 4.f, -10.f, 2.f }, { 0.f, 0.f, 0.f }, DENSITY_CAST_IRON, collisionMeshFloor, {}, nullptr, vec3(), vec3(), false, true);
 
 	// -- Create camera --
 
@@ -310,7 +297,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 	cam.pos = vec3{ -10, 0, 0 };
 	
 	bool lastStateOfF2 = false;
-
+	bool lastStateOfF4 = false;
 
 	// -- Start physics simulation --
 	physicsManager->Start();
@@ -338,6 +325,25 @@ int main(int /*argc*/, char* /*argv[]*/)
 			inputHandler.reloadAssets = false;
 		}
 
+		if (glfwGetKey(renderer->window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+			cam.pos.y -= 1.f * (float)deltaTime;
+		if (glfwGetKey(renderer->window, GLFW_KEY_SPACE) == GLFW_PRESS)
+			cam.pos.y += 1.f * (float)deltaTime;
+		
+		vec3 camFront;
+		camFront.x = cos(cam.GetRotation().z) * cos(cam.GetRotation().y);
+		camFront.y = sin(cam.GetRotation().y);
+		camFront.z = sin(cam.GetRotation().z) * cos(cam.GetRotation().y);
+
+		if (glfwGetKey(renderer->window, GLFW_KEY_W) == GLFW_PRESS)
+			cam.pos += camFront * 2.5f * (float)deltaTime;
+		if (glfwGetKey(renderer->window, GLFW_KEY_S) == GLFW_PRESS)
+			cam.pos -= camFront * 2.5f * (float)deltaTime;
+		if (glfwGetKey(renderer->window, GLFW_KEY_A) == GLFW_PRESS)
+			cam.pos -= normalize(cross(camFront, vec3(0, 1, 0))) * 2.5f * (float)deltaTime;
+		if (glfwGetKey(renderer->window, GLFW_KEY_D) == GLFW_PRESS)
+			cam.pos += normalize(cross(camFront, vec3(0, 1, 0))) * 2.5f * (float)deltaTime;
+
 		// -- Draw --
 
 		renderer->Draw(cam.GetViewMatrix(), cam.GetProjectionMatrix());
@@ -361,20 +367,16 @@ int main(int /*argc*/, char* /*argv[]*/)
 			enableFPSLimiter = !enableFPSLimiter;
 		lastStateOfF2 = glfwGetKey(renderer->window, GLFW_KEY_F2) == GLFW_PRESS;
 
-		if (glfwGetKey(renderer->window, GLFW_KEY_F4) == GLFW_PRESS)
+		if (lastStateOfF4 == false && glfwGetKey(renderer->window, GLFW_KEY_F4) == GLFW_PRESS)
 			displayUI = !displayUI;
+		lastStateOfF4 = glfwGetKey(renderer->window, GLFW_KEY_F4) == GLFW_PRESS;
 
 		cam.Update();
 
-		renderer->GetMesh("exampleMesh")->rotation = physicsManager->GetPhysObject("test")->GetProperties().rot;
-
 		renderer->GetMesh("exampleMesh")->position = physicsManager->GetPhysObject("test")->GetProperties().pos;
+		renderer->GetMesh("exampleMesh2")->position = physicsManager->GetPhysObject("test2")->GetProperties().pos;
 
 		renderer->GetMesh("floor")->position = physicsManager->GetPhysObject("floor")->GetProperties().pos;
-		
-		// This makes no sense. Somehow, the floor mesh ends up 1 unit below where it should
-		// be in the physics engine.
-		renderer->GetMesh("floor")->position.y--;
 
 		glfwPollEvents();
 

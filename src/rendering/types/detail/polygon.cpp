@@ -1,4 +1,5 @@
 #include "../polygon.h"
+#include "rendering/texture_manager.h"
 
 Polygon2D::Polygon2D() {}
 
@@ -64,10 +65,29 @@ void Polygon2D::Draw()
 	shader->SetVec2("pos", position);
 	shader->SetVec2("screenDim", (float)w, (float)h);
 
-	if (texture != nullptr)
+	if (texture)
+	{
 		shader->SetVec2("texSize", (float)texture->w, (float)texture->h);
+
+		if (texture->IsAtlasTexture())
+		{
+			//Logger::getInstance().log(texture->GetLocation().first);
+			shader->SetVec2("atlasLocation", texture->GetLocation().first);
+			shader->SetVec2("atlasSize", TextureManager::getInstance().GetAtlasDimensions());
+		}
+		else
+		{
+			shader->SetVec2("atlasLocation", -1, -1);
+			shader->SetVec2("atlasSize", -1, -1);
+		}
+
+	}
 	else
+	{
 		shader->SetVec2("texSize", -1, -1);
+		shader->SetVec2("atlasLocation", -1, -1);
+		shader->SetVec2("atlasSize", -1, -1);
+	}
 
 	shader->SetBool("uvIsNDC", uvIsNDC);
 	shader->SetBool("vertIsNDC", vertIsNDC);

@@ -43,11 +43,7 @@ Button::~Button()
 	backgroundImage->Dealloc();
 	delete backgroundImage;
 
-	for (auto& p : text->letterPolygons)
-	{
-		p.Dealloc();
-	}
-	text->letterPolygons.clear();
+	text->DeallocPolygons();
 	delete text;
 }
 
@@ -64,18 +60,9 @@ void Button::Update()
 	backgroundImage->Dealloc();
 	delete backgroundImage;
 
-	for (auto& p : text->letterPolygons)
-	{
-		p.Dealloc();
-	}
-	text->letterPolygons.clear();
-	
-	delete text;
-	
 	vec2 center = (pos * 2) + (dim / 2);
 	vec2* screenDim = Renderer::getInstance().screenDim;
-
-	text = new Text(str, vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
+	text->UpdatePosition(vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
 
 	// Construct background polygon
 	Polygon2D* poly = new Polygon2D();

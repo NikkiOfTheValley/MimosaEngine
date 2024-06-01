@@ -230,7 +230,6 @@
     <ClInclude Include="src\rendering\renderer.h" />
     <ClInclude Include="src\rendering\texture_manager.h" />
     <ClInclude Include="src\rendering\types\camera.h" />
-    <ClInclude Include="src\rendering\types\dynamic_texture.h" />
     <ClInclude Include="src\rendering\types\image.h" />
     <ClInclude Include="src\rendering\types\mat3x3.h" />
     <ClInclude Include="src\rendering\types\material.h" />

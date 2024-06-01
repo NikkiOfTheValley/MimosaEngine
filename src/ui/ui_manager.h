@@ -24,7 +24,7 @@ public:
 	void CreateImageElement(Texture* tex, bool isFullscreen, vec2 pos = vec2(), vec2 dim = vec2());
 
 	// Creates a new text element in the current UI state
-	void CreateTextElement(std::string str, std::string name, vec2 pos, int scale);
+	void CreateTextElement(std::string str, std::string name, vec2 pos, int scale, bool isStatic = false);
 
 	// Creates a new button element in the current UI state that calls a given function when pressed
 	void CreateButtonElement(std::string str, vec2 pos, vec2 dim, int textScale, std::function<void()> func);

@@ -1,6 +1,7 @@
 #include "../material.h"
 #include "../../renderer.h"
 #include "rendering/resource_manager.h"
+#include "rendering/texture_manager.h"
 #include "../mesh.h"
 
 Material::Material(
@@ -42,9 +43,28 @@ void Material::Bind(mat4x4f viewMatrix, mat4x4f projectionMatrix, mat4x4f modelM
 	shader->SetMat4("model", modelMatrix);
 
 	if (texture)
+	{
 		shader->SetVec2("texSize", (float)texture->w, (float)texture->h);
+
+		if (texture->IsAtlasTexture())
+		{
+			shader->SetVec2("atlasLocation", texture->GetLocation().first);
+			shader->SetVec2("atlasSize", TextureManager::getInstance().GetAtlasDimensions());
+		}
+		else
+		{
+			shader->SetVec2("atlasLocation", -1, -1);
+			shader->SetVec2("atlasSize", -1, -1);
+		}
+			
+	}
 	else
+	{
 		shader->SetVec2("texSize", -1, -1);
+		shader->SetVec2("atlasLocation", -1, -1);
+		shader->SetVec2("atlasSize", -1, -1);
+	}
+	
 
 	for (auto& uniform : customUniforms)
 		shader->SetAny(uniform.second, uniform.first);
