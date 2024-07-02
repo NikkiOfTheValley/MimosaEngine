@@ -24,6 +24,12 @@ Text::Text(std::string text, std::shared_ptr<FontManager> fontManager, std::stri
 void Text::Update()
 {
 	const Font* font = fontManager->GetFont(fontName);
+	
+	if (text.size() == 0)
+	{
+		DeallocPolygons();
+		return;
+	}
 
 	if (polygonsStale && !isStatic)
 		GenerateText(font);
@@ -98,6 +104,9 @@ void Text::DeallocPolygons()
 
 void Text::GenerateText(const Font* font)
 {
+	if (text.size() == 0)
+		return;
+
 	// Delete the existing polygons
 	DeallocPolygons();
 
