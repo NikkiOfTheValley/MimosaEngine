@@ -24,6 +24,14 @@ vec3::vec3(int x, int y, int z)
 	this->z = (float)z;
 }
 
+vec3::vec3(unsigned int x, unsigned int y, unsigned int z)
+{
+	this->x = (float)x;
+	this->y = (float)y;
+	this->z = (float)z;
+
+}
+
 
 vec3& vec3::operator+=(const vec3& rhs)
 {

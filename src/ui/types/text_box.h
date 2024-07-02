@@ -1,6 +1,6 @@
 #pragma once
 #include "rendering/types/vec.h"
-#include "rendering/types/text.h"
+#include "ui/types/text.h"
 #include "rendering/resource_manager.h"
 #include <functional>
 #include "button.h"
@@ -11,7 +11,7 @@ public:
 	std::string str;
 
 public:
-	TextBox(std::string defaultStr, vec2 pos, vec2 dim, int textScale);
+	TextBox(std::string defaultStr, std::shared_ptr<FontManager> fontManager, std::string font, vec2 pos, vec2 dim, int textScale);
 	~TextBox();
 
 	void Draw();

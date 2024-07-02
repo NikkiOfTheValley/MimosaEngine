@@ -5,6 +5,9 @@
 #include "types/obj_loader.h"
 #include "post_processing_manager.h"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 bool Renderer::init(uint32_t width, uint32_t height, std::function<void(GLFWwindow* window, double xpos, double ypos)> cursor_callback, std::function<void(GLFWwindow* window, int key)> key_upd_callback)
 {
     Logger* logger = &Logger::getInstance();
@@ -21,7 +24,7 @@ bool Renderer::init(uint32_t width, uint32_t height, std::function<void(GLFWwind
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+    //glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
     // Create window
     window = glfwCreateWindow(width, height, (NAME_STR + " " + VERSION_STR).c_str(), NULL, NULL);
@@ -73,7 +76,7 @@ bool Renderer::init(uint32_t width, uint32_t height, std::function<void(GLFWwind
 
     // Add the default pass-through shader
 
-    Shader* shader = new Shader("assets/passthrough.vert", "assets/passthrough.frag");
+    Shader* shader = new Shader("assets/engine/passthrough.vert", "assets/engine/passthrough.frag");
     shader->Bind();
     shader->SetInt("framebufferSampler", 0);
 

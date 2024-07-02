@@ -25,6 +25,15 @@ vec2::vec2(int x, int y)
 	this->y = (float)y;
 }
 
+// Implementation of vec2 unsigned int constructor from vec2.h
+vec2::vec2(unsigned int x, unsigned int y)
+{
+	//logger->warn("Initilization of vec2 with int constructor, this may result in data loss\n");
+
+	this->x = (float)x;
+	this->y = (float)y;
+}
+
 // Implementation of various operators
 
 vec2& vec2::operator+=(const vec2& rhs)

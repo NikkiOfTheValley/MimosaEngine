@@ -1,13 +1,13 @@
 #pragma once
 #include "rendering/types/vec.h"
-#include "rendering/types/text.h"
+#include "ui/types/text.h"
 #include "rendering/resource_manager.h"
 #include <functional>
 
 class Button
 {
 public:
-	Button(std::string str, vec2 pos, vec2 dim, int textScale, std::function<void()> func);
+	Button(std::string str, std::shared_ptr<FontManager> fontManager, std::string font, vec2 pos, vec2 dim, int textScale, std::function<void()> func);
 	~Button();
 
 	void Draw();

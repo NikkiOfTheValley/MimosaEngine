@@ -4,6 +4,9 @@
 #include <vector>
 #include <unordered_map>
 
+const size_t ATLAS_STARTING_WIDTH = 512;
+const size_t ATLAS_STARTING_HEIGHT = 512;
+
 // The TextureManager is a Singleton because more than one thing accesses it while also needing global state
 
 class TextureManager
@@ -46,7 +49,7 @@ private:
 	// Resizes the texture atlas according to the given texture
 	void ResizeAtlas(Image* tex, vec2 texLocation);
 
-	// Updates the `textureAtlasTexture` DynamicTexture
+	// Updates the texture atlas on the GPU
 	void UpdateAtlasTexture();
 
 public:

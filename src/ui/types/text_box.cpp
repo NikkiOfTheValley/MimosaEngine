@@ -1,7 +1,7 @@
 #include "text_box.h"
 #include <rendering/texture_manager.h>
 
-TextBox::TextBox(std::string defaultStr, vec2 pos, vec2 dim, int textScale)
+TextBox::TextBox(std::string defaultStr, std::shared_ptr<FontManager> fontManager, std::string font, vec2 pos, vec2 dim, int textScale)
 {
 	this->pos = pos;
 	this->str = defaultStr;
@@ -12,7 +12,7 @@ TextBox::TextBox(std::string defaultStr, vec2 pos, vec2 dim, int textScale)
 	vec2 center = (pos * 2) + (dim / 2);
 	vec2* screenDim = Renderer::getInstance().screenDim;
 
-	text = new Text(str, vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
+	text = new Text(str, fontManager, font, vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
 
 	this->dim = dim;
 
@@ -64,13 +64,14 @@ void TextBox::Update()
 	backgroundImage->Dealloc();
 	delete backgroundImage;
 
-	text->DeallocPolygons();
-	delete text;
+	//text->DeallocPolygons();
+	//delete text;
 
 	vec2 center = (pos * 2) + (dim / 2);
 	vec2* screenDim = Renderer::getInstance().screenDim;
 
-	text = new Text(str, vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
+	text->UpdatePosition(vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
+	text->UpdateText(str);
 
 	ResourceManager* resourceManager = &ResourceManager::getInstance();
 

@@ -1,6 +1,6 @@
 #include "button.h"
 
-Button::Button(std::string str, vec2 pos, vec2 dim, int textScale, std::function<void()> func)
+Button::Button(std::string str, std::shared_ptr<FontManager> fontManager, std::string font, vec2 pos, vec2 dim, int textScale, std::function<void()> func)
 {
 	this->func = func;
 	this->pos = pos;
@@ -12,7 +12,7 @@ Button::Button(std::string str, vec2 pos, vec2 dim, int textScale, std::function
 	vec2 center = (pos * 2) + (dim / 2);
 
 	vec2* screenDim = Renderer::getInstance().screenDim;
-	text = new Text(str, vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
+	text = new Text(str, fontManager, font, vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
 
 	this->dim = dim;
 

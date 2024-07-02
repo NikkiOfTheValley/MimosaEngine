@@ -29,6 +29,8 @@ public:
 	// Integer version of the float constructor
 	vec3(int x, int y, int z);
 
+	// Unsigned integer version of the float constructor
+	vec3(unsigned int x, unsigned int y, unsigned int z);
 
 	vec3& operator+=(const vec3& rhs);
 

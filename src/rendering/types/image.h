@@ -10,6 +10,9 @@ public:
 
 	Image(uint32_t* data, int width, int height, bool isRGBA);
 
+	// Converts an 8bpp image into an Image object
+	Image(uint8_t* data, int width, int height, bool setRed, bool setGreen, bool setBlue, bool isResultRGBA, bool flipVertically = false);
+
 	bool IsRGBA();
 
 	// Blit a portion of this image onto `dest` at destX, destY

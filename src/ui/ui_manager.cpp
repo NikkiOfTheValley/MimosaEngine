@@ -1,5 +1,12 @@
 #include "ui_manager.h"
 
+UIManager::UIManager()
+{
+	fontManager = std::make_shared<FontManager>();
+
+	fontManager->AddNewFont("assets/engine/font/FreeMono.ttf", "defaultFont", 96);
+}
+
 // Creates a new image element in the current UI state
 void UIManager::CreateImageElement(Texture* tex, bool isFullscreen, vec2 pos, vec2 dim)
 {
@@ -51,7 +58,7 @@ void UIManager::CreateTextElement(std::string str, std::string name, vec2 pos, i
 		return;
 	}
 
-	Text* text = new Text(str, pos, scale, isStatic);
+	Text* text = new Text(str, fontManager, "defaultFont", pos, scale, isStatic);
 
 	std::pair<Text*, std::string> textElement = std::pair{text, name};
 	curState->textElements.push_back(textElement);
@@ -66,7 +73,7 @@ void UIManager::CreateButtonElement(std::string str, vec2 pos, vec2 dim, int tex
 		return;
 	}
 
-	Button* button = new Button(str, pos, dim, textScale, func);
+	Button* button = new Button(str, fontManager, "defaultFont", pos, dim, textScale, func);
 	curState->buttons.push_back(button);
 }
 
@@ -79,7 +86,7 @@ void UIManager::CreateTextBoxElement(std::string defaultStr, std::string name, v
 		return;
 	}
 
-	TextBox* textBox = new TextBox(defaultStr, pos, dim, textScale);
+	TextBox* textBox = new TextBox(defaultStr, fontManager, "defaultFont", pos, dim, textScale);
 	curState->textBoxElements.push_back(std::pair(textBox, name));
 }
 

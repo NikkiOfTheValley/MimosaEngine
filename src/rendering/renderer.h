@@ -84,5 +84,4 @@ private:
 	std::unordered_map<std::string, size_t> nameToPolygonIndex;
 
 	PostProcessingManager* postProcessingManager;
-
 };

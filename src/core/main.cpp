@@ -6,7 +6,7 @@
 #include "rendering/types/mesh.h"
 #include "input_handler.h"
 #include <stb_image.h>
-#include "rendering/types/text.h"
+#include "ui/types/text.h"
 #include "rendering/resource_manager.h"
 #include "ui/ui_manager.h"
 #include "rendering/types/camera.h"
@@ -175,7 +175,6 @@ int main(int /*argc*/, char* /*argv[]*/)
 	logger->log(output.str());
 
 	resourceManager = &ResourceManager::getInstance();
-	uiManager = new UIManager();
 	physicsManager = new PhysicsManager();
 
 	InputHandler inputHandler;
@@ -187,21 +186,24 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	TextureManager::getInstance().Init();
 
+	// The UI manager needs to be initialized after the texture manager,
+	// as it uses the texture atlas while initializing text rendering
+	uiManager = new UIManager();
+
 	// -- Load assets --
 
 	stbi_set_flip_vertically_on_load(true);
 
-	// We need flatShader and the font.png atlas to render text
-	resourceManager->LoadShader("assets/flatShader.vert", "assets/flatShader.frag", "flatShader");
-	resourceManager->LoadTexture("assets/font.png", true, true, "textTexture");
+	// The flat shader is mandatory for the UI to render correctly
+	resourceManager->LoadShader("assets/engine/flatShader.vert", "assets/engine/flatShader.frag", "flatShader");
 
 	// We need button.png and button-highlighted.png to render buttons
-	resourceManager->LoadTexture("assets/button.png", true, true, "buttonBackground");
-	resourceManager->LoadTexture("assets/button-highlighted.png", true, true, "buttonBackgroundHighlighted");
+	resourceManager->LoadTexture("assets/engine/button.png", true, true, "buttonBackground");
+	resourceManager->LoadTexture("assets/engine/button-highlighted.png", true, true, "buttonBackgroundHighlighted");
 
 	// We need text-box.png and text-box-highlighted.png to render text boxes
-	resourceManager->LoadTexture("assets/text-box.png", true, true, "textBox");
-	resourceManager->LoadTexture("assets/text-box-highlighted.png", true, true, "textBoxHighlighted");
+	resourceManager->LoadTexture("assets/engine/text-box.png", true, true, "textBox");
+	resourceManager->LoadTexture("assets/engine/text-box-highlighted.png", true, true, "textBoxHighlighted");
 
 	resourceManager->LoadTexture("assets/example.png", true, true, "exampleImage");
 	resourceManager->LoadTexture("assets/example2.png", true, true, "exampleImage2");
@@ -300,6 +302,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 	bool lastStateOfF4 = false;
 
 	// -- Start physics simulation --
+
 	physicsManager->Start();
 
 
@@ -325,9 +328,9 @@ int main(int /*argc*/, char* /*argv[]*/)
 			inputHandler.reloadAssets = false;
 		}
 
-		if (glfwGetKey(renderer->window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+		if (glfwGetKey(renderer->window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS && !useTextInput)
 			cam.pos.y -= 1.f * (float)deltaTime;
-		if (glfwGetKey(renderer->window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		if (glfwGetKey(renderer->window, GLFW_KEY_SPACE) == GLFW_PRESS && !useTextInput)
 			cam.pos.y += 1.f * (float)deltaTime;
 		
 		vec3 camFront;
@@ -335,13 +338,13 @@ int main(int /*argc*/, char* /*argv[]*/)
 		camFront.y = sin(cam.GetRotation().y);
 		camFront.z = sin(cam.GetRotation().z) * cos(cam.GetRotation().y);
 
-		if (glfwGetKey(renderer->window, GLFW_KEY_W) == GLFW_PRESS)
+		if (glfwGetKey(renderer->window, GLFW_KEY_W) == GLFW_PRESS && !useTextInput)
 			cam.pos += camFront * 2.5f * (float)deltaTime;
-		if (glfwGetKey(renderer->window, GLFW_KEY_S) == GLFW_PRESS)
+		if (glfwGetKey(renderer->window, GLFW_KEY_S) == GLFW_PRESS && !useTextInput)
 			cam.pos -= camFront * 2.5f * (float)deltaTime;
-		if (glfwGetKey(renderer->window, GLFW_KEY_A) == GLFW_PRESS)
+		if (glfwGetKey(renderer->window, GLFW_KEY_A) == GLFW_PRESS && !useTextInput)
 			cam.pos -= normalize(cross(camFront, vec3(0, 1, 0))) * 2.5f * (float)deltaTime;
-		if (glfwGetKey(renderer->window, GLFW_KEY_D) == GLFW_PRESS)
+		if (glfwGetKey(renderer->window, GLFW_KEY_D) == GLFW_PRESS && !useTextInput)
 			cam.pos += normalize(cross(camFront, vec3(0, 1, 0))) * 2.5f * (float)deltaTime;
 
 		// -- Draw --

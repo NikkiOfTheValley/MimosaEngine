@@ -1,8 +1,9 @@
 #pragma once
 #include "rendering/types/polygon.h"
-#include "rendering/types/text.h"
+#include "types/text.h"
 #include "types/button.h"
 #include "types/text_box.h"
+#include "font_manager.h"
 
 struct UI_STATE
 {
@@ -20,6 +21,8 @@ public:
 	std::string curUIStateName;
 
 public:
+	UIManager();
+
 	// Creates a new image element in the current UI state
 	void CreateImageElement(Texture* tex, bool isFullscreen, vec2 pos = vec2(), vec2 dim = vec2());
 
@@ -52,4 +55,6 @@ private:
 	// All the different UIs that could be displayed or interacted with
 	std::vector<UI_STATE> states;
 	UI_STATE* curState = nullptr;
+
+	std::shared_ptr<FontManager> fontManager;
 };

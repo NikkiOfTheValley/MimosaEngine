@@ -28,6 +28,9 @@ public:
 	// Integer version of the float constructor
 	vec2(int x, int y);
 
+	// Unsigned integer version of the float constructor
+	vec2(unsigned int x, unsigned int y);
+
 
 	vec2& operator+=(const vec2& rhs);
 

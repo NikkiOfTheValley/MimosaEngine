@@ -2,25 +2,19 @@
 
 void TextureManager::Init()
 {
-	uint32_t* data = new uint32_t[128 * 128];
-	std::memset(data, 0, 128ULL * 128ULL * sizeof(uint32_t));
+	uint32_t* data = new uint32_t[ATLAS_STARTING_WIDTH * ATLAS_STARTING_HEIGHT];
+	std::memset(data, 0, ATLAS_STARTING_WIDTH * ATLAS_STARTING_HEIGHT * sizeof(uint32_t));
 
-	textureAtlas = new Image(data, 128, 128, true);
+	textureAtlas = new Image(data, ATLAS_STARTING_WIDTH, ATLAS_STARTING_HEIGHT, true);
 	textureAtlasTexture = new Texture(textureAtlas, true);
 }
-
+ 
 // Check if the given texture location overlaps with any texture in the textureCoords vector and outputs the texture that is overlapping
 bool TextureManager::CheckOverlapping(std::pair<vec2, vec2> image, std::pair<vec2, vec2>& overlappingTexture)
 {
 	for (auto& texCoord : textureCoords)
 	{
-
-		bool isInLowerBound = (image.first.x >= texCoord.first.x - 1) && (image.first.y >= texCoord.first.y - 1);
-
-		bool isInUpperBound = (image.first.x <= texCoord.second.x - 1) && (image.first.y <= texCoord.second.y - 1);
-
-
-		if (isInLowerBound && isInUpperBound)
+		if ((image.first.x < texCoord.second.x) && (image.second.x > texCoord.first.x) && (image.first.y < texCoord.second.y) && (image.second.y > texCoord.first.y))
 		{
 			overlappingTexture = texCoord;
 			return true;
@@ -167,32 +161,24 @@ void TextureManager::ResizeAtlas(Image* tex, vec2 texLocation)
 	if (texExtents.x < textureAtlas->w && texExtents.y < textureAtlas->h)
 		return;
 
-	// Keep a copy of the old height & width, so we can still iterate over the old data later
-	int oldHeight = textureAtlas->h;
-	int oldWidth = textureAtlas->w;
-
-	textureAtlas->h += ((tex->h + (int)texLocation.y) - textureAtlas->h);
-	textureAtlas->w += ((tex->w + (int)texLocation.x) - textureAtlas->w);
-
-	// Make sure the texture atlas can't become smaller
-	textureAtlas->h = std::max(textureAtlas->h, oldHeight);
-	textureAtlas->w = std::max(textureAtlas->w, oldWidth);
+	// Calculate the new dimensions, making sure that the atlas can't become smaller than it was before
+	int newHeight = std::max(textureAtlas->h + (int)texExtents.y, textureAtlas->h);
+	int newWidth = std::max(textureAtlas->w + (int)texExtents.x, textureAtlas->w);
 
 	// Create a new data array with the new size
-	uint32_t* newData = new uint32_t[(size_t)textureAtlas->w * textureAtlas->h];
+	uint32_t* newData = new uint32_t[(size_t)newWidth * newHeight];
 
 	// Clear the new data
-	std::memset(newData, 0, (size_t)textureAtlas->w * textureAtlas->h * sizeof(uint32_t));
+	std::memset(newData, 0, (size_t)newWidth * newHeight * sizeof(uint32_t));
 
-	// Copy the old data to the new data row by row, as the layout will be different after resizing
-	for (size_t i = 0; i < oldHeight; i++)
-		std::memcpy(newData, &textureAtlas->data[i * oldWidth], oldWidth * sizeof(uint32_t));
+	// Create a new atlas image
+	Image* newAtlasImage = new Image(newData, newWidth, newHeight, true);
 
-	// Delete the old data
-	delete[] textureAtlas->data;
+	// Blit the old atlas to the new one
+	textureAtlas->Blit(newAtlasImage, 0, 0, textureAtlas->w, textureAtlas->h, 0, 0);
 
-	// Now set the data pointer to the new data
-	textureAtlas->data = newData;
+	// Now set the atlas image to the new one
+	textureAtlas = newAtlasImage;
 }
 
 // Updates the `textureAtlasTexture` DynamicTexture

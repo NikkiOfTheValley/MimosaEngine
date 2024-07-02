@@ -48,7 +48,7 @@ extern bool useTextInput;
 
 extern std::string* currentlySelectedText;
 
-const std::string ENG_VERSION_STR = "v0.3.0";
+const std::string ENG_VERSION_STR = "v0.3.1";
 const std::string VERSION_STR = "v0.0.1";
 const std::string NAME_STR = "Example Application";
 
