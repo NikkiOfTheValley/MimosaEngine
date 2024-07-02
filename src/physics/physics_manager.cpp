@@ -17,7 +17,7 @@ void PhysicsManager::Start()
 		{
 			using namespace std::chrono;
 
-			auto startOfStep = high_resolution_clock::now();
+			auto startOfStep = steady_clock::now();
 
 			float fixedDeltaTime = 1.f / (float)PHYS_FPS;
 
@@ -25,7 +25,7 @@ void PhysicsManager::Start()
 			// cause instability, so just assume the physics is running at full speed
 			Step(fixedDeltaTime);
 
-			auto endOfStep = high_resolution_clock::now();
+			auto endOfStep = steady_clock::now();
 			auto stepTime = ((double)duration_cast<nanoseconds>(endOfStep - startOfStep).count() * conv::NANOSEC_TO_SEC);
 			
 			if (stepTime > fixedDeltaTime && WARN_ON_SIM_LAG)
@@ -72,7 +72,7 @@ void PhysicsManager::Step(double fixedDeltaTime)
 	// Check for collisions
 	collisionHandler.HandleCollisions(&state);
 
-	// Run RK4
+	// Run solver
 	odeSolver.Solve(&state, (float)fixedDeltaTime,
 		[](PhysState* /*initialState*/, obj_state& /*state*/, double /*fixedDeltaTime*/)
 		{
