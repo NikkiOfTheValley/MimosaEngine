@@ -2320,6 +2320,7 @@
     <None Include="assets\engine\font\AUTHORS" />
     <None Include="assets\engine\font\COPYING" />
     <None Include="assets\engine\font\CREDITS" />
+    <None Include=".readthedocs.yaml" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\engine\button.png">

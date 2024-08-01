@@ -960,6 +960,7 @@
     <ClCompile Include="src\vendor\glad\glad.c" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".readthedocs.yaml" />
     <None Include="assets\engine\font\AUTHORS" />
     <None Include="assets\engine\font\COPYING" />
     <None Include="assets\engine\font\CREDITS" />
