@@ -6,10 +6,20 @@
 MimosaEngine documentation
 ==========================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+MimosaEngine is a game engine designed by NikkiOfTheValley. Most of it 
+was not written with others in mind. As such, it is not reccomended for commercial projects.
 
+Its features include, but are not limited to:
+
+* A module-oriented design
+* A physics engine
+* Networking
+* A basic UI handler
+* Freetype text rendering
+
+The `GitHub repository<https:://github.com/NikkiOfTheValley/MimosaEngine`_
+contains an example application (at src/main.cpp), so to use the engine you simply compile
+the Visual Studio project and write your application code in main.cpp.
 
 .. toctree::
    :maxdepth: 2
