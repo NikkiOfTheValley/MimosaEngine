@@ -17,7 +17,7 @@ Its features include, but are not limited to:
 * A basic UI handler
 * Freetype text rendering
 
-The `GitHub repository<https:://github.com/NikkiOfTheValley/MimosaEngine`_
+The GitHub repository<https:://github.com/NikkiOfTheValley/MimosaEngine
 contains an example application (at src/main.cpp), so to use the engine you simply compile
 the Visual Studio project and write your application code in main.cpp.
 
