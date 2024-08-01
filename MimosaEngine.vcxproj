@@ -972,7 +972,8 @@
     <None Include="assets\engine\flatShader.vert" />
     <None Include="assets\engine\passthrough.frag" />
     <None Include="assets\engine\passthrough.vert" />
-    <None Include="docs\conf.py" />
+    <None Include="docs\make.bat" />
+    <None Include="docs\Makefile" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
