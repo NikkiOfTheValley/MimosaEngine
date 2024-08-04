@@ -160,11 +160,10 @@ vec3 CollisionHandler::GetSupport(const std::vector<collision_vert>& block, vec3
 
 	mat3x3f blockRotationMatrix;
 	blockRotationMatrix.rotate(objRot);
+	vec3 rot = dir * blockRotationMatrix;
 
 	for (auto& vert : block)
 	{
-		vec3 rot = dir * blockRotationMatrix;
-
 		float distance = dot(vert.pos + objPos, rot);
 
 		if (distance > farthestDistance)
@@ -214,6 +213,9 @@ gjk_collision_info CollisionHandler::GJK(
 
 	// The results from the support function for object B
 	std::vector<vec3> supportB;
+
+	supportA.reserve(128);
+	supportB.reserve(128);
 
 
 	// Pre-rotate the blocks so the GetSupport function doesn't have to do a matrix-vector multiplication for every vert
