@@ -2320,11 +2320,10 @@
     <None Include="assets\engine\font\AUTHORS" />
     <None Include="assets\engine\font\COPYING" />
     <None Include="assets\engine\font\CREDITS" />
-    <None Include=".readthedocs.yaml" />
-    <None Include="docs\Makefile" />
-    <None Include="docs\make.bat">
+    <None Include="gen_docs.bat">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="doxyfile" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\engine\button.png">
@@ -2354,7 +2353,6 @@
     <Text Include="assets\floor.obj" />
     <Text Include="assets\example.obj" />
     <Text Include="assets\cube.obj" />
-    <Text Include="docs\requirements.txt" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\engine\font\FreeMono.ttf" />

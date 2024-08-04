@@ -191,6 +191,9 @@
       </StackCommitSize>
       <AdditionalOptions>/openmp:experimental</AdditionalOptions>
     </Link>
+    <PostBuildEvent>
+      <Command>gen_docs.bat</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\debug\obj_writer.h" />
@@ -960,7 +963,6 @@
     <ClCompile Include="src\vendor\glad\glad.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".readthedocs.yaml" />
     <None Include="assets\engine\font\AUTHORS" />
     <None Include="assets\engine\font\COPYING" />
     <None Include="assets\engine\font\CREDITS" />
@@ -972,9 +974,9 @@
     <None Include="assets\engine\flatShader.vert" />
     <None Include="assets\engine\passthrough.frag" />
     <None Include="assets\engine\passthrough.vert" />
-    <None Include="docs\make.bat" />
-    <None Include="docs\Makefile" />
+    <None Include="gen_docs.bat" />
     <None Include="README.md" />
+    <None Include="doxyfile" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="assets\cube.obj">
@@ -989,7 +991,6 @@
     <Text Include="assets\torus.obj">
       <FileType>Document</FileType>
     </Text>
-    <Text Include="docs\requirements.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\engine\button-highlighted.png" />

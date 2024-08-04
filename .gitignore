@@ -12,7 +12,7 @@
 
 log.txt
 
-docs/build/
+docs/*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
