@@ -12,7 +12,7 @@ Material::Material(
 	shader = ResourceManager::getInstance().GetShader(shaderName);
 	this->shaderName = shaderName;
 
-	texture = ResourceManager::getInstance().GetTexture(textureName);
+	texture = ResourceManager::getInstance().GetTexture(textureName).get();
 	this->textureName = textureName;
 
 	this->customUniforms = customUniforms;
@@ -73,7 +73,7 @@ void Material::Bind(mat4x4f viewMatrix, mat4x4f projectionMatrix, mat4x4f modelM
 void Material::Reload()
 {
 	shader = ResourceManager::getInstance().GetShader(shaderName);
-	texture = ResourceManager::getInstance().GetTexture(textureName);
+	texture = ResourceManager::getInstance().GetTexture(textureName).get();
 
 	for (auto& mesh : meshesThatUseThisMaterial)
 		Renderer::getInstance().GetMesh(mesh)->UpdateMesh();

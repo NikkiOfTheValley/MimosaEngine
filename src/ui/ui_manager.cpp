@@ -8,7 +8,7 @@ UIManager::UIManager()
 }
 
 // Creates a new image element in the current UI state
-void UIManager::CreateImageElement(Texture* tex, bool isFullscreen, vec2 pos, vec2 dim)
+void UIManager::CreateImageElement(std::shared_ptr<Texture> tex, bool isFullscreen, vec2 pos, vec2 dim)
 {
 	if (!curState)
 	{

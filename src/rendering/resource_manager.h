@@ -17,8 +17,9 @@ public:
 
 	void LoadTexture(std::string path, bool isRGBA, bool useNearestNeighbor, std::string name);
 	void LoadShader(std::string vertPath, std::string fragPath, std::string name);
+	void LoadModel(std::string path, std::string name);
 
-	Texture*  GetTexture(std::string name);
+	std::shared_ptr<Texture> GetTexture(std::string name);
 	Shader* GetShader(std::string name);
 
 	void ReloadTextures();
@@ -32,9 +33,6 @@ public:
 
 private:
 	ResourceManager() {};
-
-	std::vector<Texture*> textures;
-	std::unordered_map<std::string, size_t> nameToTexIndex;
 
 	std::vector<Shader*> shaders;
 	std::unordered_map<std::string, size_t> nameToShaderIndex;

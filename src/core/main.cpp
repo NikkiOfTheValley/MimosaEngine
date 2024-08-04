@@ -231,7 +231,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	uiManager->CreateTextElement("Static Example Text", "example_static", vec2{0.05f, 0.15f}, 4, true);
 
-	Texture* tex = new Texture(TextureManager::getInstance().textureAtlas, true);
+	std::shared_ptr<Texture> tex = std::make_shared<Texture>(TextureManager::getInstance().textureAtlas, true);
 
 	uiManager->CreateImageElement(tex, false, vec2{ 0.0f, 0.0f }, vec2{ tex->w / renderer->screenDim->x, tex->h / renderer->screenDim->y });
 

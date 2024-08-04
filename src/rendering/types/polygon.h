@@ -25,7 +25,7 @@ public:
 	vec2 position = vec2(0.f, 0.f);
 
 	Shader* shader;
-	Texture* texture;
+	std::shared_ptr<Texture> texture;
 
 	// If the UV coordinate is in normalized device coordinates, this must be true
 	bool uvIsNDC = false;

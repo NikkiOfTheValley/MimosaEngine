@@ -15,9 +15,9 @@ void ResourceManager::LoadShader(std::string vertPath, std::string fragPath, std
 	shaders.push_back(new Shader(vertPath, fragPath));
 }
 
-Texture* ResourceManager::GetTexture(std::string name)
+std::shared_ptr<Texture> ResourceManager::GetTexture(std::string name)
 {
-	Texture* tex = new Texture(TextureManager::getInstance().GetTextureLocation(name));
+	std::shared_ptr<Texture> tex = std::make_shared<Texture>(TextureManager::getInstance().GetTextureLocation(name));
 	return tex;
 }
 
@@ -34,15 +34,7 @@ Shader* ResourceManager::GetShader(std::string name)
 
 void ResourceManager::ReloadTextures()
 {
-	for (auto& t : nameToTexIndex)
-	{
-		std::string path = textures[t.second]->path;
-		bool isRGBA = textures[t.second]->IsRGBA();
-		bool useNearestNeighbor = textures[t.second]->useNearestNeighbor;
-
-		delete textures[t.second];
-		textures[t.second] = new Texture(path, isRGBA, useNearestNeighbor);
-	}
+	// Not implemented
 }
 
 void ResourceManager::ReloadShaders()
@@ -59,11 +51,6 @@ void ResourceManager::ReloadShaders()
 
 void ResourceManager::Dealloc()
 {
-	for (auto& t : nameToTexIndex)
-	{
-		delete textures[t.second];
-	}
-
 	for (auto& s : nameToShaderIndex)
 	{
 		delete shaders[s.second];

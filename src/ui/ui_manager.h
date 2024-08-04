@@ -24,7 +24,7 @@ public:
 	UIManager();
 
 	// Creates a new image element in the current UI state
-	void CreateImageElement(Texture* tex, bool isFullscreen, vec2 pos = vec2(), vec2 dim = vec2());
+	void CreateImageElement(std::shared_ptr<Texture> tex, bool isFullscreen, vec2 pos = vec2(), vec2 dim = vec2());
 
 	// Creates a new text element in the current UI state
 	void CreateTextElement(std::string str, std::string name, vec2 pos, int scale, bool isStatic = false);
