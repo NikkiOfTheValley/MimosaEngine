@@ -12,7 +12,7 @@ struct impulse
 	LargeVector<MAX_PHYS_OBJECTS * 3> angularVelocityImpulse;
 };
 
-// A very basic SLE solver used for solving equality constraints
+//! @brief A very basic SLE solver used for solving equality constraints
 class SLESolver
 {
 public:

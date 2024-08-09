@@ -413,6 +413,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	// -- Exit application --
 
+	physicsManager->Stop();
 	renderer->destroy();
 	resourceManager->Dealloc();
 	delete uiManager;

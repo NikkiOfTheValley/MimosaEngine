@@ -8,9 +8,9 @@ PhysicsManager::PhysicsManager()
 		state.objConstraints[i] = nullptr;
 }
 
-// Starts the simulation
 void PhysicsManager::Start()
 {
+	runPhys = true;
 	physThread = std::thread([=]() {
 
 		while (runPhys)
@@ -63,6 +63,12 @@ void PhysicsManager::Start()
 			timer++;
 		}
 		});
+}
+
+void PhysicsManager::Stop()
+{
+	runPhys = false;
+	physThread.join();
 }
 
 void PhysicsManager::Step(double fixedDeltaTime)
@@ -170,6 +176,7 @@ void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float de
 	state.objects[state.objIndex] = obj;
 	state.objIndex++;
 }
+
 
 PhysObj* PhysicsManager::GetPhysObject(std::string name)
 {

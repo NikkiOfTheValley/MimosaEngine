@@ -30,7 +30,7 @@ struct force_and_torque
 	LargeVector<MAX_PHYS_OBJECTS * 3> torqueVector;
 };
 
-// An ODE solver implemented using the Runge-Kutta 4 method
+//! @brief An ODE solver that can be switched between RK4 and Euler
 class ODESolver
 {
 public:

@@ -13,9 +13,6 @@
 
 // Free to copy, preferably with credit, but I don't mind if you don't give credit. 
 
-
-// The Logger is a Singleton because more than one thing accesses it while also needing global state
-
 class Logger
 {
 public:
@@ -28,31 +25,31 @@ public:
 		return instance;
 	}
 
-	// Default constructor, sets output to true
+	//! @brief Default constructor, sets output to true
 	Logger();
 
-	// Bool controls whether to output to cout
+	//! @brief Bool controls whether to output to cout
 	Logger(bool _output);
 
-	// Prints '[LOG]: str'
+	//! @brief Prints '[LOG]: str'
 	void log(std::string str);
 
-	// Prints '[WARN]: str' in yellow text (indicates a warning)
+	//! @brief Prints '[WARN]: str' in yellow text (indicates a warning)
 	void warn(std::string str);
 
-	// Prints '[ERR]: str' in red text (indicates an error)
+	//! @brief Prints '[ERR]: str' in red text (indicates an error)
 	void err(std::string str);
 
-	// Prints '[FATAL]: str' in red text (indicates an fatal error), then exits 
+	//! @brief Prints '[FATAL]: str' in red text (indicates an fatal error), then exits 
 	void fatal(std::string str);
 
-	// Dumps the log to the working directory. Returns true if successful
+	//! @brief Dumps the log to the working directory. Returns true if successful
 	bool dumpLog();
 
-	/*
-	   Serializes the given std::any into a string.
-	   Allowed types are:
-	   std::string, int, float, double, and bool
+	/*!
+	 * @brief Serializes the given std::any into a string.
+	 * @param input Allowed types are: std::string, int, float, double, and bool
+	 * @return The serialized string
 	*/
 	std::string serialize(std::any input);
 

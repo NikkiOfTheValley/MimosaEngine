@@ -1,21 +1,18 @@
 #include "log.h"
 #include "globals.h"
 
-// Default constructor, sets output to true
 Logger::Logger()
 {
 	output = DO_LOG_OUTPUT;
 	m_log = new std::string();
 }
 
-// Bool controls whether to output to cout
 Logger::Logger(bool _output)
 {
 	output = _output;
 	m_log = new std::string();
 }
 
-// Prints '[LOG]: str'
 void Logger::log(std::string str)
 {
 	if (output)
@@ -24,7 +21,6 @@ void Logger::log(std::string str)
 	m_log->append("[LOG]: " + str + "\n");
 }
 
-// Prints '[WARN]: str' in yellow text (indicates a warning)
 void Logger::warn(std::string str)
 {
 	if (output)
@@ -44,7 +40,6 @@ void Logger::warn(std::string str)
 	m_log->append("[WARN]: " + str + "\n");
 }
 
-// Prints '[ERR]: str' in red text (indicates an error)
 void Logger::err(std::string str)
 {
 	if (output)
@@ -90,7 +85,6 @@ void Logger::fatal(std::string str)
 	exit(EXIT_FATAL_ERR);
 }
 
-// Dumps the log to the working directory. Returns true if successful
 bool Logger::dumpLog()
 {
 	std::ofstream file = std::ofstream("log.txt");
@@ -110,11 +104,6 @@ bool Logger::dumpLog()
 	return true;
 }
 
-/*
-   Serializes the given std::any into a string.
-   Allowed types are:
-   std::string, int, unsigned int, float, double, & bool
-*/
 std::string Logger::serialize(std::any input)
 {
 	std::string type = input.type().name();
