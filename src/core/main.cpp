@@ -306,6 +306,8 @@ int main(int /*argc*/, char* /*argv[]*/)
 	physicsManager->Start();
 
 
+	materialManager.GetMaterial("exampleMaterial")->RegisterNewMesh("doesntExist");
+
 	// -- Render loop --
 
 	while (!glfwWindowShouldClose(renderer->window))

@@ -18,4 +18,5 @@ public:
 private:
 	std::vector<Material*> materials;
 	std::unordered_map<std::string, size_t> nameToMaterialIndex;
+	std::unordered_map<size_t, std::string> materialIndexToName;
 };

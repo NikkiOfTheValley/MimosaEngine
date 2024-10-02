@@ -8,6 +8,7 @@ void MaterialManager::CreateMaterial(
 {
 	Logger::getInstance().log("Creating material " + name);
 	nameToMaterialIndex[name] = materials.size();
+	materialIndexToName[materials.size()] = name;
 	materials.push_back(new Material(shaderName, textureName, customUniforms));
 }
 
@@ -24,6 +25,12 @@ Material* MaterialManager::GetMaterial(std::string name)
 
 void MaterialManager::ReloadMaterials()
 {
+	size_t i = 0;
 	for (auto& material : materials)
+	{
+		Logger::getInstance().log("Reloading material " + materialIndexToName[i]);
 		material->Reload();
+		i++;
+	}
+		
 }
