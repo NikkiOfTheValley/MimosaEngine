@@ -38,7 +38,7 @@ double prevFPS = 0.0f;
 uint64_t counter = 0; // Increments once every frame
 double fixedTime = 0; // The amount of time since program startup in milliseconds
 
-UIManager* uiManager;
+ui::UIManager* uiManager;
 MaterialManager materialManager;
 ResourceManager* resourceManager;
 PhysicsManager* physicsManager;
@@ -188,7 +188,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	// The UI manager needs to be initialized after the texture manager,
 	// as it uses the texture atlas while initializing text rendering
-	uiManager = new UIManager();
+	uiManager = new ui::UIManager();
 
 	// -- Load assets --
 

@@ -4,35 +4,38 @@
 #include "rendering/resource_manager.h"
 #include <memory>
 
-class FontManager;
-class Font;
-
-class Text
+namespace ui
 {
-public:
-	Text(std::string text, std::shared_ptr<FontManager> fontManager, std::string fontName, vec2 pos, int scale, bool isStatic = false);
+	class FontManager;
+	class Font;
 
-	void Update();
+	class Text
+	{
+	public:
+		Text(std::string text, std::shared_ptr<FontManager> fontManager, std::string fontName, vec2 pos, int scale, bool isStatic = false);
 
-	void UpdateText(std::string newText);
+		void Update();
 
-	void UpdatePosition(vec2 newPos, int newScale);
+		void UpdateText(std::string newText);
 
-	void Draw();
+		void UpdatePosition(vec2 newPos, int newScale);
 
-	void DeallocPolygons();
+		void Draw();
 
-private:
-	vec2 pos;
-	int scale;
-	bool isStatic;
-	std::string text;
-	std::string fontName;
+		void DeallocPolygons();
 
-	std::vector<Polygon2D> letterPolygons;
-	bool polygonsStale;
+	private:
+		vec2 pos;
+		int scale;
+		bool isStatic;
+		std::string text;
+		std::string fontName;
 
-	std::shared_ptr<FontManager> fontManager;
+		std::vector<Polygon2D> letterPolygons;
+		bool polygonsStale;
 
-	void GenerateText(const Font* font);
-};
+		std::shared_ptr<FontManager> fontManager;
+
+		void GenerateText(const Font* font);
+	};
+}

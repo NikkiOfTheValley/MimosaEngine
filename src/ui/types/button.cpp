@@ -1,6 +1,6 @@
 #include "button.h"
 
-Button::Button(std::string str, std::shared_ptr<FontManager> fontManager, std::string font, vec2 pos, vec2 dim, int textScale, std::function<void()> func)
+ui::Button::Button(std::string str, std::shared_ptr<FontManager> fontManager, std::string font, vec2 pos, vec2 dim, int textScale, std::function<void()> func)
 {
 	this->func = func;
 	this->pos = pos;
@@ -38,7 +38,7 @@ Button::Button(std::string str, std::shared_ptr<FontManager> fontManager, std::s
 
 }
 
-Button::~Button()
+ui::Button::~Button()
 {
 	backgroundImage->Dealloc();
 	delete backgroundImage;
@@ -47,13 +47,13 @@ Button::~Button()
 	delete text;
 }
 
-void Button::Draw()
+void ui::Button::Draw()
 {
 	text->Draw();
 	backgroundImage->Draw();
 }
 
-void Button::Update()
+void ui::Button::Update()
 {
 	// Update visuals to match screen size
 

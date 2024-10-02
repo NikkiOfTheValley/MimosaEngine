@@ -5,24 +5,27 @@
 #include <functional>
 #include "button.h"
 
-class TextBox
+namespace ui
 {
-public:
-	std::string str;
+	class TextBox
+	{
+	public:
+		std::string str;
 
-public:
-	TextBox(std::string defaultStr, std::shared_ptr<FontManager> fontManager, std::string font, vec2 pos, vec2 dim, int textScale);
-	~TextBox();
+	public:
+		TextBox(std::string defaultStr, std::shared_ptr<FontManager> fontManager, std::string font, vec2 pos, vec2 dim, int textScale);
+		~TextBox();
 
-	void Draw();
+		void Draw();
 
-	void Update();
+		void Update();
 
-private:
-	vec2 pos;
-	vec2 dim;
-	Text* text;
-	int textScale;
-	Polygon2D* backgroundImage;
-	bool selected = false;
-};
+	private:
+		vec2 pos;
+		vec2 dim;
+		Text* text;
+		int textScale;
+		Polygon2D* backgroundImage;
+		bool selected = false;
+	};
+}

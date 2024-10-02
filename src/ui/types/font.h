@@ -5,22 +5,25 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-struct glyphInfo_t {
-	std::pair<vec2, vec2> atlasPosition; // Position of the glyph in the texture atlas
-	vec2 size; // Size of the glyph
-	vec2 bearing; // Offset from baseline to top-left of the glyph
-	unsigned int advance; // Offset to advance to the next glyph position
-};
-
-class Font
+namespace ui
 {
-public:
-	Font(FT_Library* ft, std::string path, unsigned int height);
+	struct glyphInfo_t {
+		std::pair<vec2, vec2> atlasPosition; // Position of the glyph in the texture atlas
+		vec2 size; // Size of the glyph
+		vec2 bearing; // Offset from baseline to top-left of the glyph
+		unsigned int advance; // Offset to advance to the next glyph position
+	};
 
-	std::string GetPath() const;
+	class Font
+	{
+	public:
+		Font(FT_Library* ft, std::string path, unsigned int height);
 
-	std::map<char, glyphInfo_t> characters;
+		std::string GetPath() const;
 
-private:
-	std::string path;
-};
+		std::map<char, glyphInfo_t> characters;
+
+	private:
+		std::string path;
+	};
+}
