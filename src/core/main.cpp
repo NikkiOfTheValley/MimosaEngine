@@ -67,9 +67,9 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	//  GCC Intrinsics
 	#include <cpuid.h>
-		void cpuid(int info[4], int InfoType) {
-			__cpuid_count(InfoType, 0, info[0], info[1], info[2], info[3]);
-		}
+	static void cpuid(int info[4], int InfoType) {
+		__cpuid_count(InfoType, 0, info[0], info[1], info[2], info[3]);
+	}
 
 	#endif
 
@@ -281,14 +281,19 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// -- Create physics objects --
 
 	CollisionMesh collisionMeshCube;
-	collisionMeshCube.LoadFromOBJ("assets/cube.obj");
+	CollisionPrimitive cube;
+	cube.type = CollisionPrimitiveType::Cube;
+	cube.scale = vec3(0.125f, 0.125f, 0.125f);
+
+	collisionMeshCube.AddPrimitive(cube);
 
 	physicsManager->CreateObject("test", { 4.f, 5.f, 2.001f }, { 0.f, 0.f, 0.f }, DENSITY_WOOD, collisionMeshCube, {}, nullptr, vec3(), vec3(), false);
 
 	physicsManager->CreateObject("test2", { 4.f, 5.f, 3.001f }, { 0.f, 0.f, 0.f }, DENSITY_WOOD, collisionMeshCube);
 
 	CollisionMesh collisionMeshFloor;
-	collisionMeshFloor.LoadFromOBJ("assets/floor.obj");
+	cube.scale = vec3(10.f, 1.f, 10.f);
+	collisionMeshCube.AddPrimitive(cube);
 
 	physicsManager->CreateObject("floor", { 4.f, -10.f, 2.f }, { 0.f, 0.f, 0.f }, DENSITY_CAST_IRON, collisionMeshFloor, {}, nullptr, vec3(), vec3(), false, true);
 
@@ -304,9 +309,6 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// -- Start physics simulation --
 
 	physicsManager->Start();
-
-
-	materialManager.GetMaterial("exampleMaterial")->RegisterNewMesh("doesntExist");
 
 	// -- Render loop --
 
