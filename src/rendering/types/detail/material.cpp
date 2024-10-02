@@ -75,8 +75,24 @@ void Material::Reload()
 	shader = ResourceManager::getInstance().GetShader(shaderName);
 	texture = ResourceManager::getInstance().GetTexture(textureName).get();
 
+	// Keep track of any meshes that weren't found during the reload
+	std::vector<std::string> meshesToDelete;
 	for (auto& mesh : meshesThatUseThisMaterial)
-		Renderer::getInstance().GetMesh(mesh)->UpdateMesh();
+	{
+		Mesh* meshPointer = Renderer::getInstance().GetMesh(mesh);
+		if (meshPointer)
+			meshPointer->UpdateMesh();
+		else
+		{
+			Logger::getInstance().warn("Mesh " + mesh + " is a stale reference, deleting");
+			meshesToDelete.push_back(mesh);
+		}
+	}
+
+	for (auto& mesh : meshesToDelete)
+	{
+		meshesThatUseThisMaterial.erase(std::remove(meshesThatUseThisMaterial.begin(), meshesThatUseThisMaterial.end(), mesh), meshesThatUseThisMaterial.end());
+	}
 }
 
 // Registers a new mesh that uses this material
