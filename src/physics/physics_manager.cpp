@@ -112,7 +112,7 @@ void PhysicsManager::Step(double fixedDeltaTime)
 	state.isInStep = false;
 }
 
-void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float density, CollisionMesh& collisionMesh, std::vector<Constraint*> constraints, std::function<void(double /* fixedDeltaTime */)> updateFunc, vec3 vel, vec3 angVel, bool hasGravity, bool isPinned)
+void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float /*density*/, CollisionMesh& collisionMesh, std::vector<Constraint*> constraints, std::function<void(double /* fixedDeltaTime */)> updateFunc, vec3 vel, vec3 angVel, bool hasGravity, bool isPinned)
 {
 	if (state.objIndex >= MAX_PHYS_OBJECTS)
 	{
@@ -146,7 +146,7 @@ void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float de
 	state.objRotationVector[(state.objIndex * 3) + 2] = rot.z;
 
 	// Calculate inertia tensor and mass for this object
-	CalculatePhysicalProperties(density, collisionMesh.GetBlocks()[0]);
+	//CalculatePhysicalProperties(density, collisionMesh.GetBlocks()[0]);
 
 	// Since objPropertiesMatrix was just modified by CalculatePhysicalProperties, we have to update its inverse
 	//state.objPropertiesMatrixInverse = state.objPropertiesMatrix;
@@ -204,7 +204,7 @@ void PhysicsManager::ApplyTorque(std::string name, vec3 /*torque*/)
 
 // This function is based on https://www.geometrictools.com/Documentation/PolyhedralMassProperties.pdfm, which is licensed under https://creativecommons.org/licenses/by/4.0/.
 // This code is also modified from the original to make it more readable and to work with existing code.
-inline void CalculatePhysicalPropertiesHelper(float& w0, float& w1, float& w2, float& f1, float& f2, float& f3, float& g0, float& g1, float& g2)
+inline static void CalculatePhysicalPropertiesHelper(float& w0, float& w1, float& w2, float& f1, float& f2, float& f3, float& g0, float& g1, float& g2)
 {
 	float temp0 = w0 + w1;
 	float temp1 = w0 * w0;

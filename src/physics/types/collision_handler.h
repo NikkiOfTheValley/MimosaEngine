@@ -8,7 +8,16 @@ class PhysObj;
 /*!
  * @brief Defines a given collision
  * @var colliding True if the objects are colliding
- * 
+ * @var collidingObjA A pointer to object A, or nullptr if there is no collision
+ * @var collidingObjB A pointer to object B, or nullptr if there is no collision
+ * @var initialPositionOffset The initial position of object B relative to object A (used for persistent collisions)
+ * @var initialRotationOffset The initial rotation of object B relative to object A (used for persistent collisions)
+ * @var contactPointA The contact point on object A in world space
+ * @var contactPointB The contact point on object B in world space
+ * @var contactNormal The normal of the collision plane
+ * @var collisionDepth The depth of the collision
+ * @var contactTangent1 The first contact tangent. Forms an orthonormal basis with the contact normal and the second contact tangent
+ * @var contactTangent2 The second contact tangent. Forms an orthonormal basis with the contact normal and the first contact tangent
 */
 struct collision
 {
@@ -17,15 +26,9 @@ struct collision
 	PhysObj* collidingObjA;
 	PhysObj* collidingObjB;
 
-	// The initial position of object B relative to object A
-	// Used for persistent collisions
 	vec3 initialPositionOffset;
-
-	// The initial rotation of object B relative to object A
-	// Used for persistent collisions
 	vec3 initialRotationOffset;
 
-	// The two contact points for objects A and B in world space
 	vec3 contactPointA;
 	vec3 contactPointB;
 
@@ -89,6 +92,23 @@ public:
 	void HandleCollisions(PhysState* state);
 
 private:
+	/*!
+	 * @brief Handles the collisions for primitive `PhysObj`s
+	 * @param state The physics state
+	 * @param objA The object to handle collisions for
+	 * @param[out] collisions The collisions that were detected
+	*/
+	void HandleCollisionsPrimitive(PhysState* state, PhysObj& objA, std::vector<collision>& collisions);
+
+	/*!
+	 * @brief Handles the collisions for convex decomposition `PhysObj`s
+	 * @param state The physics state
+	 * @param objA The object to handle collisions for
+	 * @param[out] collisions The collisions that were detected
+	*/
+	void HandleCollisionsConvexDecomposition(PhysState* state, PhysObj& objA, std::vector<collision>& collisions);
+
+
 	/*!
 	 * @brief Generates the support vertex for the given block and support direction
 	 * @param block The block to generate the support from

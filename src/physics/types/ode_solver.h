@@ -9,18 +9,18 @@
 struct PhysState;
 class SLESolver;
 
+/*!
+ * @brief A simplified version of the physics engine state
+ * @var objAccelVector A copy of the objAccelVector structure from `PhysState`
+ * @var objAngAccelVector A copy of the objAngAccel structure from `PhysState`
+ * @var objVelVector A copy of the objVelVector structure from `PhysState`
+ * @var objAngVelVector A copy of the objAngVel structure from `PhysState`
+*/
 struct obj_state
 {
-	// A copy of the objAccelVector structure from PhysState
 	LargeVector<MAX_PHYS_OBJECTS * 3> objAccelVector;
-
-	// A copy of the objAngAccel structure from PhysState
 	LargeVector<MAX_PHYS_OBJECTS * 3> objAngAccelVector;
-
-	// A copy of the objVelVector structure from PhysState
 	LargeVector<MAX_PHYS_OBJECTS * 3> objVelVector;
-
-	// A copy of the objAngVel structure from PhysState
 	LargeVector<MAX_PHYS_OBJECTS * 3> objAngVelVector;
 };
 
@@ -34,6 +34,13 @@ struct force_and_torque
 class ODESolver
 {
 public:
+	/*!
+	 * @brief Solves for the physics state
+	 * @param[in,out] state The physics state to solve from
+	 * @param fixedDeltaTime The deltaTime to use
+	 * @param forceFunction The force function, is used to calcuate forces from a given state. Only used in RK4 mode
+	 * @param[in] solver The SLE solver to use
+	*/
 	void Solve(
 		PhysState* state,
 		float fixedDeltaTime,
@@ -49,7 +56,16 @@ private:
 	LargeVector<MAX_PHYS_OBJECTS * 3> tempObjPosVector;
 	LargeVector<MAX_PHYS_OBJECTS * 3> tempObjRotVector;
 
-	void Evaluate(PhysState* state,
+	/*!
+	 * @brief Evaluates an RK4 stage
+	 * @param[in] initialState The initial state
+	 * @param fixedDeltaTime The deltaTime to use
+	 * @param[in] oldState The previous state
+	 * @param[out] output The output state
+	 * @param forceFunction The force function
+	 * @param solver The SLE solver to use
+	*/
+	void Evaluate(PhysState* initialState,
 		float fixedDeltaTime,
 		const obj_state& oldState,
 		obj_state& output,

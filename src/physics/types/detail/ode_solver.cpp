@@ -38,6 +38,20 @@ void ODESolver::Solve(
 	impulse constraintImpulse = solver->SolveConstraints(state, state->objPositionVector, state->objRotationVector, fixedDeltaTime);
 
 	state->objAccelVector = state->objForceVector / state->objMass;
+
+	//for (auto& obj : state->objects)
+	//{
+		//if (obj.index >= MAX_PHYS_OBJECTS)
+		//	continue;
+
+		//vec3* angAccel = state->objAngAccelVector.GetVector<vec3>(obj.index * 3);
+
+		//const mat3x3f& inertiaTensor = state->objInertiaMatrices[obj.index];
+
+		//*angAccel * inertiaTensor;
+	//}
+
+
 	state->objAngAccelVector = state->objTorqueVector / state->objMass;
 
 	state->objVelVector += state->objAccelVector + constraintImpulse.velocityImpulse;

@@ -34,95 +34,12 @@ void CollisionHandler::HandleCollisions(PhysState* state)
 
 		std::vector<collision> collisions;
 
- 		phys_obj_prop objAProperties = objA.GetProperties();
+		//if (objA.collisionMesh.IsPrimitive())
+		//	HandleCollisionsPrimitive(state, objA, collisions);
+		//else
+		//	HandleCollisionsConvexDecomposition(state, objA, collisions);
 
-		// For each block, check if it collides with any other object's block(s) and add collisions if necessary
-		for (auto& blockA : objA.collisionMesh.GetBlocks())
-		{
-			for (auto& objB : state->objects)
-			{
-				// Skip object if it isn't initialized or if it's the same as objA
-				if (objB.index > MAX_PHYS_OBJECTS || objB.index == objA.index)
-					continue;
-
-				phys_obj_prop objBProperties = objB.GetProperties();
-
-				for (auto& blockB : objB.collisionMesh.GetBlocks())
-				{
-					gjk_collision_info info = GJK(blockA, objAProperties.pos, objAProperties.rot, blockB, objBProperties.pos, objBProperties.rot);
-
-					if (info.colliding)
-					{
-						collision collision;
-						collision.colliding = true;
-						collision.collidingObjA = &objA;
-						collision.collidingObjB = &objB;
-
-						epa_collision_info epa_info = EPA(info, blockA, objAProperties.pos, objAProperties.rot, blockB, objBProperties.pos, objBProperties.rot);
-
-						collision.initialPositionOffset = objAProperties.pos - objBProperties.pos;
-						collision.initialRotationOffset = objAProperties.rot - objBProperties.rot;
-
-						collision.contactPointA = epa_info.contactPointA;
-						collision.contactPointB = epa_info.contactPointB;
-
-						collision.contactNormal = epa_info.contactNormal;
-						collision.collisionDepth = epa_info.collisionDepth;
-
-						// Weird way of computing an orthonormal basis from https://box2d.org/posts/2014/02/computing-a-basis/
-
-						vec3 contactTangent1;
-						if (collision.contactNormal.x >= 0.57735f)
-							contactTangent1 = vec3(collision.contactNormal.y, -collision.contactNormal.x, 0.f);
-						else
-							contactTangent1 = vec3(0.f, collision.contactNormal.z, -collision.contactNormal.y);
-
-						contactTangent1 = normalize(contactTangent1);
-						vec3 contactTangent2 = cross(collision.contactNormal, contactTangent1);
-
-						collision.contactTangent1 = contactTangent1;
-						collision.contactTangent2 = contactTangent2;
-
-						collisions.push_back(collision);
-
-						// Simple temporary collision handling
-
-						if (objA.isPinned)
-						{
-							vec3 positionOffset = collision.contactNormal * collision.collisionDepth;
-
-							*state->objPositionVector.GetVector<vec3>(objB.index * 3) += positionOffset;
-
-							vec3 objBVelocity = *state->objVelVector.GetVector<vec3>(objB.index * 3);
-
-							objBVelocity += collision.contactNormal * dot(collision.contactNormal, objBVelocity);
-						}
-
-						if (objB.isPinned)
-						{
-							vec3 positionOffset = collision.contactNormal * collision.collisionDepth;
-
-							*state->objPositionVector.GetVector<vec3>(objA.index * 3) -= positionOffset;
-
-							vec3 objAVelocity = *state->objVelVector.GetVector<vec3>(objA.index * 3);
-
-							objAVelocity += collision.contactNormal * dot(collision.contactNormal, objAVelocity);
-						}
-
-						if (!objA.isPinned && !objB.isPinned)
-						{
-							vec3 positionOffset = collision.contactNormal * collision.collisionDepth;
-
-							*state->objPositionVector.GetVector<vec3>(objB.index * 3) += positionOffset;
-
-							vec3 objBVelocity = *state->objVelVector.GetVector<vec3>(objB.index * 3);
-
-							objBVelocity += collision.contactNormal * dot(collision.contactNormal, objBVelocity);
-						}
-					}
-				}
-			}
-		}
+		HandleCollisionsPrimitive(state, objA, collisions);
 
 		// All collisions have been added, so add the collision constraints to the object
 		for (auto& collision : collisions)
@@ -151,6 +68,123 @@ void CollisionHandler::HandleCollisions(PhysState* state)
 		}
 
 	}
+}
+
+void CollisionHandler::HandleCollisionsPrimitive(PhysState* /*state*/, PhysObj& /*objA*/, std::vector<collision>& /*collisions*/)
+{
+	//phys_obj_prop objAProperties = objA.GetProperties();
+
+	//// For each primitive, check if it collides with any other object's primitive(s) and add collisions if necessary
+	//for (auto& primitiveA : objA.collisionMesh.GetPrimitives())
+	//{
+	//	for (auto& objB : state->objects)
+	//	{
+	//		// Skip object if it isn't initialized or if it's the same as objA
+	//		if (objB.index > MAX_PHYS_OBJECTS || objB.index == objA.index)
+	//			continue;
+
+	//		phys_obj_prop objBProperties = objB.GetProperties();
+
+	//		for (auto& primitiveB : objB.collisionMesh.GetPrimitives())
+
+	//		{
+
+	//		}
+	//	}
+	//}
+}
+
+void CollisionHandler::HandleCollisionsConvexDecomposition(PhysState* /*state*/, PhysObj& /*objA*/, std::vector<collision>& /*collisions*/)
+{
+	//phys_obj_prop objAProperties = objA.GetProperties();
+
+	//// For each block, check if it collides with any other object's block(s) and add collisions if necessary
+	//for (auto& blockA : objA.collisionMesh.GetBlocks())
+	//{
+	//	for (auto& objB : state->objects)
+	//	{
+	//		// Skip object if it isn't initialized or if it's the same as objA
+	//		if (objB.index > MAX_PHYS_OBJECTS || objB.index == objA.index)
+	//			continue;
+
+	//		phys_obj_prop objBProperties = objB.GetProperties();
+
+	//		for (auto& blockB : objB.collisionMesh.GetBlocks())
+	//		{
+	//			gjk_collision_info info = GJK(blockA, objAProperties.pos, objAProperties.rot, blockB, objBProperties.pos, objBProperties.rot);
+
+	//			if (info.colliding)
+	//			{
+	//				collision collision;
+	//				collision.colliding = true;
+	//				collision.collidingObjA = &objA;
+	//				collision.collidingObjB = &objB;
+
+	//				epa_collision_info epa_info = EPA(info, blockA, objAProperties.pos, objAProperties.rot, blockB, objBProperties.pos, objBProperties.rot);
+
+	//				collision.initialPositionOffset = objAProperties.pos - objBProperties.pos;
+	//				collision.initialRotationOffset = objAProperties.rot - objBProperties.rot;
+
+	//				collision.contactPointA = epa_info.contactPointA;
+	//				collision.contactPointB = epa_info.contactPointB;
+
+	//				collision.contactNormal = epa_info.contactNormal;
+	//				collision.collisionDepth = epa_info.collisionDepth;
+
+	//				// Weird way of computing an orthonormal basis from https://box2d.org/posts/2014/02/computing-a-basis/
+
+	//				vec3 contactTangent1;
+	//				if (collision.contactNormal.x >= 0.57735f)
+	//					contactTangent1 = vec3(collision.contactNormal.y, -collision.contactNormal.x, 0.f);
+	//				else
+	//					contactTangent1 = vec3(0.f, collision.contactNormal.z, -collision.contactNormal.y);
+
+	//				contactTangent1 = normalize(contactTangent1);
+	//				vec3 contactTangent2 = cross(collision.contactNormal, contactTangent1);
+
+	//				collision.contactTangent1 = contactTangent1;
+	//				collision.contactTangent2 = contactTangent2;
+
+	//				collisions.push_back(collision);
+
+	//				// Simple temporary collision handling
+
+	//				if (objA.isPinned)
+	//				{
+	//					vec3 positionOffset = collision.contactNormal * collision.collisionDepth;
+
+	//					*state->objPositionVector.GetVector<vec3>(objB.index * 3) += positionOffset;
+
+	//					vec3 objBVelocity = *state->objVelVector.GetVector<vec3>(objB.index * 3);
+
+	//					objBVelocity += collision.contactNormal * dot(collision.contactNormal, objBVelocity);
+	//				}
+
+	//				if (objB.isPinned)
+	//				{
+	//					vec3 positionOffset = collision.contactNormal * collision.collisionDepth;
+
+	//					*state->objPositionVector.GetVector<vec3>(objA.index * 3) -= positionOffset;
+
+	//					vec3 objAVelocity = *state->objVelVector.GetVector<vec3>(objA.index * 3);
+
+	//					objAVelocity += collision.contactNormal * dot(collision.contactNormal, objAVelocity);
+	//				}
+
+	//				if (!objA.isPinned && !objB.isPinned)
+	//				{
+	//					vec3 positionOffset = collision.contactNormal * collision.collisionDepth;
+
+	//					*state->objPositionVector.GetVector<vec3>(objB.index * 3) += positionOffset;
+
+	//					vec3 objBVelocity = *state->objVelVector.GetVector<vec3>(objB.index * 3);
+
+	//					objBVelocity += collision.contactNormal * dot(collision.contactNormal, objBVelocity);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 vec3 CollisionHandler::GetSupport(const std::vector<collision_vert>& block, vec3 objPos, vec3 objRot, vec3 dir)

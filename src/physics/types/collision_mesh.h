@@ -2,7 +2,7 @@
 #include "rendering/types/vec.h"
 #include <vector>
 
-// Prefefine Mesh and PhysObj so we don't have to `include` them
+// Predefine Mesh and PhysObj so we don't have to `include` them
 class Mesh;
 class PhysObj;
 
@@ -12,17 +12,55 @@ struct collision_vert
 	vec3 normal;
 };
 
+enum CollisionPrimitiveType
+{
+	Cube,
+	AABB,
+	Plane,
+	Sphere,
+	Cylinder
+};
+
+/*!
+ * @brief An optimized primitive collision mesh
+ * 
+ * @var type The type of this primitive
+ * @var offset The offset from the model-space origin for this primitive
+ * @var rotation The rotation of the primitive (does not apply to AABBs)
+ * @var scale The scale in the XYZ axes for this primitive
+*/
+struct CollisionPrimitive
+{
+	CollisionPrimitiveType type;
+	vec3 offset;
+	vec3 rotation;
+	vec3 scale;
+};
+
+/*!
+ * @brief A collision mesh.
+*/
 class CollisionMesh
 {
 public:
-	// The OBJ needs to be in the format of a bunch of convex "blocks" if the original model is concave
-	void LoadFromOBJ(std::string path);
+	/*!
+	 * @brief Adds a optimized primitive shape.
+	 * 
+	 * Can be called more than once to create multi-primitive collision meshes.
+	 * 
+	 * @param primitive The primitive to add
+	*/
+	void AddPrimitive(CollisionPrimitive primitive);
 
-	// This function is very slow for large blocks, don't use it in preformace-critical locations!
-	void AddBlock(const Mesh& mesh);
+	/*!
+	 * @brief Loads a CollisionMesh file.
+	 * 
+	 * @param path The path to the file
+	*/
+	void LoadFromFile(std::string path);
 
-	const std::vector<std::vector<collision_vert>>& GetBlocks();
+	const std::vector<CollisionPrimitive> GetPrimitives();
 
 private:
-	std::vector<std::vector<collision_vert>> convexBlocks;
+	std::vector<CollisionPrimitive> primitives;
 };
