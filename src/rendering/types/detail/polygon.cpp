@@ -55,15 +55,10 @@ void Polygon2D::Draw()
 	if (texture != nullptr)
 		texture->Bind(0);
 
-
-	Renderer* r = &Renderer::getInstance();
-	int w, h;
-	glfwGetFramebufferSize(r->window, &w, &h);
-
 	shader->Bind();
 
 	shader->SetVec2("pos", position);
-	shader->SetVec2("screenDim", (float)w, (float)h);
+	shader->SetVec2("screenDim", *Renderer::getInstance().screenDim);
 
 	if (texture)
 	{
