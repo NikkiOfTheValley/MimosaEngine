@@ -196,6 +196,11 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\animation\animation_manager.h" />
+    <ClInclude Include="src\animation\inverse_kinematics.h" />
+    <ClInclude Include="src\animation\types\animation.h" />
+    <ClInclude Include="src\animation\types\bone.h" />
+    <ClInclude Include="src\animation\types\keyframe.h" />
     <ClInclude Include="src\debug\obj_writer.h" />
     <ClInclude Include="src\math\conversion.h" />
     <ClInclude Include="src\math\formatting_util.h" />
