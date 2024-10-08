@@ -1,5 +1,7 @@
 #include "../obj_loader.h"
 
+using namespace math;
+
 // Splits a string on a character (util function)
 std::vector<std::string> split(const std::string s, char delim)
 {

@@ -1,5 +1,7 @@
 #include "texture_manager.h"
 
+using namespace math;
+
 void TextureManager::Init()
 {
 	uint32_t* data = new uint32_t[ATLAS_STARTING_WIDTH * ATLAS_STARTING_HEIGHT];
@@ -10,7 +12,7 @@ void TextureManager::Init()
 }
  
 // Check if the given texture location overlaps with any texture in the textureCoords vector and outputs the texture that is overlapping
-bool TextureManager::CheckOverlapping(std::pair<vec2, vec2> image, std::pair<vec2, vec2>& overlappingTexture)
+bool TextureManager::CheckOverlapping(std::pair<math::vec2, math::vec2> image, std::pair<math::vec2, math::vec2>& overlappingTexture)
 {
 	for (auto& texCoord : textureCoords)
 	{
@@ -25,7 +27,7 @@ bool TextureManager::CheckOverlapping(std::pair<vec2, vec2> image, std::pair<vec
 }
 
 // Check if the given texture location is within the bounds of the atlas. Returns true if it is in bounds
-bool TextureManager::CheckInBounds(std::pair<vec2, vec2> image)
+bool TextureManager::CheckInBounds(std::pair<math::vec2, math::vec2> image)
 {
 	bool isInLowerBound = (image.first.x > 0) && (image.second.x > 0) && (image.first.y > 0) && (image.second.y > 0);
 
@@ -71,8 +73,8 @@ void TextureManager::AddImage(Image* img, std::string name, bool /*isRGBA*/, boo
 	//    * If it isn't, then resize the atlas dimensions to the new texture's dimensions + the old atlas dimensions
 	// 6: * Then place the texture in that location (slight optimization, gets rid of an extra CheckOverlapping() call in the case of needing to resize the atlas)
 
-	std::pair<vec2, vec2> newTextureCoords = { vec2(), {img->w, img->h} };
-	std::pair<vec2, vec2> overlappingTexture = { vec2(), vec2() };
+	std::pair<math::vec2, math::vec2> newTextureCoords = { math::vec2(), {img->w, img->h} };
+	std::pair<math::vec2, math::vec2> overlappingTexture = { math::vec2(), math::vec2() };
 
 	if (!CheckInBounds(newTextureCoords))
 		ResizeAtlas(img, newTextureCoords.first);
@@ -132,20 +134,20 @@ void TextureManager::AddImage(Image* img, std::string name, bool /*isRGBA*/, boo
 }
 
 // Returns the UV coordinates in the atlas that correspond to the given texture name
-std::pair<vec2, vec2> TextureManager::GetTextureLocation(std::string name)
+std::pair<math::vec2, math::vec2> TextureManager::GetTextureLocation(std::string name)
 {
 	if (!nameToTexCoordIndex.contains(name))
 	{
 		Logger::getInstance().err("No texture exists in the atlas named " + name);
-		return {vec2(), vec2()};
+		return { math::vec2(), math::vec2()};
 	}
 
 	return {
-		vec2(textureCoords[nameToTexCoordIndex[name]].first.x / (float)textureAtlas->w,
-			 textureCoords[nameToTexCoordIndex[name]].first.y / (float)textureAtlas->h),
+		math::vec2(textureCoords[nameToTexCoordIndex[name]].first.x / (float)textureAtlas->w,
+				   textureCoords[nameToTexCoordIndex[name]].first.y / (float)textureAtlas->h),
 
-		vec2(textureCoords[nameToTexCoordIndex[name]].second.x / (float)textureAtlas->w,
-			 textureCoords[nameToTexCoordIndex[name]].second.y / (float)textureAtlas->h)
+		math::vec2(textureCoords[nameToTexCoordIndex[name]].second.x / (float)textureAtlas->w,
+				   textureCoords[nameToTexCoordIndex[name]].second.y / (float)textureAtlas->h)
 	};
 }
 
@@ -154,9 +156,9 @@ vec2 TextureManager::GetAtlasDimensions()
 	return { textureAtlas->w, textureAtlas->h };
 }
 
-void TextureManager::ResizeAtlas(Image* tex, vec2 texLocation)
+void TextureManager::ResizeAtlas(Image* tex, math::vec2 texLocation)
 {
-	vec2 texExtents = { texLocation.x + tex->w, texLocation.y + tex->h };
+	math::vec2 texExtents = { texLocation.x + tex->w, texLocation.y + tex->h };
 
 	if (texExtents.x < textureAtlas->w && texExtents.y < textureAtlas->h)
 		return;

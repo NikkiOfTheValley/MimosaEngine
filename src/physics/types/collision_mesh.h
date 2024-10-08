@@ -1,5 +1,5 @@
 #pragma once
-#include "rendering/types/vec.h"
+#include <math/vec.h>
 #include <vector>
 
 // Predefine Mesh and PhysObj so we don't have to `include` them
@@ -8,8 +8,8 @@ class PhysObj;
 
 struct collision_vert
 {
-	vec3 pos;
-	vec3 normal;
+	math::vec3 pos;
+	math::vec3 normal;
 };
 
 enum CollisionPrimitiveType
@@ -32,9 +32,9 @@ enum CollisionPrimitiveType
 struct CollisionPrimitive
 {
 	CollisionPrimitiveType type;
-	vec3 offset;
-	vec3 rotation;
-	vec3 scale;
+	math::vec3 offset;
+	math::vec3 rotation;
+	math::vec3 scale;
 };
 
 /*!

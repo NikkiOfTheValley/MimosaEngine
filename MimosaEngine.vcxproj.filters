@@ -42,16 +42,16 @@
     <ClInclude Include="src\networking\m_net\tsqueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\rendering\types\vec_math.h">
+    <ClInclude Include="src\math\vec_math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\rendering\types\vec2.h">
+    <ClInclude Include="src\math\vec2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\rendering\types\vec3.h">
+    <ClInclude Include="src\math\vec3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\rendering\types\mat4x4.h">
+    <ClInclude Include="src\math\mat4x4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering\types\mesh.h">
@@ -66,7 +66,7 @@
     <ClInclude Include="src\rendering\types\texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\rendering\types\vec.h">
+    <ClInclude Include="src\math\vec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering\renderer.h">
@@ -2142,7 +2142,7 @@
     <ClInclude Include="src\physics\types\large_sparse_matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\rendering\types\mat3x3.h">
+    <ClInclude Include="src\math\mat3x3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\physics\types\collision_handler.h">
@@ -2190,6 +2190,15 @@
     <ClInclude Include="src\animation\inverse_kinematics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\scene\scene_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\gltf_importer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\input_handler.cpp">
@@ -2213,16 +2222,16 @@
     <ClCompile Include="src\networking\m_net\message.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\types\detail\vec_math.cpp">
+    <ClCompile Include="src\math\detail\vec_math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\types\detail\vec2.cpp">
+    <ClCompile Include="src\math\detail\vec2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\types\detail\vec3.cpp">
+    <ClCompile Include="src\math\detail\vec3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\types\detail\mat4x4.cpp">
+    <ClCompile Include="src\math\detail\mat4x4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\rendering\types\detail\mesh.cpp">
@@ -2297,7 +2306,7 @@
     <ClCompile Include="src\core\accurate_timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\types\detail\mat3x3.cpp">
+    <ClCompile Include="src\math\detail\mat3x3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\physics\types\detail\collision_handler.cpp">

@@ -29,7 +29,7 @@ public:
 	 * @param hasGravity Set to true if the object is supposed to fall under gravity
 	 * @param isPinned Set to true if the object is not supposed to move at all
 	*/
-	void CreateObject(std::string name, vec3 pos, vec3 rot, float density, CollisionMesh& collisionMesh, std::vector<Constraint*> constraints = {}, std::function<void(double /* fixedDeltaTime */)> updateFunc = nullptr, vec3 vel = vec3(), vec3 angVel = vec3(), bool hasGravity = true, bool isPinned = false);
+	void CreateObject(std::string name, math::vec3 pos, math::vec3 rot, float density, CollisionMesh& collisionMesh, std::vector<Constraint*> constraints = {}, std::function<void(double /* fixedDeltaTime */)> updateFunc = nullptr, math::vec3 vel = math::vec3(), math::vec3 angVel = math::vec3(), bool hasGravity = true, bool isPinned = false);
 	
 	/*!
 	 * @brief Gets a physics object
@@ -43,14 +43,14 @@ public:
 	 * @param name The name of the physics object to apply the force to
 	 * @param force The force to apply
 	*/
-	void ApplyForce(std::string name, vec3 force);
+	void ApplyForce(std::string name, math::vec3 force);
 
 	/*!
 	 * @brief Applies a torque to a physics object
 	 * @param name The name of the physics object to apply the torque to
 	 * @param torque The torque to apply
 	*/
-	void ApplyTorque(std::string name, vec3 torque);
+	void ApplyTorque(std::string name, math::vec3 torque);
 private:
 	/*!
 	 * @brief Steps the physics simulation forwards

@@ -1,5 +1,5 @@
 #include "renderer.h"
-#include "types/vec.h"
+#include <math/vec.h>
 #include "types/mesh.h"
 #include "types/polygon.h"
 #include "types/obj_loader.h"
@@ -7,6 +7,8 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+
+using namespace math;
 
 bool Renderer::init(uint32_t width, uint32_t height, std::function<void(GLFWwindow* window, double xpos, double ypos)> cursor_callback, std::function<void(GLFWwindow* window, int key)> key_upd_callback)
 {

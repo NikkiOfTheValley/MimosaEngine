@@ -1,6 +1,9 @@
 #include "physics_manager.h"
 #include "core/accurate_timer.h"
-#include "math/formatting_util.h"
+#include <math/formatting_util.h>
+#include <math/conversion.h>
+
+using namespace math;
 
 PhysicsManager::PhysicsManager()
 {

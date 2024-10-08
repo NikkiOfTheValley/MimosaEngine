@@ -1,5 +1,7 @@
 #include "ui_manager.h"
 
+using namespace math;
+
 namespace ui
 {
 	UIManager::UIManager()
@@ -10,7 +12,7 @@ namespace ui
 	}
 
 	// Creates a new image element in the current UI state
-	void UIManager::CreateImageElement(std::shared_ptr<Texture> tex, bool isFullscreen, vec2 pos, vec2 dim)
+	void UIManager::CreateImageElement(std::shared_ptr<Texture> tex, bool isFullscreen, math::vec2 pos, math::vec2 dim)
 	{
 		if (!curState)
 		{
@@ -52,7 +54,7 @@ namespace ui
 	}
 
 	// Creates a new text element in the current UI state
-	void UIManager::CreateTextElement(std::string str, std::string name, vec2 pos, int scale, bool isStatic)
+	void UIManager::CreateTextElement(std::string str, std::string name, math::vec2 pos, int scale, bool isStatic)
 	{
 		if (!curState)
 		{
@@ -67,7 +69,7 @@ namespace ui
 	}
 
 	// Creates a new button element in the current UI state that calls a given function when pressed
-	void UIManager::CreateButtonElement(std::string str, vec2 pos, vec2 dim, int textScale, std::function<void()> func)
+	void UIManager::CreateButtonElement(std::string str, math::vec2 pos, math::vec2 dim, int textScale, std::function<void()> func)
 	{
 		if (!curState)
 		{
@@ -80,7 +82,7 @@ namespace ui
 	}
 
 	// Creates a new text box element in the current UI state
-	void UIManager::CreateTextBoxElement(std::string defaultStr, std::string name, vec2 pos, vec2 dim, int textScale)
+	void UIManager::CreateTextBoxElement(std::string defaultStr, std::string name, math::vec2 pos, math::vec2 dim, int textScale)
 	{
 		if (!curState)
 		{

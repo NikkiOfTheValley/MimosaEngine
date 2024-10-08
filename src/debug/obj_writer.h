@@ -1,10 +1,10 @@
 #pragma once
-#include <rendering/types/vec.h>
+#include <math/vec.h>
 #include <vector>
 
 namespace obj
 {
-	void WriteOBJ(std::string path, std::vector<vec3> verts, std::vector<size_t> indices);
+	void WriteOBJ(std::string path, std::vector<math::vec3> verts, std::vector<size_t> indices);
 
-	void WriteOBJ(std::string path, std::vector<vec3> verts);
+	void WriteOBJ(std::string path, std::vector<math::vec3> verts);
 }

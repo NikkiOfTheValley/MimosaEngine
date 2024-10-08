@@ -7,7 +7,7 @@
 #include "mlcp_solver.h"
 #include "collision_handler.h"
 #include "large_sparse_matrix.h"
-#include "rendering/types/mat3x3.h"
+#include <math/mat3x3.h>
 
 struct PhysState
 {
@@ -18,7 +18,7 @@ struct PhysState
 	size_t objIndex = 0;
 	std::array<PhysObj, MAX_PHYS_OBJECTS> objects;
 	std::array<Constraint*, MAX_PHYS_OBJECTS * MAX_CONSTRAINTS_PER_PHYS_OBJ> objConstraints;
-	std::array<mat3x3f, MAX_PHYS_OBJECTS> objInertiaMatrices;
+	std::array<math::mat3x3f, MAX_PHYS_OBJECTS> objInertiaMatrices;
 
 	std::unordered_map<std::string, size_t> nameToObjIndex;
 

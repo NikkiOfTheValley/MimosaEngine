@@ -2,7 +2,7 @@
 #include <vector>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "vec.h"
+#include <math/vec.h>
 #include "core/globals.h"
 #include "../renderer.h"
 #include "math/conversion.h"
@@ -26,8 +26,8 @@ class Mesh
 public:
 	std::vector<vert> verts;
 
-	vec3 position = vec3(0.f, 0.f, 0.f);
-	vec3 rotation = vec3(0.f, 0.f, 0.f);
+	math::vec3 position = math::vec3(0.f, 0.f, 0.f);
+	math::vec3 rotation = math::vec3(0.f, 0.f, 0.f);
 
 	Mesh() = default;
 
@@ -39,8 +39,8 @@ public:
 	// Updates the mesh on the GPU
 	void UpdateMesh();
 
-	void Draw(mat4x4f viewMatrix, mat4x4f projectionMatrix);
-	
+	void Draw(math::mat4x4f viewMatrix, math::mat4x4f projectionMatrix);
+
 private:
 	GLuint vao;
 	GLuint vbo;

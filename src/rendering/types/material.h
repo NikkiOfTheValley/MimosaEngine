@@ -12,7 +12,7 @@ public:
 
 	void SetUniform(std::string name, std::any value);
 
-	void Bind(mat4x4f viewMatrix, mat4x4f projectionMatrix, mat4x4f modelMatrix);
+	void Bind(math::mat4x4f viewMatrix, math::mat4x4f projectionMatrix, math::mat4x4f modelMatrix);
 
 	void Reload();
 

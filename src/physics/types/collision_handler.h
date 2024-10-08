@@ -1,5 +1,5 @@
 #pragma once
-#include "rendering/types/vec.h"
+#include <math/vec.h>
 #include "collision_mesh.h"
 
 struct PhysState;
@@ -26,17 +26,17 @@ struct collision
 	PhysObj* collidingObjA;
 	PhysObj* collidingObjB;
 
-	vec3 initialPositionOffset;
-	vec3 initialRotationOffset;
+	math::vec3 initialPositionOffset;
+	math::vec3 initialRotationOffset;
 
-	vec3 contactPointA;
-	vec3 contactPointB;
+	math::vec3 contactPointA;
+	math::vec3 contactPointB;
 
-	vec3 contactNormal;
+	math::vec3 contactNormal;
 	float collisionDepth;
 
-	vec3 contactTangent1;
-	vec3 contactTangent2;
+	math::vec3 contactTangent1;
+	math::vec3 contactTangent2;
 };
 
 /*!
@@ -49,13 +49,13 @@ struct collision
 struct gjk_collision_info
 {
 	bool colliding;
-	std::vector<vec3> resultSimplex;
+	std::vector<math::vec3> resultSimplex;
 
 	// The results from the support function for object A
-	std::vector<vec3> resultSupportA;
+	std::vector<math::vec3> resultSupportA;
 
 	// The results from the support function for object B
-	std::vector<vec3> resultSupportB;
+	std::vector<math::vec3> resultSupportB;
 };
 
 /*!
@@ -67,10 +67,10 @@ struct gjk_collision_info
 */
 struct epa_collision_info
 {
-	vec3 contactPointA;
-	vec3 contactPointB;
+	math::vec3 contactPointA;
+	math::vec3 contactPointB;
 
-	vec3 contactNormal;
+	math::vec3 contactNormal;
 	float collisionDepth;
 };
 
@@ -117,7 +117,7 @@ private:
 	 * @param dir The direction to generate the support in
 	 * @return The support point. Returns vec3(NaN, NaN, NaN) if there was no support point
 	*/
-	vec3 GetSupport(const std::vector<collision_vert>& block, vec3 blockPos, vec3 objRot, vec3 dir);
+	math::vec3 GetSupport(const std::vector<collision_vert>& block, math::vec3 blockPos, math::vec3 objRot, math::vec3 dir);
 
 	/*!
 	 * @brief Adds a new support vertex to the simplex
@@ -138,12 +138,12 @@ private:
 	 * @return True if the vertex went past the origin, false otherwise
 	*/
 	bool AddSupport(
-		std::vector<vec3>& simplex,
-		std::vector<vec3>& supportA,
-		std::vector<vec3>& supportB,
-		const std::vector<collision_vert>& blockA, vec3 blockAPos, vec3 blockARot,
-		const std::vector<collision_vert>& blockB, vec3 blockBPos, vec3 blockBRot,
-		vec3 dir);
+		std::vector<math::vec3>& simplex,
+		std::vector<math::vec3>& supportA,
+		std::vector<math::vec3>& supportB,
+		const std::vector<collision_vert>& blockA, math::vec3 blockAPos, math::vec3 blockARot,
+		const std::vector<collision_vert>& blockB, math::vec3 blockBPos, math::vec3 blockBRot,
+		math::vec3 dir);
 
 	/*!
 	 * @brief Implements the GJK collision detection algorithm
@@ -156,8 +156,8 @@ private:
 	 * @return Information about the collision, including whether a collision was detected at all
 	*/
 	gjk_collision_info GJK(
-			const std::vector<collision_vert>& blockA, vec3 blockAPos, vec3 blockARot,
-			const std::vector<collision_vert>& blockB, vec3 blockBPos, vec3 blockBRot);
+			const std::vector<collision_vert>& blockA, math::vec3 blockAPos, math::vec3 blockARot,
+			const std::vector<collision_vert>& blockB, math::vec3 blockBPos, math::vec3 blockBRot);
 
 	/*!
 	 * @brief Returns the face normals and distance to the origin for the given polytope
@@ -166,7 +166,7 @@ private:
 	 * @return The face formals and distance to the origin in the format std::pair<normal, distance>
 	 * @warning Causes a fatal error if the faceIndices vector is empty.
 	*/
-	std::vector<std::pair<vec3, float>> GetFaceNormalsAndDistance(const std::vector<vec3>& polytope, const std::vector<size_t>& faceIndices);
+	std::vector<std::pair<math::vec3, float>> GetFaceNormalsAndDistance(const std::vector<math::vec3>& polytope, const std::vector<size_t>& faceIndices);
 
 	/*!
 	 * @brief Computes closest face to the origin and its distance using the normals and distance information from `GetFaceNormalsAndDistance`
@@ -175,7 +175,7 @@ private:
 	 * @warning Causes a fatal error if normalsAndDistance is empty.
 	 * @warning Causes a fatal error if there is a face with NaN distance to the origin, or if there is no closest face.
 	*/
-	std::pair<size_t, float> GetClosestFace(const std::vector<std::pair<vec3, float>>& normalsAndDistance);
+	std::pair<size_t, float> GetClosestFace(const std::vector<std::pair<math::vec3, float>>& normalsAndDistance);
 
 	/*!
 	 * @brief Adds the edge a, b to the uniqueEdges vector if it's unique
@@ -202,7 +202,6 @@ private:
 	*/
 	epa_collision_info EPA(
 		gjk_collision_info info,
-		const std::vector<collision_vert>& blockA, vec3 blockAPos, vec3 blockARot,
-		const std::vector<collision_vert>& blockB, vec3 blockBPos, vec3 blockBRot);
-
+		const std::vector<collision_vert>& blockA, math::vec3 blockAPos, math::vec3 blockARot,
+		const std::vector<collision_vert>& blockB, math::vec3 blockBPos, math::vec3 blockBRot);
 };

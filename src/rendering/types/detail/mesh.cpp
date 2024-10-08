@@ -1,5 +1,7 @@
 #include "../mesh.h"
 
+using namespace math;
+
 Mesh::Mesh(std::vector<vert> verts, Material* material)
 {
 	this->verts = verts;
@@ -47,13 +49,13 @@ void Mesh::UpdateMesh()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Mesh::Draw(mat4x4f viewMatrix, mat4x4f projectionMatrix)
+void Mesh::Draw(math::mat4x4f viewMatrix, math::mat4x4f projectionMatrix)
 {
 	// If there's no mesh data, don't do anything
 	if (verts.size() == 0)
 		return;
 
-	mat4x4f modelMatrix;
+	math::mat4x4f modelMatrix;
 
 	modelMatrix.translate(position);
 	modelMatrix.rotate(rotation);

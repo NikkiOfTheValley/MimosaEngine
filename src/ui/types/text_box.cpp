@@ -1,9 +1,11 @@
 #include "text_box.h"
 #include <rendering/texture_manager.h>
 
+using namespace math;
+
 namespace ui
 {
-	TextBox::TextBox(std::string defaultStr, std::shared_ptr<FontManager> fontManager, std::string font, vec2 pos, vec2 dim, int textScale)
+	TextBox::TextBox(std::string defaultStr, std::shared_ptr<FontManager> fontManager, std::string font, math::vec2 pos, math::vec2 dim, int textScale)
 	{
 		this->pos = pos;
 		this->str = defaultStr;
@@ -11,10 +13,10 @@ namespace ui
 
 		// Make sure the text on the text box is center-aligned
 
-		vec2 center = (pos * 2) + (dim / 2);
-		vec2* screenDim = Renderer::getInstance().screenDim;
+		math::vec2 center = (pos * 2) + (dim / 2);
+		math::vec2* screenDim = Renderer::getInstance().screenDim;
 
-		text = new Text(str, fontManager, font, vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
+		text = new Text(str, fontManager, font, math::vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
 
 		this->dim = dim;
 
@@ -69,10 +71,10 @@ namespace ui
 		//text->DeallocPolygons();
 		//delete text;
 
-		vec2 center = (pos * 2) + (dim / 2);
-		vec2* screenDim = Renderer::getInstance().screenDim;
+		math::vec2 center = (pos * 2) + (dim / 2);
+		math::vec2* screenDim = Renderer::getInstance().screenDim;
 
-		text->UpdatePosition(vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
+		text->UpdatePosition(math::vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
 		text->UpdateText(str);
 
 		ResourceManager* resourceManager = &ResourceManager::getInstance();

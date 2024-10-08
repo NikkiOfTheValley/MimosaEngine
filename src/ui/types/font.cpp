@@ -3,6 +3,8 @@
 #include <rendering/texture_manager.h>
 #include <rendering/renderer.h>
 
+using namespace math;
+
 namespace ui
 {
 	Font::Font(FT_Library* ft, std::string path, unsigned int height)
@@ -16,7 +18,7 @@ namespace ui
 		if (FT_New_Face(*ft, path.c_str(), 0, &face))
 			Logger::getInstance().fatal("Failed to create FT_Face for font " + path);
 
-		vec2 screenSize = *Renderer::getInstance().screenDim;
+		math::vec2 screenSize = *Renderer::getInstance().screenDim;
 
 		int physicalScreenWidth = 0;
 		int physicalScreenHeight = 0;
@@ -78,8 +80,8 @@ namespace ui
 			glyphInfo_t glyphInfo =
 			{
 				TextureManager::getInstance().GetTextureLocation(path + std::to_string(c)),
-				vec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-				vec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+				math::vec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+				math::vec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
 				(unsigned int)(face->glyph->advance.x >> 6),
 			};
 			characters.insert(std::pair<char, glyphInfo_t>(c, glyphInfo));

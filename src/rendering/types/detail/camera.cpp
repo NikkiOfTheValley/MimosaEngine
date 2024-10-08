@@ -1,5 +1,7 @@
 #include "../camera.h"
 
+using namespace math;
+
 void Camera::Update()
 {
 	double xOffset = mousePos.x - prevMousePos.x;

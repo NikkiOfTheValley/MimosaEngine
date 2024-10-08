@@ -1,7 +1,7 @@
 #pragma once
 #include "log.h"
 
-struct vec2;
+namespace math { struct vec2; };
 
 // Some definitions for various exit codes
 #define EXIT_FATAL_ERR -100
@@ -40,7 +40,7 @@ const uint16_t HW_AVX512VBMI = 32768; // AVX512 Vector Byte Manipulation Instruc
 extern uint16_t supportedFeatures;
 
 
-extern vec2 mousePos;
+extern math::vec2 mousePos;
 extern bool lmbPressed;
 
 extern bool inUI;

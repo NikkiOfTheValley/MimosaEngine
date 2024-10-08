@@ -4,6 +4,8 @@
 #include "rendering/texture_manager.h"
 #include "../mesh.h"
 
+using namespace math;
+
 Material::Material(
 	std::string shaderName,
 	std::string textureName,
@@ -32,7 +34,7 @@ void Material::SetUniform(std::string name, std::any value)
 	Logger::getInstance().warn("No uniform named " + name + " found");
 }
 
-void Material::Bind(mat4x4f viewMatrix, mat4x4f projectionMatrix, mat4x4f modelMatrix)
+void Material::Bind(math::mat4x4f viewMatrix, math::mat4x4f projectionMatrix, math::mat4x4f modelMatrix)
 {
 	if (texture)
 		texture->Bind(0);

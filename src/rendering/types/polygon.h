@@ -2,7 +2,7 @@
 #include <vector>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "vec.h"
+#include <math/vec.h>
 #include "shader.h"
 #include "core/globals.h"
 #include "../renderer.h"
@@ -22,7 +22,7 @@ class Polygon2D
 public:
 	std::vector<vert2d> verts;
 
-	vec2 position = vec2(0.f, 0.f);
+	math::vec2 position = math::vec2(0.f, 0.f);
 
 	Shader* shader;
 	std::shared_ptr<Texture> texture;

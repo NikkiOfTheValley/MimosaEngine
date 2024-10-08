@@ -1,6 +1,10 @@
 #include "../texture.h"
 #include "../../texture_manager.h"
 
+#include <math/vec.h>
+
+using namespace math;
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -85,7 +89,7 @@ Texture::Texture(Image* image, bool useNearestNeighbor)
 	}
 }
 
-Texture::Texture(std::pair<vec2, vec2> atlasLoc)
+Texture::Texture(std::pair<math::vec2, math::vec2> atlasLoc)
 {
 	w = (int)abs((atlasLoc.first.x - atlasLoc.second.x) * TextureManager::getInstance().GetAtlasDimensions().x);
 	h = (int)abs((atlasLoc.first.y - atlasLoc.second.y) * TextureManager::getInstance().GetAtlasDimensions().y);
@@ -95,12 +99,12 @@ Texture::Texture(std::pair<vec2, vec2> atlasLoc)
 }
 
 // Gets the location of this texture in the atlas, if the texture is an atlased texture.
-std::pair<vec2, vec2> Texture::GetLocation()
+std::pair<math::vec2, math::vec2> Texture::GetLocation()
 {
 	if (!this->isAtlasTexture)
 	{
 		Logger::getInstance().warn("Attempted to get the atlas location of a non-atlas texture! This will cause broken textures!");
-		return { vec2(), vec2() };
+		return { math::vec2(), math::vec2() };
 	}
 
 	return this->location;

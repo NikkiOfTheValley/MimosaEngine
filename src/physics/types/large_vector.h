@@ -6,7 +6,7 @@
 #include "large_matrix.h"
 #include "large_sparse_matrix.h"
 #include "core/globals.h"
-#include "rendering/types/vec.h"
+#include <math/vec.h>
 
 // Allows the creation of a vector of arbitrary size specified at compile-time
 // Only used in the SLE solver, so it's a physics engine type

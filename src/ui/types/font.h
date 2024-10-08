@@ -1,5 +1,5 @@
 #pragma once
-#include "rendering/types/vec.h"
+#include <math/vec.h>
 #include <map>
 
 #include <ft2build.h>
@@ -8,9 +8,9 @@
 namespace ui
 {
 	struct glyphInfo_t {
-		std::pair<vec2, vec2> atlasPosition; // Position of the glyph in the texture atlas
-		vec2 size; // Size of the glyph
-		vec2 bearing; // Offset from baseline to top-left of the glyph
+		std::pair<math::vec2, math::vec2> atlasPosition; // Position of the glyph in the texture atlas
+		math::vec2 size; // Size of the glyph
+		math::vec2 bearing; // Offset from baseline to top-left of the glyph
 		unsigned int advance; // Offset to advance to the next glyph position
 	};
 

@@ -17,12 +17,14 @@
 #include "accurate_timer.h"
 #include "math/formatting_util.h"
 
+using namespace math;
+
 // - Global variables -
 
 uint16_t supportedFeatures;
 float fov = 45;
 bool inUI = true;
-vec2 mousePos = vec2();
+math::vec2 mousePos = math::vec2();
 bool lmbPressed = false;
 bool useTextInput = false;
 std::string* currentlySelectedText = nullptr;
@@ -174,6 +176,16 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	logger->log(output.str());
 
+	if (!(supportedFeatures & HW_x64))
+		logger->fatal("Hardware is not x64! How is this application even running!?");
+
+	if (!(supportedFeatures & HW_FMA3) && !(supportedFeatures & HW_FMA4))
+		logger->fatal("Hardware does not support FMA instructions! This is required to run the physics engine!");
+
+	if (!(supportedFeatures & HW_SSE2))
+		logger->fatal("Hardware does not support SSE2! SSE2 is required to run the physics engine!");
+
+
 	resourceManager = &ResourceManager::getInstance();
 	physicsManager = new PhysicsManager();
 
@@ -227,24 +239,24 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	// Then, start creating new elements on that new UI
 
-	uiManager->CreateTextElement("Dynamic Example Text", "example", vec2{ 0.05f, 0.066f }, 4);
+	uiManager->CreateTextElement("Dynamic Example Text", "example", math::vec2{ 0.05f, 0.066f }, 4);
 
-	uiManager->CreateTextElement("Static Example Text", "example_static", vec2{0.05f, 0.15f}, 4, true);
+	uiManager->CreateTextElement("Static Example Text", "example_static", math::vec2{0.05f, 0.15f}, 4, true);
 
 	std::shared_ptr<Texture> tex = std::make_shared<Texture>(TextureManager::getInstance().textureAtlas, true);
 
-	uiManager->CreateImageElement(tex, false, vec2{ 0.0f, 0.0f }, vec2{ tex->w / renderer->screenDim->x, tex->h / renderer->screenDim->y });
+	uiManager->CreateImageElement(tex, false, math::vec2{ 0.0f, 0.0f }, math::vec2{ tex->w / renderer->screenDim->x, tex->h / renderer->screenDim->y });
 
-	uiManager->CreateButtonElement("Example Button", vec2{ 0.41f, 0.36f }, vec2{ 0.38f, 0.08f }, 4,
+	uiManager->CreateButtonElement("Example Button", math::vec2{ 0.41f, 0.36f }, math::vec2{ 0.38f, 0.08f }, 4,
 		[&]() {
 			uiManager->UpdateTextElement("example", "Dynamic Example Text 2");
 		});
 
-	uiManager->CreateTextBoxElement("Example Text Box", "text_box", vec2{ 0.355f, 0.5f }, vec2{ 0.38f, 0.06f }, 4);
+	uiManager->CreateTextBoxElement("Example Text Box", "text_box", math::vec2{ 0.355f, 0.5f }, math::vec2{ 0.38f, 0.06f }, 4);
 
-	uiManager->CreateTextBoxElement("Example Text Box 2", "text_box_2", vec2{ 0.355f, 0.58f }, vec2{ 0.45f, 0.06f }, 4);
+	uiManager->CreateTextBoxElement("Example Text Box 2", "text_box_2", math::vec2{ 0.355f, 0.58f }, math::vec2{ 0.45f, 0.06f }, 4);
 
-	uiManager->CreateButtonElement("Example Button 2", vec2{ 0.355f, 0.7f }, vec2{ 0.38f, 0.08f }, 4,
+	uiManager->CreateButtonElement("Example Button 2", math::vec2{ 0.355f, 0.7f }, math::vec2{ 0.38f, 0.08f }, 4,
 		[&]() {
 			std::string text = uiManager->GetTextBoxContents("text_box");
 

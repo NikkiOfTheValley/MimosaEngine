@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "rendering/types/vec3.h"
+#include <math/vec3.h>
 #include "constraint.h"
 #include "collision_mesh.h"
 #include "constraints/collision_constraint.h"
@@ -11,14 +11,14 @@ class CollisionMesh;
 
 struct phys_obj_prop
 {
-	vec3 pos;
-	vec3 rot;
+	math::vec3 pos;
+	math::vec3 rot;
 
-	vec3 accel;
-	vec3 angAccel;
+	math::vec3 accel;
+	math::vec3 angAccel;
 
-	vec3 vel;
-	vec3 angVel;
+	math::vec3 vel;
+	math::vec3 angVel;
 
 	float mass;
 };

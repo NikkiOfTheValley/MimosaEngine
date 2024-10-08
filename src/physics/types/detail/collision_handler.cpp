@@ -3,6 +3,8 @@
 #include "../phys_obj.h"
 #include "debug/obj_writer.h"
 
+using namespace math;
+
 void CollisionHandler::HandleCollisions(PhysState* state)
 {
 

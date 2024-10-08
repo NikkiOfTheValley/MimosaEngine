@@ -2,11 +2,13 @@
 #include <rendering/texture_manager.h>
 #include <ui/font_manager.h>
 
+using namespace math;
+
 namespace ui
 {
 	static int globalIDCounter = 0;
 
-	Text::Text(std::string text, std::shared_ptr<FontManager> fontManager, std::string fontName, vec2 pos, int scale, bool isStatic)
+	Text::Text(std::string text, std::shared_ptr<FontManager> fontManager, std::string fontName, math::vec2 pos, int scale, bool isStatic)
 	{
 		this->scale = scale;
 		this->isStatic = isStatic;
@@ -37,10 +39,10 @@ namespace ui
 			GenerateText(font);
 		else
 		{
-			vec2* screenDim = Renderer::getInstance().screenDim;
+			math::vec2* screenDim = Renderer::getInstance().screenDim;
 
 			// Start the text at the top-left of the first character
-			vec2 currentPosition = pos * *screenDim;
+			math::vec2 currentPosition = pos * *screenDim;
 
 			float firstGlyphHeight = font->characters.at(text[0]).size.y;
 
@@ -49,7 +51,7 @@ namespace ui
 			{
 				glyphInfo_t glyph = font->characters.at(text[i]);
 
-				poly.position = vec2(currentPosition.x, currentPosition.y - glyph.bearing.y + firstGlyphHeight);
+				poly.position = math::vec2(currentPosition.x, currentPosition.y - glyph.bearing.y + firstGlyphHeight);
 
 				poly.UpdateMesh();
 
@@ -72,7 +74,7 @@ namespace ui
 		polygonsStale = true;
 	}
 
-	void Text::UpdatePosition(vec2 newPos, int newScale)
+	void Text::UpdatePosition(math::vec2 newPos, int newScale)
 	{
 		if (isStatic)
 		{

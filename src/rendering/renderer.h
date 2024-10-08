@@ -4,7 +4,7 @@
 #include <iostream>
 #include "core/globals.h"
 #include <functional>
-#include "types/vec.h"
+#include <math/vec.h>
 
 class Shader;
 class Texture;
@@ -30,7 +30,7 @@ public:
 	GLFWwindow* window;
 	std::function<void(GLFWwindow* window, double xpos, double ypos)> cursor_callback_func;
 	std::function<void(GLFWwindow* window, int key)> key_callback_func;
-	vec2* screenDim;
+	math::vec2* screenDim;
 
 	bool init(
 		uint32_t width,
@@ -44,17 +44,17 @@ public:
 		std::string path,
 		std::string name,
 		Material* material,
-		vec3 pos = vec3(),
-		vec3 rot = vec3());
+		math::vec3 pos = math::vec3(),
+		math::vec3 rot = math::vec3());
 
 	// Creates a new mesh either from a .obj file or a std::vector<vert>
 	void CreateNewMesh(std::vector<vert> verts,
 		std::string name,
 		Material* material,
-		vec3 pos = vec3(),
-		vec3 rot = vec3());
+		math::vec3 pos = math::vec3(),
+		math::vec3 rot = math::vec3());
 	
-	void CreateNewPolygon(std::vector<vert2d> verts, std::string name, Shader* shader, Texture* texture = nullptr, vec3 pos = vec3());
+	void CreateNewPolygon(std::vector<vert2d> verts, std::string name, Shader* shader, Texture* texture = nullptr, math::vec3 pos = math::vec3());
 
 	void AddNewPostProcessingShader(Shader* shader);
 
@@ -64,7 +64,7 @@ public:
 	Mesh* GetMesh(std::string name);
 	Polygon2D* GetPolygon(std::string name);
 
-	void Draw(mat4x4f viewMatrix, mat4x4f projectionMatrix);
+	void Draw(math::mat4x4f viewMatrix, math::mat4x4f projectionMatrix);
 
 
 	Renderer(Renderer const&) = delete;

@@ -26,16 +26,16 @@ namespace ui
 		UIManager();
 
 		// Creates a new image element in the current UI state
-		void CreateImageElement(std::shared_ptr<Texture> tex, bool isFullscreen, vec2 pos = vec2(), vec2 dim = vec2());
+		void CreateImageElement(std::shared_ptr<Texture> tex, bool isFullscreen, math::vec2 pos = math::vec2(), math::vec2 dim = math::vec2());
 
 		// Creates a new text element in the current UI state
-		void CreateTextElement(std::string str, std::string name, vec2 pos, int scale, bool isStatic = false);
+		void CreateTextElement(std::string str, std::string name, math::vec2 pos, int scale, bool isStatic = false);
 
 		// Creates a new button element in the current UI state that calls a given function when pressed
-		void CreateButtonElement(std::string str, vec2 pos, vec2 dim, int textScale, std::function<void()> func);
+		void CreateButtonElement(std::string str, math::vec2 pos, math::vec2 dim, int textScale, std::function<void()> func);
 
 		// Creates a new text box element in the current UI state
-		void CreateTextBoxElement(std::string defaultStr, std::string name, vec2 pos, vec2 dim, int textScale);
+		void CreateTextBoxElement(std::string defaultStr, std::string name, math::vec2 pos, math::vec2 dim, int textScale);
 
 		// Updates a text element in the current UI state
 		void UpdateTextElement(std::string name, std::string str = "");

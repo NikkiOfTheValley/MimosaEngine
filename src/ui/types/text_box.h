@@ -1,5 +1,5 @@
 #pragma once
-#include "rendering/types/vec.h"
+#include <math/vec.h>
 #include "ui/types/text.h"
 #include "rendering/resource_manager.h"
 #include <functional>
@@ -13,7 +13,7 @@ namespace ui
 		std::string str;
 
 	public:
-		TextBox(std::string defaultStr, std::shared_ptr<FontManager> fontManager, std::string font, vec2 pos, vec2 dim, int textScale);
+		TextBox(std::string defaultStr, std::shared_ptr<FontManager> fontManager, std::string font, math::vec2 pos, math::vec2 dim, int textScale);
 		~TextBox();
 
 		void Draw();
@@ -21,8 +21,8 @@ namespace ui
 		void Update();
 
 	private:
-		vec2 pos;
-		vec2 dim;
+		math::vec2 pos;
+		math::vec2 dim;
 		Text* text;
 		int textScale;
 		Polygon2D* backgroundImage;

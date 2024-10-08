@@ -1,5 +1,7 @@
 #include "input_handler.h"
 
+using namespace math;
+
 InputHandler::InputHandler()
 {
 	mouse_callback = [&](GLFWwindow* window, double xpos, double ypos)

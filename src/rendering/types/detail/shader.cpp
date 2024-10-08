@@ -1,5 +1,7 @@
 #include "../shader.h"
 
+using namespace math;
+
 Shader::Shader(std::string vertShaderPath, std::string fragShaderPath)
 {
 	namespace fs = std::filesystem;
@@ -128,7 +130,7 @@ void Shader::SetFloat(const std::string& name, float value) const
 	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::SetVec2(const std::string& name, const vec2& value) const
+void Shader::SetVec2(const std::string& name, const math::vec2& value) const
 {
 	glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value.x);
 }
@@ -138,7 +140,7 @@ void Shader::SetVec2(const std::string& name, float x, float y) const
 	glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
 }
 
-void Shader::SetVec3(const std::string& name, const vec3& value) const
+void Shader::SetVec3(const std::string& name, const math::vec3& value) const
 {
 	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value.x);
 }
@@ -153,7 +155,7 @@ void Shader::SetVec4(const std::string& name, float x, float y, float z, float w
 	glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
 }
 
-void Shader::SetMat4(const std::string& name, const mat4x4f& mat) const
+void Shader::SetMat4(const std::string& name, const math::mat4x4f& mat) const
 {
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat.data[0][0]);
 }
@@ -168,14 +170,14 @@ void Shader::SetIntArray(const std::string& name, const int* arr, GLsizei size)
 	glUniform1iv(glGetUniformLocation(ID, name.c_str()), size, arr);
 }
 
-void Shader::SetVec2Array(const std::string& name, const vec2* arr, GLsizei size)
+void Shader::SetVec2Array(const std::string& name, const math::vec2* arr, GLsizei size)
 {
 	// Yes, I know this is slow, but I'm fairly sure it isn't possible to set the entire array in a single glUniform call
 	for (size_t i = 0; i < size; i++)
 		glUniform1fv(glGetUniformLocation(ID, (name + "[" + std::to_string(i) + "]").c_str()), 1, &arr[i].x);
 }
 
-void Shader::SetVec3Array(const std::string& name, const vec3* arr, GLsizei size)
+void Shader::SetVec3Array(const std::string& name, const math::vec3* arr, GLsizei size)
 {
 	// Yes, I know this is slow, but I'm fairly sure it isn't possible to set the entire array in a single glUniform call
 	for (size_t i = 0; i < size; i++)
@@ -192,10 +194,10 @@ void Shader::SetAny(const std::string& name, const std::any value)
 		SetInt(name, std::any_cast<int>(value));
 	else if (value.type() == typeid(float))
 		SetFloat(name, std::any_cast<float>(value));
-	else if (value.type() == typeid(vec2))
-		SetVec2(name, std::any_cast<vec2>(value));
-	else if (value.type() == typeid(vec3))
-		SetVec3(name, std::any_cast<vec3>(value));
-	else if (value.type() == typeid(mat4x4f))
-		SetMat4(name, std::any_cast<mat4x4f>(value));
+	else if (value.type() == typeid(math::vec2))
+		SetVec2(name, std::any_cast<math::vec2>(value));
+	else if (value.type() == typeid(math::vec3))
+		SetVec3(name, std::any_cast<math::vec3>(value));
+	else if (value.type() == typeid(math::mat4x4f))
+		SetMat4(name, std::any_cast<math::mat4x4f>(value));
 }

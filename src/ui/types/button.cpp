@@ -1,6 +1,8 @@
 #include "button.h"
 
-ui::Button::Button(std::string str, std::shared_ptr<FontManager> fontManager, std::string font, vec2 pos, vec2 dim, int textScale, std::function<void()> func)
+using namespace math;
+
+ui::Button::Button(std::string str, std::shared_ptr<FontManager> fontManager, std::string font, math::vec2 pos, math::vec2 dim, int textScale, std::function<void()> func)
 {
 	this->func = func;
 	this->pos = pos;
@@ -9,9 +11,9 @@ ui::Button::Button(std::string str, std::shared_ptr<FontManager> fontManager, st
 
 	// Make sure the text on the button is center-aligned
 
-	vec2 center = (pos * 2) + (dim / 2);
+	math::vec2 center = (pos * 2) + (dim / 2);
 
-	vec2* screenDim = Renderer::getInstance().screenDim;
+	math::vec2* screenDim = Renderer::getInstance().screenDim;
 	text = new Text(str, fontManager, font, vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
 
 	this->dim = dim;
@@ -60,9 +62,9 @@ void ui::Button::Update()
 	backgroundImage->Dealloc();
 	delete backgroundImage;
 
-	vec2 center = (pos * 2) + (dim / 2);
-	vec2* screenDim = Renderer::getInstance().screenDim;
-	text->UpdatePosition(vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
+	math::vec2 center = (pos * 2) + (dim / 2);
+	math::vec2* screenDim = Renderer::getInstance().screenDim;
+	text->UpdatePosition(math::vec2((center.x + dim.x / 2) - (4 * textScale * str.length() / screenDim->x), center.y + (4 / screenDim->y)), textScale);
 
 	// Construct background polygon
 	Polygon2D* poly = new Polygon2D();

@@ -1,6 +1,6 @@
 #pragma once
 #include "types/texture.h"
-#include "rendering/types/vec.h"
+#include <math/vec.h>
 #include <vector>
 #include <unordered_map>
 
@@ -26,9 +26,9 @@ public:
 	void RemoveTexture(std::string name);
 
 	// Returns the UV coordinates in the atlas that correspond to the given texture name
-	std::pair<vec2, vec2> GetTextureLocation(std::string name);
+	std::pair<math::vec2, math::vec2> GetTextureLocation(std::string name);
 
-	vec2 GetAtlasDimensions();
+	math::vec2 GetAtlasDimensions();
 
 	TextureManager(TextureManager const&) = delete;
 	void operator=(TextureManager const&) = delete;
@@ -41,13 +41,13 @@ private:
 	TextureManager() { textureAtlas = nullptr; textureAtlasTexture = nullptr; };
 
 	// Check if the given texture location overlaps with any texture in the textureCoords vector (This includes itself!) and outputs the texture that is overlapping
-	bool CheckOverlapping(std::pair<vec2, vec2> image, std::pair<vec2, vec2>& overlappingTexture);
+	bool CheckOverlapping(std::pair<math::vec2, math::vec2> image, std::pair<math::vec2, math::vec2>& overlappingTexture);
 
 	// Check if the given texture location (in pixels) is within the bounds of the atlas
-	bool CheckInBounds(std::pair<vec2, vec2> image);
+	bool CheckInBounds(std::pair<math::vec2, math::vec2> image);
 
 	// Resizes the texture atlas according to the given texture
-	void ResizeAtlas(Image* tex, vec2 texLocation);
+	void ResizeAtlas(Image* tex, math::vec2 texLocation);
 
 	// Updates the texture atlas on the GPU
 	void UpdateAtlasTexture();
@@ -55,7 +55,7 @@ private:
 public:
 
 	// Holds every texture's coordinates (in pixels)
-	std::vector<std::pair<vec2, vec2>> textureCoords;
+	std::vector<std::pair<math::vec2, math::vec2>> textureCoords;
 
 	// Maps texture names to indices
 	std::unordered_map<std::string, size_t> nameToTexCoordIndex;

@@ -1,12 +1,13 @@
 #include "../obj_writer.h"
 #include <filesystem>
 
+using namespace math;
 
 namespace obj
 {
 	namespace fs = std::filesystem;
 
-	void WriteOBJ(std::string path, std::vector<vec3> verts, std::vector<size_t> indices)
+	void WriteOBJ(std::string path, std::vector<math::vec3> verts, std::vector<size_t> indices)
 	{
 		Logger* logger = &Logger::getInstance();
 
@@ -41,7 +42,7 @@ namespace obj
 		logger->log("Created OBJ file " + path);
 	}
 
-	void WriteOBJ(std::string path, std::vector<vec3> verts)
+	void WriteOBJ(std::string path, std::vector<math::vec3> verts)
 	{
 		Logger* logger = &Logger::getInstance();
 
