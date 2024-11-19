@@ -14,7 +14,7 @@ Material::Material(
 	shader = ResourceManager::getInstance().GetShader(shaderName);
 	this->shaderName = shaderName;
 
-	texture = ResourceManager::getInstance().GetTexture(textureName).get();
+	texture = ResourceManager::getInstance().GetTexture(textureName);
 	this->textureName = textureName;
 
 	this->customUniforms = customUniforms;
@@ -75,16 +75,15 @@ void Material::Bind(math::mat4x4f viewMatrix, math::mat4x4f projectionMatrix, ma
 void Material::Reload()
 {
 	shader = ResourceManager::getInstance().GetShader(shaderName);
-	texture = ResourceManager::getInstance().GetTexture(textureName).get();
+	texture = ResourceManager::getInstance().GetTexture(textureName);
 
 	// Keep track of any meshes that weren't found during the reload
 	std::vector<std::string> meshesToDelete;
 	for (auto& mesh : meshesThatUseThisMaterial)
 	{
 		Mesh* meshPointer = Renderer::getInstance().GetMesh(mesh);
-		if (meshPointer)
-			meshPointer->UpdateMesh();
-		else
+		Logger::getInstance().log("Mesh " + mesh);
+		if (!meshPointer)
 		{
 			Logger::getInstance().warn("Mesh " + mesh + " is a stale reference, deleting");
 			meshesToDelete.push_back(mesh);

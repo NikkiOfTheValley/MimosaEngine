@@ -69,8 +69,8 @@ bool Renderer::init(uint32_t width, uint32_t height, std::function<void(GLFWwind
     glCullFace(GL_BACK);
     glFrontFace(GL_CW);
     
-    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
 
     screenDim = new vec2((int)width, (int)height);
 

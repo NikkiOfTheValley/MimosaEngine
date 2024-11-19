@@ -121,6 +121,18 @@ void TextureManager::AddImage(Image* img, std::string name, bool /*isRGBA*/, boo
 			textureCoords.push_back(newTextureCoords);
 
 			UpdateAtlasTexture();
+
+			std::pair<math::vec2, math::vec2> uvCoords = {
+				math::vec2(textureCoords[nameToTexCoordIndex[name]].first.x / (float)textureAtlas->w,
+						   textureCoords[nameToTexCoordIndex[name]].first.y / (float)textureAtlas->h),
+
+				math::vec2(textureCoords[nameToTexCoordIndex[name]].second.x / (float)textureAtlas->w,
+						   textureCoords[nameToTexCoordIndex[name]].second.y / (float)textureAtlas->h)
+			};
+
+			nameToTexIndex[name] = textures.size();
+			textures.push_back(std::make_shared<Texture>(uvCoords));
+
 			return;
 		}
 	}
@@ -131,6 +143,17 @@ void TextureManager::AddImage(Image* img, std::string name, bool /*isRGBA*/, boo
 	textureCoords.push_back(newTextureCoords);
 
 	UpdateAtlasTexture();
+
+	std::pair<math::vec2, math::vec2> uvCoords = {
+		math::vec2(textureCoords[nameToTexCoordIndex[name]].first.x / (float)textureAtlas->w,
+				   textureCoords[nameToTexCoordIndex[name]].first.y / (float)textureAtlas->h),
+
+		math::vec2(textureCoords[nameToTexCoordIndex[name]].second.x / (float)textureAtlas->w,
+				   textureCoords[nameToTexCoordIndex[name]].second.y / (float)textureAtlas->h)
+	};
+
+	nameToTexIndex[name] = textures.size();
+	textures.push_back(std::make_shared<Texture>(uvCoords));
 }
 
 // Returns the UV coordinates in the atlas that correspond to the given texture name
@@ -139,7 +162,7 @@ std::pair<math::vec2, math::vec2> TextureManager::GetTextureLocation(std::string
 	if (!nameToTexCoordIndex.contains(name))
 	{
 		Logger::getInstance().err("No texture exists in the atlas named " + name);
-		return { math::vec2(), math::vec2()};
+		return { math::vec2(), math::vec2() };
 	}
 
 	return {
@@ -149,6 +172,17 @@ std::pair<math::vec2, math::vec2> TextureManager::GetTextureLocation(std::string
 		math::vec2(textureCoords[nameToTexCoordIndex[name]].second.x / (float)textureAtlas->w,
 				   textureCoords[nameToTexCoordIndex[name]].second.y / (float)textureAtlas->h)
 	};
+}
+
+std::shared_ptr<Texture> TextureManager::GetTexture(std::string name)
+{
+	if (!nameToTexIndex.contains(name))
+	{
+		Logger::getInstance().err("No texture exists in the atlas named " + name);
+		return nullptr;
+	}
+
+	return textures[nameToTexIndex[name]];
 }
 
 vec2 TextureManager::GetAtlasDimensions()

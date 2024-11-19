@@ -337,10 +337,10 @@ int main(int /*argc*/, char* /*argv[]*/)
 		if (inputHandler.reloadAssets)
 		{
 			logger->log("Reloading assets");
-			resourceManager->ReloadShaders();
-			resourceManager->ReloadTextures();
+			//resourceManager->ReloadShaders();
+			//resourceManager->ReloadTextures();
 			materialManager.ReloadMaterials();
-			uiManager->UpdateTextElement("example");
+			//uiManager->UpdateTextElement("example");
 			inputHandler.reloadAssets = false;
 		}
 

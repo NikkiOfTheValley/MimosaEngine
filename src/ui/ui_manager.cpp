@@ -8,7 +8,7 @@ namespace ui
 	{
 		fontManager = std::make_shared<FontManager>();
 
-		fontManager->AddNewFont("assets/engine/font/FreeMono.ttf", "defaultFont", 96);
+		fontManager->AddNewFont("assets/engine/font/FreeMono.ttf", "defaultFont", 96, false);
 	}
 
 	// Creates a new image element in the current UI state

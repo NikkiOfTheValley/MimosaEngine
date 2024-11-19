@@ -23,7 +23,7 @@ private:
 	Shader* shader;
 	std::string shaderName;
 
-	Texture* texture;
+	std::shared_ptr<Texture> texture;
 	std::string textureName;
 
 	std::vector<std::pair<std::any /* VALUE */, std::string /* NAME */>> customUniforms;

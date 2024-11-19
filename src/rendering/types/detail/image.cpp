@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 #include "core/log.h"
 #include "../image.h"
-#include <rendering/types/vec2.h>
+#include <math/vec2.h>
 
 Image::Image(std::string path, bool isRGBA)
 {
@@ -26,52 +26,63 @@ Image::Image(uint32_t* data, int width, int height, bool isRGBA)
 	this->isRGBA = isRGBA;
 }
 
-// Loads a 8bpp image into this Image
-Image::Image(uint8_t* data, int width, int height, bool setRed, bool setGreen, bool setBlue, bool isResultRGBA, bool flipVertically)
+Image::Image(uint8_t* data, int width, int height, bool useRGB, bool isResultRGBA, bool flipVertically)
 {
 	this->path = "img:" + std::to_string(rand());
 	w = width;
 	h = height;
 	isRGBA = isResultRGBA;
+	
+	if ((width <= 0 && height > 0) || (height <= 0 && width > 0))
+		Logger::getInstance().fatal("Image has invalid dimensions");
 
-	this->data = new uint32_t[width * height];
-	memset(this->data, 0, width * height * sizeof(uint32_t));
-
-	for (size_t x = 0; x < width; x++)
+	if (!useRGB)
 	{
-		for (size_t y = 0; y < height; y++)
+		this->data = new uint32_t[width * height];
+		memset(this->data, 0, (size_t)width * (size_t)height * sizeof(uint32_t));
+
+		for (size_t x = 0; x < width; x++)
 		{
-			if (!flipVertically)
+			for (size_t y = 0; y < height; y++)
 			{
-				if (setRed)
-					this->data[x + (y * width)] = data[x + (y * width)];
+				size_t scanlineIndex = y * width;
 
-				if (setGreen)
-					this->data[x + (y * width)] |= ((uint32_t)data[x + (y * width)]) << 8;
+				if (flipVertically)
+					scanlineIndex = (height - y - 1) * width;
 
-				if (setBlue)
-					this->data[x + (y * width)] |= ((uint32_t)data[x + (y * width)]) << 16;
+				this->data[x + (y * width)] = ((uint32_t)0xFF) << 0;
+				this->data[x + (y * width)] |= ((uint32_t)0xFF) << 8;
+				this->data[x + (y * width)] |= ((uint32_t)0xFF) << 16;
 
 				if (isResultRGBA)
-					this->data[x + (y * width)] |= ((uint32_t)data[x + (y * width)]) << 24;
+					this->data[x + (y * width)] |= ((uint32_t)data[x + scanlineIndex]) << 24;
+
 			}
-			else
-			{
-				if (setRed)
-					this->data[x + (y * width)] = data[x + ((height - y - 1) * width)];
-
-				if (setGreen)
-					this->data[x + (y * width)] |= ((uint32_t)data[x + ((height - y - 1) * width)]) << 8;
-
-				if (setBlue)
-					this->data[x + (y * width)] |= ((uint32_t)data[x + ((height - y - 1) * width)]) << 16;
-
-				if (isResultRGBA)
-					this->data[x + (y * width)] |= ((uint32_t)data[x + ((height - y - 1) * width)]) << 24;
-			}
-
 		}
 	}
+	else
+	{
+		this->data = new uint32_t[(width / 3) * height];
+		memset(this->data, 0, (size_t)(width / 3) * (size_t)height * sizeof(uint32_t));
+
+		for (size_t x = 0; x < width; x += 3)
+		{
+			for (size_t y = 0; y < height; y++)
+			{
+				uint32_t value = 0;
+
+				value |= (uint32_t)data[x + (y * width) + 0] << 0;
+				value |= (uint32_t)data[x + (y * width) + 1] << 8;
+				value |= (uint32_t)data[x + (y * width) + 2] << 16;
+				
+				if (isResultRGBA)
+					value |= (uint32_t)0xFF << 24;
+
+				this->data[x + (y * (width / 3))] = value;
+			}
+		}
+	}
+
 }
 
 bool Image::IsRGBA() { return isRGBA; }

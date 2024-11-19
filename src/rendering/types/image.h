@@ -10,8 +10,8 @@ public:
 
 	Image(uint32_t* data, int width, int height, bool isRGBA);
 
-	// Converts an 8bpp image into an Image object
-	Image(uint8_t* data, int width, int height, bool setRed, bool setGreen, bool setBlue, bool isResultRGBA, bool flipVertically = false);
+	// Converts a FreeType bitmap into a font image
+	Image(uint8_t* data, int width, int height, bool useRGB, bool isResultRGBA, bool flipVertically = false);
 
 	bool IsRGBA();
 

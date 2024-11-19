@@ -6,6 +6,7 @@ void ResourceManager::LoadTexture(std::string path, bool isRGBA, bool useNearest
 	Logger::getInstance().log("Loading texture " + name + " (at " + path + ")");
 
 	TextureManager::getInstance().AddTexture(path, name, isRGBA, useNearestNeighbor);
+	
 }
 
 void ResourceManager::LoadShader(std::string vertPath, std::string fragPath, std::string name)
@@ -17,8 +18,7 @@ void ResourceManager::LoadShader(std::string vertPath, std::string fragPath, std
 
 std::shared_ptr<Texture> ResourceManager::GetTexture(std::string name)
 {
-	std::shared_ptr<Texture> tex = std::make_shared<Texture>(TextureManager::getInstance().GetTextureLocation(name));
-	return tex;
+	return TextureManager::getInstance().GetTexture(name);
 }
 
 Shader* ResourceManager::GetShader(std::string name)

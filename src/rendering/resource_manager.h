@@ -36,4 +36,7 @@ private:
 
 	std::vector<Shader*> shaders;
 	std::unordered_map<std::string, size_t> nameToShaderIndex;
+
+	std::vector<std::shared_ptr<Texture>> textures;
+	std::unordered_map<std::string, size_t> nameToTextureIndex;
 };

@@ -17,7 +17,7 @@ namespace ui
 	class Font
 	{
 	public:
-		Font(FT_Library* ft, std::string path, unsigned int height);
+		Font(FT_Library* ft, std::string path, unsigned int height, bool useRGB);
 
 		std::string GetPath() const;
 

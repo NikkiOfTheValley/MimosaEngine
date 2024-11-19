@@ -11,7 +11,7 @@ namespace ui
 	public:
 		FontManager();
 
-		void AddNewFont(std::string path, std::string name, unsigned int height);
+		void AddNewFont(std::string path, std::string name, unsigned int height, bool useRGB);
 
 		glyphInfo_t GetGlyph(char c, std::string fontName);
 

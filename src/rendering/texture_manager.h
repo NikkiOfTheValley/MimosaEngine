@@ -28,6 +28,9 @@ public:
 	// Returns the UV coordinates in the atlas that correspond to the given texture name
 	std::pair<math::vec2, math::vec2> GetTextureLocation(std::string name);
 
+	// Returns a shared_ptr to the texture
+	std::shared_ptr<Texture> GetTexture(std::string name);
+
 	math::vec2 GetAtlasDimensions();
 
 	TextureManager(TextureManager const&) = delete;
@@ -59,4 +62,10 @@ public:
 
 	// Maps texture names to indices
 	std::unordered_map<std::string, size_t> nameToTexCoordIndex;
+
+	// A vector of textures
+	std::vector<std::shared_ptr<Texture>> textures;
+
+	// Maps texture names to texture indices
+	std::unordered_map<std::string, size_t> nameToTexIndex;
 };

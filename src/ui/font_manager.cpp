@@ -13,9 +13,9 @@ namespace ui
 			logger->fatal("Failed to initialize FreeType!");
 	}
 
-	void FontManager::AddNewFont(std::string path, std::string name, unsigned int height)
+	void FontManager::AddNewFont(std::string path, std::string name, unsigned int height, bool useRGB)
 	{
-		Font* font = new Font(&ft, path, height);
+		Font* font = new Font(&ft, path, height, useRGB);
 
 		fontNameToIndex[name] = fonts.size();
 		fonts.push_back(font);
