@@ -19,11 +19,15 @@ namespace ui
 	public:
 		Font(FT_Library* ft, std::string path, unsigned int height, bool useRGB);
 
+		Font(FT_Library* ft, const unsigned char* data, size_t dataLen, unsigned int height, bool useRGB);
+
 		std::string GetPath() const;
 
 		std::map<char, glyphInfo_t> characters;
 
 	private:
 		std::string path;
+
+		void LoadFontFromFace(FT_Face& face, unsigned int height, bool useRGB);
 	};
 }

@@ -1,4 +1,5 @@
 #include "ui_manager.h"
+#include "embedded_files/headers/font_Roboto_Regular_ttf.h"
 
 using namespace math;
 
@@ -8,7 +9,7 @@ namespace ui
 	{
 		fontManager = std::make_shared<FontManager>();
 
-		fontManager->AddNewFont("assets/engine/font/FreeMono.ttf", "defaultFont", 96, false);
+		fontManager->AddNewFont(font_Roboto_Regular_ttf, FONT_ROBOTO_REGULAR_TTF_SIZE, "defaultFont", 96, false);
 	}
 
 	// Creates a new image element in the current UI state

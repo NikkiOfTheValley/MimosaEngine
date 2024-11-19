@@ -21,6 +21,14 @@ namespace ui
 		fonts.push_back(font);
 	}
 
+	void FontManager::AddNewFont(const unsigned char* data, size_t len, std::string name, unsigned int height, bool useRGB)
+	{
+		Font* font = new Font(&ft, data, len, height, useRGB);
+
+		fontNameToIndex[name] = fonts.size();
+		fonts.push_back(font);
+	}
+
 	glyphInfo_t FontManager::GetGlyph(char c, std::string fontName)
 	{
 		if (!fontNameToIndex.contains(fontName))

@@ -15,6 +15,8 @@ public:
 
 	Shader(std::string vertShaderPath, std::string fragShaderPath);
 
+	Shader(const unsigned char* vertShaderData, size_t vertLength, const unsigned char* fragShaderData, size_t fragLength);
+
 	// Bind this shader
 	void Bind();
 

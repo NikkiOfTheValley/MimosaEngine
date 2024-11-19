@@ -13,6 +13,8 @@ namespace ui
 
 		void AddNewFont(std::string path, std::string name, unsigned int height, bool useRGB);
 
+		void AddNewFont(const unsigned char* data, size_t len, std::string name, unsigned int height, bool useRGB);
+
 		glyphInfo_t GetGlyph(char c, std::string fontName);
 
 		const Font* GetFont(std::string fontName);

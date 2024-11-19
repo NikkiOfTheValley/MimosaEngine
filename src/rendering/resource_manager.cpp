@@ -1,11 +1,11 @@
 #include "resource_manager.h"
 #include "rendering/texture_manager.h"
 
-void ResourceManager::LoadTexture(std::string path, bool isRGBA, bool useNearestNeighbor, std::string name)
+void ResourceManager::LoadTexture(std::string path, bool isRGBA, std::string name)
 {
 	Logger::getInstance().log("Loading texture " + name + " (at " + path + ")");
 
-	TextureManager::getInstance().AddTexture(path, name, isRGBA, useNearestNeighbor);
+	TextureManager::getInstance().AddTexture(path, name, isRGBA);
 	
 }
 
@@ -16,19 +16,20 @@ void ResourceManager::LoadShader(std::string vertPath, std::string fragPath, std
 	shaders.push_back(new Shader(vertPath, fragPath));
 }
 
-void ResourceManager::LoadTexture(const char* data, bool isRGBA, bool useNearestNeighbor, std::string name)
+void ResourceManager::LoadTexture(const unsigned char* data, size_t len, bool isRGBA, std::string name)
 {
 	Logger::getInstance().log("Loading texture " + name + " (embedded resource)");
 
-	TextureManager::getInstance().AddTexture(data, name, isRGBA, useNearestNeighbor);
+	Image* img = new Image(data, len, isRGBA);
 
+	TextureManager::getInstance().AddImage(img, name);
 }
 
-void ResourceManager::LoadShader(const char* vertData, const char* fragData, std::string name)
+void ResourceManager::LoadShader(const unsigned char* vertData, size_t vertLength, const unsigned char* fragData, size_t fragLength, std::string name)
 {
 	Logger::getInstance().log("Loading shader " + name + " (embedded resource)");
 	nameToShaderIndex[name] = shaders.size();
-	shaders.push_back(new Shader(vertData, fragData));
+	shaders.push_back(new Shader(vertData, vertLength, fragData, fragLength));
 }
 
 std::shared_ptr<Texture> ResourceManager::GetTexture(std::string name)

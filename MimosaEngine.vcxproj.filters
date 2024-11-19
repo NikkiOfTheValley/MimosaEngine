@@ -2337,39 +2337,36 @@
     <None Include="assets\example.vert" />
     <None Include="assets\examplePostProcessingShader.frag" />
     <None Include="assets\examplePostProcessingShader.vert" />
-    <None Include="assets\engine\flatShader.frag" />
-    <None Include="assets\engine\flatShader.vert" />
-    <None Include="assets\engine\passthrough.frag" />
-    <None Include="assets\engine\passthrough.vert" />
-    <None Include="assets\engine\font\AUTHORS" />
-    <None Include="assets\engine\font\COPYING" />
-    <None Include="assets\engine\font\CREDITS" />
     <None Include="gen_docs.bat">
       <Filter>Source Files</Filter>
     </None>
     <None Include="doxyfile" />
-    <None Include="create_embedded_file.py" />
+    <None Include="src\embedded_files\assets\gen_embedded_file.py" />
+    <None Include="src\embedded_files\assets\flatShader.frag" />
+    <None Include="src\embedded_files\assets\flatShader.vert" />
+    <None Include="src\embedded_files\assets\passthrough.frag" />
+    <None Include="src\embedded_files\assets\passthrough.vert" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="assets\engine\button.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="assets\engine\button-highlighted.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="assets\example.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="assets\example2.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="assets\engine\font.png">
+    <Image Include="src\embedded_files\assets\button.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="assets\engine\text-box.png">
+    <Image Include="src\embedded_files\assets\button-highlighted.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="assets\engine\text-box-highlighted.png">
+    <Image Include="src\embedded_files\assets\font.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\embedded_files\assets\text-box.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\embedded_files\assets\text-box-highlighted.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -2378,8 +2375,5 @@
     <Text Include="assets\floor.obj" />
     <Text Include="assets\example.obj" />
     <Text Include="assets\cube.obj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Font Include="assets\engine\font\FreeMono.ttf" />
   </ItemGroup>
 </Project>

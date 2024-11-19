@@ -5,6 +5,9 @@
 #include "types/obj_loader.h"
 #include "post_processing_manager.h"
 
+#include "embedded_files/headers/assets_passthrough_vert.h"
+#include "embedded_files/headers/assets_passthrough_frag.h"
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -78,7 +81,7 @@ bool Renderer::init(uint32_t width, uint32_t height, std::function<void(GLFWwind
 
     // Add the default pass-through shader
 
-    Shader* shader = new Shader("assets/engine/passthrough.vert", "assets/engine/passthrough.frag");
+    Shader* shader = new Shader(assets_passthrough_vert, ASSETS_PASSTHROUGH_VERT_SIZE, assets_passthrough_frag, ASSETS_PASSTHROUGH_FRAG_SIZE);
     shader->Bind();
     shader->SetInt("framebufferSampler", 0);
 

@@ -18,6 +18,34 @@ namespace ui
 		if (FT_New_Face(*ft, path.c_str(), 0, &face))
 			Logger::getInstance().fatal("Failed to create FT_Face for font " + path);
 
+		LoadFontFromFace(face, height, useRGB);
+
+		FT_Done_Face(face);
+	}
+
+	Font::Font(FT_Library* ft, const unsigned char* data, size_t dataLen, unsigned int height, bool useRGB)
+	{
+		Logger::getInstance().log("Loading embedded font");
+
+		this->path = "embedded_font:" + std::to_string(rand());
+
+		FT_Face face;
+
+		if (FT_New_Memory_Face(*ft, data, (FT_Long)dataLen, 0, &face))
+			Logger::getInstance().fatal("Failed to create FT_Face for font " + path);
+
+		LoadFontFromFace(face, height, useRGB);
+
+		FT_Done_Face(face);
+	}
+
+	std::string Font::GetPath() const
+	{
+		return path;
+	}
+
+	void Font::LoadFontFromFace(FT_Face& face, unsigned int height, bool useRGB)
+	{
 		math::vec2 screenSize = *Renderer::getInstance().screenDim;
 
 		int physicalScreenWidth = 0;
@@ -79,8 +107,8 @@ namespace ui
 			Image* img = new Image(face->glyph->bitmap.buffer, (int)bitmapDimensions.x, (int)bitmapDimensions.y, useRGB, true, true);
 
 			// Add the Image to the texture atlas
-			TextureManager::getInstance().AddImage(img, path + std::to_string(c), true, true);
-			
+			TextureManager::getInstance().AddImage(img, path + std::to_string(c));
+
 			// Add the glyph info into the character map
 			if (!useRGB)
 			{
@@ -106,12 +134,5 @@ namespace ui
 			}
 
 		}
-
-		FT_Done_Face(face);
-	}
-
-	std::string Font::GetPath() const
-	{
-		return path;
 	}
 }

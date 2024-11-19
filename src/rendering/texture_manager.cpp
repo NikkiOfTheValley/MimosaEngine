@@ -40,14 +40,14 @@ bool TextureManager::CheckInBounds(std::pair<math::vec2, math::vec2> image)
 	return isInLowerBound && isInUpperBound;
 }
 
-void TextureManager::AddTexture(std::string path, std::string name, bool isRGBA, bool useNearestNeighbor)
+void TextureManager::AddTexture(std::string path, std::string name, bool isRGBA)
 {
 	Image* tex = new Image(path, isRGBA);
 
-	AddImage(tex, name, isRGBA, useNearestNeighbor);
+	AddImage(tex, name);
 }
 
-void TextureManager::AddImage(Image* img, std::string name, bool /*isRGBA*/, bool /*useNearestNeighbor*/)
+void TextureManager::AddImage(Image* img, std::string name)
 {
 	// This is probably O(n^2)
 	// I feel like it's possible to get it in O(n)..

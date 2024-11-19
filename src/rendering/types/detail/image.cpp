@@ -12,9 +12,22 @@ Image::Image(std::string path, bool isRGBA)
 	// Load and generate the texture
 	int nrChannels;
 	data = (uint32_t*)stbi_load(path.c_str(), &w, &h, &nrChannels, 0);
-
+	
 	if (!data)
 		Logger::getInstance().err("Failed to load texture " + path);
+}
+
+Image::Image(const unsigned char* data, size_t len, bool isRGBA)
+{
+	this->path = "embedded_img:" + std::to_string(rand());
+	this->isRGBA = isRGBA;
+
+	// Load the texture
+	int nrChannels;
+	this->data = (uint32_t*)stbi_load_from_memory(data, (int)len, &w, &h, &nrChannels, 0);
+
+	if (!data)
+		Logger::getInstance().err("Failed to load embedded texture " + path);
 }
 
 Image::Image(uint32_t* data, int width, int height, bool isRGBA)

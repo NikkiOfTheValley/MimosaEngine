@@ -21,8 +21,8 @@ public:
 
 	void Init();
 
-	void AddTexture(std::string path, std::string name, bool isRGBA, bool useNearestNeighbor);
-	void AddImage(Image* img, std::string name, bool isRGBA, bool useNearestNeighbor);
+	void AddTexture(std::string path, std::string name, bool isRGBA);
+	void AddImage(Image* img, std::string name);
 	void RemoveTexture(std::string name);
 
 	// Returns the UV coordinates in the atlas that correspond to the given texture name
