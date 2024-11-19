@@ -243,10 +243,6 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	uiManager->CreateTextElement("Static Example Text", "example_static", math::vec2{0.05f, 0.15f}, 4, true);
 
-	std::shared_ptr<Texture> tex = std::make_shared<Texture>(TextureManager::getInstance().textureAtlas, true);
-
-	uiManager->CreateImageElement(tex, false, math::vec2{ 0.0f, 0.0f }, math::vec2{ tex->w / renderer->screenDim->x, tex->h / renderer->screenDim->y });
-
 	uiManager->CreateButtonElement("Example Button", math::vec2{ 0.41f, 0.36f }, math::vec2{ 0.38f, 0.08f }, 4,
 		[&]() {
 			uiManager->UpdateTextElement("example", "Dynamic Example Text 2");
@@ -288,6 +284,12 @@ int main(int /*argc*/, char* /*argv[]*/)
 		"floor",
 		materialManager.GetMaterial("exampleMaterial"),
 		vec3{ 4.f, -10.f, 2.f });
+
+	renderer->CreateNewMesh(
+		"assets/torus.obj",
+		"brokenTorus",
+		materialManager.GetMaterial("exampleMaterial"),
+		vec3{ 4.f, 4.f, 2.f });
 	
 
 	// -- Create physics objects --

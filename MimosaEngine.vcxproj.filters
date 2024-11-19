@@ -2348,6 +2348,7 @@
       <Filter>Source Files</Filter>
     </None>
     <None Include="doxyfile" />
+    <None Include="create_embedded_file.py" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\engine\button.png">

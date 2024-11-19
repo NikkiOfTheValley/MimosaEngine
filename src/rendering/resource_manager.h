@@ -17,6 +17,8 @@ public:
 
 	void LoadTexture(std::string path, bool isRGBA, bool useNearestNeighbor, std::string name);
 	void LoadShader(std::string vertPath, std::string fragPath, std::string name);
+	void LoadTexture(const char* data, bool isRGBA, bool useNearestNeighbor, std::string name);
+	void LoadShader(const char* vertData, const char* fragData, std::string name);
 	void LoadModel(std::string path, std::string name);
 
 	std::shared_ptr<Texture> GetTexture(std::string name);

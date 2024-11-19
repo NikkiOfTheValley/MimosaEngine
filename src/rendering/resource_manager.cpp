@@ -16,6 +16,21 @@ void ResourceManager::LoadShader(std::string vertPath, std::string fragPath, std
 	shaders.push_back(new Shader(vertPath, fragPath));
 }
 
+void ResourceManager::LoadTexture(const char* data, bool isRGBA, bool useNearestNeighbor, std::string name)
+{
+	Logger::getInstance().log("Loading texture " + name + " (embedded resource)");
+
+	TextureManager::getInstance().AddTexture(data, name, isRGBA, useNearestNeighbor);
+
+}
+
+void ResourceManager::LoadShader(const char* vertData, const char* fragData, std::string name)
+{
+	Logger::getInstance().log("Loading shader " + name + " (embedded resource)");
+	nameToShaderIndex[name] = shaders.size();
+	shaders.push_back(new Shader(vertData, fragData));
+}
+
 std::shared_ptr<Texture> ResourceManager::GetTexture(std::string name)
 {
 	return TextureManager::getInstance().GetTexture(name);
@@ -35,6 +50,7 @@ Shader* ResourceManager::GetShader(std::string name)
 void ResourceManager::ReloadTextures()
 {
 	// Not implemented
+	Logger::getInstance().warn("ResourceManager::ReloadTextures() is not implemented!");
 }
 
 void ResourceManager::ReloadShaders()

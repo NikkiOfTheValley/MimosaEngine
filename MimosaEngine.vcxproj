@@ -982,6 +982,7 @@
     <None Include="assets\engine\flatShader.vert" />
     <None Include="assets\engine\passthrough.frag" />
     <None Include="assets\engine\passthrough.vert" />
+    <None Include="create_embedded_file.py" />
     <None Include="gen_docs.bat" />
     <None Include="README.md" />
     <None Include="doxyfile" />
