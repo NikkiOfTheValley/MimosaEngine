@@ -17,7 +17,7 @@ namespace ui
 	{
 		if (!curState)
 		{
-			Logger::getInstance().err("No UIs exist or an invalid UI was selected.");
+			logger.err("No UIs exist or an invalid UI was selected.");
 			return;
 		}
 
@@ -59,7 +59,7 @@ namespace ui
 	{
 		if (!curState)
 		{
-			Logger::getInstance().err("No UIs exist or an invalid UI was selected.");
+			logger.err("No UIs exist or an invalid UI was selected.");
 			return;
 		}
 
@@ -74,7 +74,7 @@ namespace ui
 	{
 		if (!curState)
 		{
-			Logger::getInstance().err("No UIs exist or an invalid UI was selected.");
+			logger.err("No UIs exist or an invalid UI was selected.");
 			return;
 		}
 
@@ -87,7 +87,7 @@ namespace ui
 	{
 		if (!curState)
 		{
-			Logger::getInstance().err("No UIs exist or an invalid UI was selected.");
+			logger.err("No UIs exist or an invalid UI was selected.");
 			return;
 		}
 
@@ -98,11 +98,9 @@ namespace ui
 	// Updates a text element in the current UI state
 	void UIManager::UpdateTextElement(std::string name, std::string str)
 	{
-		Logger* logger = &Logger::getInstance();
-
 		if (!curState)
 		{
-			logger->err("No UIs exist or an invalid UI was selected.");
+			logger.err("No UIs exist or an invalid UI was selected.");
 			return;
 		}
 
@@ -119,7 +117,7 @@ namespace ui
 		}
 
 		if (!textElement.first)
-			logger->err("No text element named " + name + "  found!");
+			logger.err("No text element named " + name + "  found!");
 		else
 		{
 			if (str != "")
@@ -132,11 +130,9 @@ namespace ui
 
 	std::string UIManager::GetTextBoxContents(std::string name)
 	{
-		Logger* logger = &Logger::getInstance();
-
 		if (!curState)
 		{
-			logger->err("No UIs exist or an invalid UI was selected.");
+			logger.err("No UIs exist or an invalid UI was selected.");
 			return "";
 		}
 
@@ -145,7 +141,7 @@ namespace ui
 			if (elem.second == name)
 				return elem.first->str;
 		}
-		logger->warn("No text box exists named \"" + name + "\"");
+		logger.warn("No text box exists named \"" + name + "\"");
 		return "";
 	}
 
@@ -169,7 +165,7 @@ namespace ui
 			}
 		}
 		if (!curState)
-			Logger::getInstance().err("Selected invalid UI! This will cause broken behavior!");
+			logger.err("Selected invalid UI! This will cause broken behavior!");
 
 		curUIStateName = name;
 	}
@@ -179,7 +175,7 @@ namespace ui
 	{
 		if (!curState)
 		{
-			Logger::getInstance().err("No UIs exist or an invalid UI was selected.");
+			logger.err("No UIs exist or an invalid UI was selected.");
 			return;
 		}
 
@@ -200,7 +196,7 @@ namespace ui
 	{
 		if (!curState)
 		{
-			Logger::getInstance().err("No UIs exist or an invalid UI was selected.");
+			logger.err("No UIs exist or an invalid UI was selected.");
 			return;
 		}
 

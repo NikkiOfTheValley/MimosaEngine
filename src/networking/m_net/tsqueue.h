@@ -15,7 +15,7 @@ public:
 	const T& front()
 	{
 		std::scoped_lock lock(muxQueue);
-		if (deqQueue.empty()) { Logger::getInstance().err("Attempted to call front() on an empty tsqueue!"); throw std::exception(); }
+		if (deqQueue.empty()) { logger.err("Attempted to call front() on an empty tsqueue!"); throw std::exception(); }
 		return deqQueue.front();
 	}
 
@@ -24,7 +24,7 @@ public:
 	const T& back()
 	{
 		std::scoped_lock lock(muxQueue);
-		if (deqQueue.empty()) { Logger::getInstance().err("Attempted to call back() on an empty tsqueue!"); throw std::exception(); }
+		if (deqQueue.empty()) { logger.err("Attempted to call back() on an empty tsqueue!"); throw std::exception(); }
 		return deqQueue.back();
 	}
 
@@ -49,7 +49,7 @@ public:
 	T pop_front()
 	{
 		std::scoped_lock lock(muxQueue);
-		if (deqQueue.empty()) { Logger::getInstance().err("Attempted to call pop_front() on an empty tsqueue!"); throw std::exception(); }
+		if (deqQueue.empty()) { logger.err("Attempted to call pop_front() on an empty tsqueue!"); throw std::exception(); }
 		auto t = std::move(deqQueue.front());
 		deqQueue.pop_front();
 		return t;
@@ -60,7 +60,7 @@ public:
 	T pop_back()
 	{
 		std::scoped_lock lock(muxQueue);
-		if (deqQueue.empty()) { Logger::getInstance().err("Attempted to call pop_back() on an empty tsqueue!"); throw std::exception(); }
+		if (deqQueue.empty()) { logger.err("Attempted to call pop_back() on an empty tsqueue!"); throw std::exception(); }
 		auto t = std::move(deqQueue.back());
 		deqQueue.pop_back();
 		return t;

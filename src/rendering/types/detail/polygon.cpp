@@ -66,7 +66,7 @@ void Polygon2D::Draw()
 
 		if (texture->IsAtlasTexture())
 		{
-			//Logger::getInstance().log(texture->GetLocation().first);
+			//logger.log(texture->GetLocation().first);
 			shader->SetVec2("atlasLocation", texture->GetLocation().first);
 			shader->SetVec2("atlasSize", TextureManager::getInstance().GetAtlasDimensions());
 		}

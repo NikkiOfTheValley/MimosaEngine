@@ -84,7 +84,7 @@ void TextureManager::AddImage(Image* img, std::string name)
 	{
 		if (i > 1024)
 		{
-			Logger::getInstance().err("Failed to place texture " + name + ", iteration limit reached!");
+			logger.err("Failed to place texture " + name + ", iteration limit reached!");
 			return;
 		}
 
@@ -161,7 +161,7 @@ std::pair<math::vec2, math::vec2> TextureManager::GetTextureLocation(std::string
 {
 	if (!nameToTexCoordIndex.contains(name))
 	{
-		Logger::getInstance().err("No texture exists in the atlas named " + name);
+		logger.err("No texture exists in the atlas named " + name);
 		return { math::vec2(), math::vec2() };
 	}
 
@@ -178,7 +178,7 @@ std::shared_ptr<Texture> TextureManager::GetTexture(std::string name)
 {
 	if (!nameToTexIndex.contains(name))
 	{
-		Logger::getInstance().err("No texture exists in the atlas named " + name);
+		logger.err("No texture exists in the atlas named " + name);
 		return nullptr;
 	}
 

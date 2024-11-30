@@ -21,7 +21,7 @@ PostProcessingManager::PostProcessingManager()
 
 	// Make sure the multisampled framebuffer is complete
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		Logger::getInstance().err("Failed to initialize multisampled framebuffer");
+		logger.err("Failed to initialize multisampled framebuffer");
 
 	// Initialize the texture to blit multisampled color buffer to
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
@@ -38,7 +38,7 @@ PostProcessingManager::PostProcessingManager()
 
 	// Make sure the framebuffer is complete
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		Logger::getInstance().err("Failed to initialize framebuffer");
+		logger.err("Failed to initialize framebuffer");
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	
@@ -72,7 +72,7 @@ PostProcessingManager::~PostProcessingManager()
 {
 	glDeleteFramebuffers(1, &multisampledFramebuffer);
 	glDeleteFramebuffers(1, &framebuffer);
-	glDeleteRenderbuffers(1, &renderBuffer);
+	glDeleteRenderbuffers(1, &renderBuffer); 
 	glDeleteVertexArrays(1, &framebufferVertsVAO);
 	glDeleteTextures(1, &framebufferTexture);
 }

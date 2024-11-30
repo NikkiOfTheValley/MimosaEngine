@@ -38,8 +38,6 @@ Loads a mesh from a section of an OBJ file
 */
 std::vector<vert> LoadMeshFromOBJLines(std::vector<std::string> lines, std::string path, std::string name)
 {
-	Logger* logger = &Logger::getInstance();
-
 	// Parse OBJ file into vert positions, UVs (if they exist), normals (if they exist), and faces
 
 	// This code uses https://people.computing.clemson.edu/~dhouse/courses/405/docs/brief-obj-file-format.html
@@ -131,10 +129,10 @@ std::vector<vert> LoadMeshFromOBJLines(std::vector<std::string> lines, std::stri
 	}
 
 	if (!hasNormals)
-		logger->warn("OBJ file " + path + " doesn't have normals! This could cause broken rendering!");
+		logger.warn("OBJ file " + path + " doesn't have normals! This could cause broken rendering!");
 
 	if (!hasUVs)
-		logger->warn("OBJ file " + path + " doesn't have UVs! This could cause broken rendering!");
+		logger.warn("OBJ file " + path + " doesn't have UVs! This could cause broken rendering!");
 
 	// Resolve faces into vertices
 
@@ -197,21 +195,19 @@ std::vector<std::vector<vert>> obj::LoadOBJ(std::string path)
 	namespace fs = std::filesystem;
 	using namespace std::chrono;
 
-	Logger* logger = &Logger::getInstance();
-
-	logger->log("Loading OBJ file " + path);
+	logger.log("Loading OBJ file " + path);
 	auto loadStart = std::chrono::steady_clock::now();
 
 	// - Read OBJ File -
 
 	// Verify that the OBJ file does exist and is a file
-	if (!fs::is_regular_file(path)) { logger->err("File " + path + " does not exist or is not a file"); return {}; }
+	if (!fs::is_regular_file(path)) { logger.err("File " + path + " does not exist or is not a file"); return {}; }
 
 	// Open the OBJ file (binary is fastest)
 	std::ifstream file(std::filesystem::absolute(path), std::ios::binary);
 	
 	// Make sure the file is open
-	if (!file) { logger->err("Failed to open OBJ file " + path); return {}; }
+	if (!file) { logger.err("Failed to open OBJ file " + path); return {}; }
 
 	std::string fileAsString;
 
@@ -274,7 +270,7 @@ std::vector<std::vector<vert>> obj::LoadOBJ(std::string path)
 	for (auto& mesh : meshes)
 		numTris += mesh.size() / 3;
 
-	logger->log("Finished loading OBJ file " + path + ". Took " + std::to_string(timeToLoadInMS) + "ms, has " +
+	logger.log("Finished loading OBJ file " + path + ". Took " + std::to_string(timeToLoadInMS) + "ms, has " +
 			    std::to_string(meshes.size()) + " object(s), and contains " + std::to_string(numTris) + " tris.");
 
 	return meshes;

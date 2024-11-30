@@ -47,7 +47,7 @@ Texture::Texture(std::string path, bool isRGBA, bool useNearestNeighbor)
 	}
 	else
 	{
-		Logger::getInstance().err("Failed to load texture " + path);
+		logger.err("Failed to load texture " + path);
 	}
 	stbi_image_free(data);
 }
@@ -85,7 +85,7 @@ Texture::Texture(Image* image, bool useNearestNeighbor)
 	}
 	else
 	{
-		Logger::getInstance().err("Failed to generate texture " + path + " from image");
+		logger.err("Failed to generate texture " + path + " from image");
 	}
 }
 
@@ -103,7 +103,7 @@ std::pair<math::vec2, math::vec2> Texture::GetLocation()
 {
 	if (!this->isAtlasTexture)
 	{
-		Logger::getInstance().warn("Attempted to get the atlas location of a non-atlas texture! This will cause broken textures!");
+		logger.warn("Attempted to get the atlas location of a non-atlas texture! This will cause broken textures!");
 		return { math::vec2(), math::vec2() };
 	}
 

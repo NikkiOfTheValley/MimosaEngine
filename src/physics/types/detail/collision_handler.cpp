@@ -65,7 +65,7 @@ void CollisionHandler::HandleCollisions(PhysState* state)
 			}
 
 			if (!wasConstraintSet)
-				Logger::getInstance().err("Failed to set collision constraint because the number of constraints is >= MAX_CONSTRAINTS_PER_PHYS_OBJ");
+				logger.err("Failed to set collision constraint because the number of constraints is >= MAX_CONSTRAINTS_PER_PHYS_OBJ");
 
 		}
 
@@ -513,7 +513,7 @@ std::vector<std::pair<vec3, float>> CollisionHandler::GetFaceNormalsAndDistance(
 	std::vector<std::pair<vec3, float>> result;
 
 	if (faceIndices.size() == 0)
-		Logger::getInstance().fatal("faceIndices.size() == 0");
+		logger.fatal("faceIndices.size() == 0");
 
 	for (size_t i = 0; i < faceIndices.size(); i += 3)
 	{
@@ -524,7 +524,7 @@ std::vector<std::pair<vec3, float>> CollisionHandler::GetFaceNormalsAndDistance(
 		vec3 normal = normalize(cross(c - a, b - a));
 
 		if (is_nan(normal))
-			Logger::getInstance().err("Element of normal is NaN in GetFaceNormalsAndDistance! Face index is " + std::to_string(i) +
+			logger.err("Element of normal is NaN in GetFaceNormalsAndDistance! Face index is " + std::to_string(i) +
 				", and triangle coords are " + (std::string)a + " | " + (std::string)b + " | " + (std::string)c);
 
 		float distance = dot(normal, a);
@@ -538,7 +538,7 @@ std::vector<std::pair<vec3, float>> CollisionHandler::GetFaceNormalsAndDistance(
 
 		if (std::isnan(distance))
 		{
-			Logger::getInstance().err("Distance to origin is NaN in GetFaceNormalsAndDistance! Face index is " + std::to_string(i) +
+			logger.err("Distance to origin is NaN in GetFaceNormalsAndDistance! Face index is " + std::to_string(i) +
 				", normal is " + (std::string)normal + ", and triangle coords are " + (std::string)a + " | " + (std::string)b + " | " + (std::string)c);
 			continue;
 		}
@@ -556,14 +556,14 @@ std::pair<size_t, float> CollisionHandler::GetClosestFace(const std::vector<std:
 	float closestDistance = FLT_MAX;
 
 	if (normalsAndDistance.size() == 0)
-		Logger::getInstance().fatal("normalsAndDistance.size() == 0");
+		logger.fatal("normalsAndDistance.size() == 0");
 
 	for (size_t i = 0; i < normalsAndDistance.size(); i++)
 	{
 		float distance = normalsAndDistance[i].second;
 
 		if (std::isnan(distance))
-			Logger::getInstance().fatal("Distance to origin for the closest face in EPA is NaN!");
+			logger.fatal("Distance to origin for the closest face in EPA is NaN!");
 
 		if (distance < closestDistance)
 		{
@@ -573,7 +573,7 @@ std::pair<size_t, float> CollisionHandler::GetClosestFace(const std::vector<std:
 	}
 
 	if (closestFaceIndex == -1)
-		Logger::getInstance().fatal("There is no closest face to the origin! This shouldn't be possible!");
+		logger.fatal("There is no closest face to the origin! This shouldn't be possible!");
 
 	return std::make_pair(closestFaceIndex, closestDistance);
 }
@@ -728,7 +728,7 @@ epa_collision_info CollisionHandler::EPA(
 			if (uniqueEdges.size() == 0)
 			{
 				iterations = 0;
-				Logger::getInstance().warn("No unique edges found in EPA");
+				logger.warn("No unique edges found in EPA");
 				break;
 			}
 				
@@ -769,7 +769,7 @@ epa_collision_info CollisionHandler::EPA(
 
 	if (iterations == 0)
 	{
-		Logger::getInstance().warn(
+		logger.warn(
 			"EPA iteration limit reached! This is probably a result of trying to calculate collisions for very complex or invalid geometry! This will cause broken collisions!"
 		);
 	}

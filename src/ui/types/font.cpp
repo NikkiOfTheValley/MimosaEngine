@@ -9,14 +9,14 @@ namespace ui
 {
 	Font::Font(FT_Library* ft, std::string path, unsigned int height, bool useRGB)
 	{
-		Logger::getInstance().log("Loading font " + path);
+		logger.log("Loading font " + path);
 
 		this->path = path;
 
 		FT_Face face;
 
 		if (FT_New_Face(*ft, path.c_str(), 0, &face))
-			Logger::getInstance().fatal("Failed to create FT_Face for font " + path);
+			logger.fatal("Failed to create FT_Face for font " + path);
 
 		LoadFontFromFace(face, height, useRGB);
 
@@ -25,14 +25,14 @@ namespace ui
 
 	Font::Font(FT_Library* ft, const unsigned char* data, size_t dataLen, unsigned int height, bool useRGB)
 	{
-		Logger::getInstance().log("Loading embedded font");
+		logger.log("Loading embedded font");
 
 		this->path = "embedded_font:" + std::to_string(rand());
 
 		FT_Face face;
 
 		if (FT_New_Memory_Face(*ft, data, (FT_Long)dataLen, 0, &face))
-			Logger::getInstance().fatal("Failed to create FT_Face for font " + path);
+			logger.fatal("Failed to create FT_Face for font " + path);
 
 		LoadFontFromFace(face, height, useRGB);
 
@@ -62,7 +62,7 @@ namespace ui
 
 		if (physicalScreenHeight == NULL || physicalScreenWidth == NULL)
 		{
-			Logger::getInstance().warn("Could not get monitor DPI, assuming 96 DPI");
+			logger.warn("Could not get monitor DPI, assuming 96 DPI");
 
 			dpiX /= xScale;
 			dpiY /= yScale;
@@ -79,7 +79,7 @@ namespace ui
 		}
 
 		if (FT_Set_Char_Size(face, 0, height << 6, (int)dpiX, (int)dpiY))
-			Logger::getInstance().err("Failed to set character size for font " + path);
+			logger.err("Failed to set character size for font " + path);
 
 		for (unsigned char c = 32; c < 128; c++)
 		{
@@ -91,13 +91,13 @@ namespace ui
 			// Load the character
 			if (FT_Load_Char(face, c, loadFlags))
 			{
-				Logger::getInstance().err((std::stringstream() << "Failed to load glyph for character `" << c).str() + "` in font " + path);
+				logger.err((std::stringstream() << "Failed to load glyph for character `" << c).str() + "` in font " + path);
 				continue;
 			}
 
 			if (face->glyph->bitmap.pixel_mode != FT_PIXEL_MODE_GRAY && face->glyph->bitmap.pixel_mode != FT_PIXEL_MODE_LCD)
 			{
-				Logger::getInstance().err((std::stringstream() << "Character `" << c).str() + "` in font " + path + " is in an invalid pixel mode!");
+				logger.err((std::stringstream() << "Character `" << c).str() + "` in font " + path + " is in an invalid pixel mode!");
 				continue;
 			}
 

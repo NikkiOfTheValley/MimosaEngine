@@ -46,14 +46,14 @@ void DeviceInterface::AsyncAcceptConnection(const uint16_t port)
 				connection->SetID(lastID + 1);
 				lastID = connection->GetID();
 				connections.push_back(connection);
-				Logger::getInstance().log("A new connection was made");
+				logger.log("A new connection was made");
 
 				// Prime ASIO to accept a new connection, this fixes a bug where only one connection can be made to a given host
 				AsyncAcceptConnection(port);
 			}
 			else
 			{
-				Logger::getInstance().err("A new connection was attempted, but caused an error: " + ec.message());
+				logger.err("A new connection was attempted, but caused an error: " + ec.message());
 			}
 		});
 }

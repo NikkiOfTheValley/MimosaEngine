@@ -39,6 +39,7 @@ const uint16_t HW_AVX512VBMI = 32768; // AVX512 Vector Byte Manipulation Instruc
 
 extern uint16_t supportedFeatures;
 
+extern Logger logger;
 
 extern math::vec2 mousePos;
 extern bool lmbPressed;

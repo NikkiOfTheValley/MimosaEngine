@@ -6,7 +6,7 @@ void MaterialManager::CreateMaterial(
 	std::string textureName,
 	std::vector<std::pair<std::any /* DEFAULT VALUE */, std::string /* NAME */>> customUniforms)
 {
-	Logger::getInstance().log("Creating material " + name);
+	logger.log("Creating material " + name);
 	nameToMaterialIndex[name] = materials.size();
 	materialIndexToName[materials.size()] = name;
 	materials.push_back(new Material(shaderName, textureName, customUniforms));
@@ -16,7 +16,7 @@ Material* MaterialManager::GetMaterial(std::string name)
 {
 	if (!nameToMaterialIndex.contains(name))
 	{
-		Logger::getInstance().err("No material exists called " + name);
+		logger.err("No material exists called " + name);
 		return nullptr;
 	}
 
@@ -28,7 +28,7 @@ void MaterialManager::ReloadMaterials()
 	size_t i = 0;
 	for (auto& material : materials)
 	{
-		Logger::getInstance().log("Reloading material " + materialIndexToName[i]);
+		logger.log("Reloading material " + materialIndexToName[i]);
 		material->Reload();
 		i++;
 	}

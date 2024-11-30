@@ -66,7 +66,7 @@ namespace ui
 	{
 		if (isStatic)
 		{
-			Logger::getInstance().err("Attempted to change the text of a static Text object!");
+			logger.err("Attempted to change the text of a static Text object!");
 			return;
 		}
 
@@ -78,7 +78,7 @@ namespace ui
 	{
 		if (isStatic)
 		{
-			Logger::getInstance().err("Attempted to change the position/scale of a static Text object!");
+			logger.err("Attempted to change the position/scale of a static Text object!");
 			return;
 		}
 

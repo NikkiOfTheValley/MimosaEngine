@@ -31,7 +31,7 @@ void Material::SetUniform(std::string name, std::any value)
 		}
 	}
 
-	Logger::getInstance().warn("No uniform named " + name + " found");
+	logger.warn("No uniform named " + name + " found");
 }
 
 void Material::Bind(math::mat4x4f viewMatrix, math::mat4x4f projectionMatrix, math::mat4x4f modelMatrix)
@@ -82,10 +82,10 @@ void Material::Reload()
 	for (auto& mesh : meshesThatUseThisMaterial)
 	{
 		Mesh* meshPointer = Renderer::getInstance().GetMesh(mesh);
-		Logger::getInstance().log("Mesh " + mesh);
+		logger.log("Mesh " + mesh);
 		if (!meshPointer)
 		{
-			Logger::getInstance().warn("Mesh " + mesh + " is a stale reference, deleting");
+			logger.warn("Mesh " + mesh + " is a stale reference, deleting");
 			meshesToDelete.push_back(mesh);
 		}
 	}

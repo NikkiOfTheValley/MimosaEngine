@@ -7,24 +7,22 @@ Shader::Shader(std::string vertShaderPath, std::string fragShaderPath)
 {
 	namespace fs = std::filesystem;
 
-	Logger* logger = &Logger::getInstance();
-
 	vertPath = vertShaderPath;
 	fragPath = fragShaderPath;
 
 	// - Read the vert shader file & the frag shader file -
 
 	// Verify that the vertex shader and fragment shader files exist and are files
-	if (!fs::is_regular_file(vertShaderPath)) { logger->err("File " + vertShaderPath + " does not exist or is not a file"); return; }
-	if (!fs::is_regular_file(fragShaderPath)) { logger->err("File " + fragShaderPath + " does not exist or is not a file"); return; }
+	if (!fs::is_regular_file(vertShaderPath)) { logger.err("File " + vertShaderPath + " does not exist or is not a file"); return; }
+	if (!fs::is_regular_file(fragShaderPath)) { logger.err("File " + fragShaderPath + " does not exist or is not a file"); return; }
 
 	// Open vert shader file & frag shader file (binary is fastest)
 	std::ifstream if_vert(fs::absolute(vertShaderPath), std::ios::binary);
 	std::ifstream if_frag(fs::absolute(fragShaderPath), std::ios::binary);
 
 	// Make sure the files are open
-	if (!if_vert) { logger->err("Failed to open vert shader file " + vertShaderPath); return; }
-	if (!if_frag) { logger->err("Failed to open frag shader file " + fragShaderPath); return; }
+	if (!if_vert) { logger.err("Failed to open vert shader file " + vertShaderPath); return; }
+	if (!if_frag) { logger.err("Failed to open frag shader file " + fragShaderPath); return; }
 
 	std::string vertCodeString;
 	std::string fragCodeString;
@@ -142,7 +140,7 @@ void Shader::CheckCompileErrors(GLuint shader, std::string type)
 		if (!success)
 		{
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			Logger::getInstance().err("Shader compilation error! Type " + type + "\n" + infoLog);
+			logger.err("Shader compilation error! Type " + type + "\n" + infoLog);
 		}
 	}
 	else
@@ -151,7 +149,7 @@ void Shader::CheckCompileErrors(GLuint shader, std::string type)
 		if (!success)
 		{
 			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-			Logger::getInstance().err("Shader linking error! Type " + type + "\n" + infoLog);
+			logger.err("Shader linking error! Type " + type + "\n" + infoLog);
 		}
 	}
 }

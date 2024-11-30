@@ -3,7 +3,7 @@
 
 void ResourceManager::LoadTexture(std::string path, bool isRGBA, std::string name)
 {
-	Logger::getInstance().log("Loading texture " + name + " (at " + path + ")");
+	logger.log("Loading texture " + name + " (at " + path + ")");
 
 	TextureManager::getInstance().AddTexture(path, name, isRGBA);
 	
@@ -11,14 +11,14 @@ void ResourceManager::LoadTexture(std::string path, bool isRGBA, std::string nam
 
 void ResourceManager::LoadShader(std::string vertPath, std::string fragPath, std::string name)
 {
-	Logger::getInstance().log("Loading shader " + name + " (at " + vertPath + " and " + fragPath + ")");
+	logger.log("Loading shader " + name + " (at " + vertPath + " and " + fragPath + ")");
 	nameToShaderIndex[name] = shaders.size();
 	shaders.push_back(new Shader(vertPath, fragPath));
 }
 
 void ResourceManager::LoadTexture(const unsigned char* data, size_t len, bool isRGBA, std::string name)
 {
-	Logger::getInstance().log("Loading texture " + name + " (embedded resource)");
+	logger.log("Loading texture " + name + " (embedded resource)");
 
 	Image* img = new Image(data, len, isRGBA);
 
@@ -27,7 +27,7 @@ void ResourceManager::LoadTexture(const unsigned char* data, size_t len, bool is
 
 void ResourceManager::LoadShader(const unsigned char* vertData, size_t vertLength, const unsigned char* fragData, size_t fragLength, std::string name)
 {
-	Logger::getInstance().log("Loading shader " + name + " (embedded resource)");
+	logger.log("Loading shader " + name + " (embedded resource)");
 	nameToShaderIndex[name] = shaders.size();
 	shaders.push_back(new Shader(vertData, vertLength, fragData, fragLength));
 }
@@ -41,7 +41,7 @@ Shader* ResourceManager::GetShader(std::string name)
 {
 	if (!nameToShaderIndex.contains(name))
 	{
-		Logger::getInstance().err("No shader exists named " + name);
+		logger.err("No shader exists named " + name);
 		return nullptr;
 	}
 
@@ -51,7 +51,7 @@ Shader* ResourceManager::GetShader(std::string name)
 void ResourceManager::ReloadTextures()
 {
 	// Not implemented
-	Logger::getInstance().warn("ResourceManager::ReloadTextures() is not implemented!");
+	logger.warn("ResourceManager::ReloadTextures() is not implemented!");
 }
 
 void ResourceManager::ReloadShaders()

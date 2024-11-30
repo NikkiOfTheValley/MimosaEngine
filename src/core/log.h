@@ -18,13 +18,6 @@ class Logger
 public:
 	bool output;
 
-	// Should be thread-safe, magic statics (also known as "dynamic initialization and destruction with concurrency") were implemented in VS 2015
-	static Logger& getInstance()
-	{
-		static Logger instance;
-		return instance;
-	}
-
 	//! @brief Default constructor, sets output to true
 	Logger();
 
@@ -52,9 +45,6 @@ public:
 	 * @return The serialized string
 	*/
 	std::string serialize(std::any input);
-
-	Logger(Logger const&) = delete;
-	void operator=(Logger const&) = delete;
 
 private:
 	std::string* m_log;

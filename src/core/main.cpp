@@ -28,6 +28,7 @@ using namespace math;
 
 // - Global variables -
 
+Logger logger;
 uint16_t supportedFeatures;
 float fov = 45;
 bool inUI = true;
@@ -51,7 +52,6 @@ ui::UIManager* uiManager;
 MaterialManager materialManager;
 ResourceManager* resourceManager;
 PhysicsManager* physicsManager;
-Logger* logger;
 bool enableFPSLimiter = true;
 bool displayUI = true;
 int setFPS = 60;
@@ -60,10 +60,10 @@ int main(int /*argc*/, char* /*argv[]*/)
 {
 	// -- Initialize --
 
-	logger = &Logger::getInstance();
+	logger = Logger();
 
-	logger->log("MimosaEngine " + ENG_VERSION_STR);
-	logger->log(NAME_STR + " " + VERSION_STR);
+	logger.log("MimosaEngine " + ENG_VERSION_STR);
+	logger.log(NAME_STR + " " + VERSION_STR);
 
 	// Check what the CPU supports
 
@@ -138,7 +138,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 		if (((supportedFeatures & HW_AVX) != 0) && avxSupportedByOS != true)
 		{
-			logger->warn("AVX is supported by the CPU, but not the OS! This may cause performace issues!");
+			logger.warn("AVX is supported by the CPU, but not the OS! This may cause performace issues!");
 
 			// Zero out all AVX flags
 			supportedFeatures &= ~(HW_AVX | HW_AVX2);
@@ -148,7 +148,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 		if (((supportedFeatures & AVX512_BITMASK) != 0) && avx512SupportedByOS != true)
 		{
-			logger->warn("AVX512 is supported by the CPU, but not the OS! This may cause performace issues!");
+			logger.warn("AVX512 is supported by the CPU, but not the OS! This may cause performace issues!");
 
 			// Zero out all AVX512 flags
 			supportedFeatures &= ~AVX512_BITMASK;
@@ -157,7 +157,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	// Output supported features
 
-	logger->log("Supported Features:");
+	logger.log("Supported Features:");
 
 	std::stringstream output;
 
@@ -181,16 +181,16 @@ int main(int /*argc*/, char* /*argv[]*/)
 	((supportedFeatures & HW_AVX512DQ) != 0) ? output << "[LOG]:     AVX512 Doubleword + Quadword: Yes\n" : output << "[LOG]:     AVX512 Doubleword + Quadword: No\n";
 	((supportedFeatures & HW_AVX512VBMI) != 0) ? output << "[LOG]:     AVX512 Vector Byte Manipulation Instructions: Yes" : output << "[LOG]:     AVX512 Vector Byte Manipulation Instructions: No";
 
-	logger->log(output.str());
+	logger.log(output.str());
 
 	if (!(supportedFeatures & HW_x64))
-		logger->fatal("Hardware is not x64! How is this application even running!?");
+		logger.fatal("Hardware is not x64! How is this application even running!?");
 
 	if (!(supportedFeatures & HW_FMA3) && !(supportedFeatures & HW_FMA4))
-		logger->fatal("Hardware does not support FMA instructions! This is required to run the physics engine!");
+		logger.fatal("Hardware does not support FMA instructions! This is required to run the physics engine!");
 
 	if (!(supportedFeatures & HW_SSE2))
-		logger->fatal("Hardware does not support SSE2! SSE2 is required to run the physics engine!");
+		logger.fatal("Hardware does not support SSE2! SSE2 is required to run the physics engine!");
 
 
 	resourceManager = &ResourceManager::getInstance();
@@ -348,7 +348,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 		if (inputHandler.reloadAssets)
 		{
-			logger->log("Reloading assets");
+			logger.log("Reloading assets");
 			//resourceManager->ReloadShaders();
 			//resourceManager->ReloadTextures();
 			materialManager.ReloadMaterials();
@@ -427,7 +427,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 		FPS = 1 / deltaTime;
 		if ((int)counter % setFPS == 0)
-			logger->log(
+			logger.log(
 				"deltaTime: " + math::floatToString((float)deltaTime * conv::SEC_TO_MILLISEC, 4) + "ms "
 				"| frameTime: " + math::floatToString((float)frameTime * conv::SEC_TO_MILLISEC, 4) + "ms "
 				"| FPS: " + std::to_string(((int)ceil(FPS) + (int)ceil(prevFPS)) / 2));
@@ -446,7 +446,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 	resourceManager->Dealloc();
 	delete uiManager;
 
-	logger->log("Exiting application");
+	logger.log("Exiting application");
 
-	logger->dumpLog();
+	logger.dumpLog();
 }

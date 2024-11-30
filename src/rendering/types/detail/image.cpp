@@ -14,7 +14,7 @@ Image::Image(std::string path, bool isRGBA)
 	data = (uint32_t*)stbi_load(path.c_str(), &w, &h, &nrChannels, 0);
 	
 	if (!data)
-		Logger::getInstance().err("Failed to load texture " + path);
+		logger.err("Failed to load texture " + path);
 }
 
 Image::Image(const unsigned char* data, size_t len, bool isRGBA)
@@ -27,7 +27,7 @@ Image::Image(const unsigned char* data, size_t len, bool isRGBA)
 	this->data = (uint32_t*)stbi_load_from_memory(data, (int)len, &w, &h, &nrChannels, 0);
 
 	if (!data)
-		Logger::getInstance().err("Failed to load embedded texture " + path);
+		logger.err("Failed to load embedded texture " + path);
 }
 
 Image::Image(uint32_t* data, int width, int height, bool isRGBA)
@@ -47,7 +47,7 @@ Image::Image(uint8_t* data, int width, int height, bool useRGB, bool isResultRGB
 	isRGBA = isResultRGBA;
 	
 	if ((width <= 0 && height > 0) || (height <= 0 && width > 0))
-		Logger::getInstance().fatal("Image has invalid dimensions");
+		logger.fatal("Image has invalid dimensions");
 
 	if (!useRGB)
 	{
@@ -105,13 +105,13 @@ void Image::Blit(Image* dest, size_t srcX, size_t srcY, size_t srcWidth, size_t 
 {
 	if (!isRGBA || !dest->IsRGBA())
 	{
-		Logger::getInstance().err("Failed to blit Image " + path + " to Image " + dest->path + " as one or both Image(s) aren't RGBA");
+		logger.err("Failed to blit Image " + path + " to Image " + dest->path + " as one or both Image(s) aren't RGBA");
 		return;
 	}
 
 	if (srcX + srcWidth > w || srcY + srcHeight > h || destX + srcWidth > dest->w || destY + srcHeight > dest->h)
 	{
-		Logger::getInstance().err("Failed to blit Image " + path + " to Image " + dest->path + " as the blitted portion is outside of one or both of the Image(s)");
+		logger.err("Failed to blit Image " + path + " to Image " + dest->path + " as the blitted portion is outside of one or both of the Image(s)");
 		return;
 	}
 

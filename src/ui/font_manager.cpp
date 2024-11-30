@@ -5,12 +5,10 @@ namespace ui
 {
 	FontManager::FontManager()
 	{
-		Logger* logger = &Logger::getInstance();
-
-		logger->log("Initializing text rendering");
+		logger.log("Initializing text rendering");
 
 		if (FT_Init_FreeType(&ft))
-			logger->fatal("Failed to initialize FreeType!");
+			logger.fatal("Failed to initialize FreeType!");
 	}
 
 	void FontManager::AddNewFont(std::string path, std::string name, unsigned int height, bool useRGB)
@@ -33,7 +31,7 @@ namespace ui
 	{
 		if (!fontNameToIndex.contains(fontName))
 		{
-			Logger::getInstance().err("Font " + fontName + " does not exist or has not been added");
+			logger.err("Font " + fontName + " does not exist or has not been added");
 			return {};
 		}
 
@@ -46,7 +44,7 @@ namespace ui
 	{
 		if (!fontNameToIndex.contains(fontName))
 		{
-			Logger::getInstance().err("Font " + fontName + " does not exist or has not been added");
+			logger.err("Font " + fontName + " does not exist or has not been added");
 			return {};
 		}
 

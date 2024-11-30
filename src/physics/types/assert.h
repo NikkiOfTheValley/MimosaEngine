@@ -12,8 +12,8 @@
         if (!(condition)) { \
             std::stringstream output; \
             output << "Assertion `" #condition "` failed in " << __FILE__ << " line " << __LINE__ << ": " << message; \
-            Logger::getInstance().err(output.str()); \
-            Logger::getInstance().dumpLog(); \
+            logger.err(output.str()); \
+            logger.dumpLog(); \
             __debugbreak(); \
             exit(EXIT_ASSERT_FAIL); \
         } \

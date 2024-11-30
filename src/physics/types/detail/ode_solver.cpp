@@ -14,7 +14,7 @@ void ODESolver::Solve(
 
 	if (!haveDisplayedWarning)
 	{
-		Logger::getInstance().warn("ODE solver is using RK4 implementation! This is known to be broken!");
+		logger.warn("ODE solver is using RK4 implementation! This is known to be broken!");
 		haveDisplayedWarning = true;
 	}
 		

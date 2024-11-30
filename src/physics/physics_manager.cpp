@@ -32,7 +32,7 @@ void PhysicsManager::Start()
 			auto stepTime = ((double)duration_cast<nanoseconds>(endOfStep - startOfStep).count() * conv::NANOSEC_TO_SEC);
 			
 			if (stepTime > fixedDeltaTime && WARN_ON_SIM_LAG)
-				Logger::getInstance().warn("Simulation behind by " + std::to_string((stepTime - fixedDeltaTime) * conv::SEC_TO_NANOSEC) + "ns");
+				logger.warn("Simulation behind by " + std::to_string((stepTime - fixedDeltaTime) * conv::SEC_TO_NANOSEC) + "ns");
 
 			BlockForNanoseconds((long long)((fixedDeltaTime - stepTime) * conv::SEC_TO_NANOSEC));
 			
@@ -53,7 +53,7 @@ void PhysicsManager::Start()
 
 				averageStepTime = totalStepTime / max((double)stepTimeOverLastSecond.size(), 1);
 
-				Logger::getInstance().log(
+				logger.log(
 					"fixedDeltaTime: " + math::floatToString((float)fixedDeltaTime * conv::SEC_TO_MICROSEC, 4) + "us "
 					"|  stepTime: "+ math::floatToString((float)averageStepTime * conv::SEC_TO_MICROSEC, 4) + "us "
 					"| avgUpdateRate: " + std::to_string(((int)ceil(1.f / (max(averageStepTime, fixedDeltaTime)) / 1000))) + "kHz "
@@ -119,7 +119,7 @@ void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float /*
 {
 	if (state.objIndex >= MAX_PHYS_OBJECTS)
 	{
-		Logger::getInstance().err("Failed to create PhysObj because the number of objects is >= MAX_PHYS_OBJECTS");
+		logger.err("Failed to create PhysObj because the number of objects is >= MAX_PHYS_OBJECTS");
 		return;
 	}
 
@@ -173,7 +173,7 @@ void PhysicsManager::CreateObject(std::string name, vec3 pos, vec3 rot, float /*
 		}
 
 		if (!wasConstraintSet)
-			Logger::getInstance().err("Failed to set constraint because the number of constraints is >= MAX_CONSTRAINTS_PER_PHYS_OBJ");
+			logger.err("Failed to set constraint because the number of constraints is >= MAX_CONSTRAINTS_PER_PHYS_OBJ");
 	}
 
 	state.objects[state.objIndex] = obj;
@@ -185,7 +185,7 @@ PhysObj* PhysicsManager::GetPhysObject(std::string name)
 {
 	if (!state.nameToObjIndex.contains(name))
 	{
-		Logger::getInstance().warn("No PhysObj named " + name + " exists.");
+		logger.warn("No PhysObj named " + name + " exists.");
 		return nullptr;
 	}
 
@@ -308,6 +308,6 @@ void PhysicsManager::CalculatePhysicalProperties(float density, const std::vecto
 	state.objInertiaMatrices[state.objIndex].data[0][2] = tensor_xz * density;
 	state.objInertiaMatrices[state.objIndex].data[2][0] = tensor_xz * density;
 
-	Logger::getInstance().log("Calculated values:\n      Mass: " + std::to_string(volume * density) + "kg\n      Volume: " + std::to_string(volume) + "m^3\n      Center Of Mass: " + (std::string)COM);
+	logger.log("Calculated values:\n      Mass: " + std::to_string(volume * density) + "kg\n      Volume: " + std::to_string(volume) + "m^3\n      Center Of Mass: " + (std::string)COM);
 	
 }

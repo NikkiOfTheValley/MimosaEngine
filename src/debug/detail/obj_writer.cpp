@@ -9,13 +9,11 @@ namespace obj
 
 	void WriteOBJ(std::string path, std::vector<math::vec3> verts, std::vector<size_t> indices)
 	{
-		Logger* logger = &Logger::getInstance();
-
-		logger->log("Creating OBJ file " + path);
+		logger.log("Creating OBJ file " + path);
 
 		if (indices.size() % 3 != 0)
 		{
-			logger->err("Failed to create OBJ file " + path + " because there are incomplete triangles");
+			logger.err("Failed to create OBJ file " + path + " because there are incomplete triangles");
 			return;
 		}
 			
@@ -24,7 +22,7 @@ namespace obj
 		std::ofstream file(std::filesystem::absolute(path), std::ios::binary);
 
 		// Make sure the file was actually opened
-		if (!file) { logger->err("Failed to create OBJ file " + path); return; }
+		if (!file) { logger.err("Failed to create OBJ file " + path); return; }
 
 		std::string output;
 
@@ -39,18 +37,16 @@ namespace obj
 		file.write(output.c_str(), output.size());
 		file.close();
 
-		logger->log("Created OBJ file " + path);
+		logger.log("Created OBJ file " + path);
 	}
 
 	void WriteOBJ(std::string path, std::vector<math::vec3> verts)
 	{
-		Logger* logger = &Logger::getInstance();
-
-		logger->log("Creating OBJ file " + path);
+		logger.log("Creating OBJ file " + path);
 
 		if (verts.size() % 3 != 0)
 		{
-			logger->err("Failed to create OBJ file " + path + " because there are incomplete triangles");
+			logger.err("Failed to create OBJ file " + path + " because there are incomplete triangles");
 			return;
 		}
 			
@@ -59,7 +55,7 @@ namespace obj
 		std::ofstream file(std::filesystem::absolute(path), std::ios::binary);
 
 		// Make sure the file was actually opened
-		if (!file) { logger->err("Failed to create OBJ file " + path); return; }
+		if (!file) { logger.err("Failed to create OBJ file " + path); return; }
 
 		std::string output;
 
@@ -72,6 +68,6 @@ namespace obj
 		file.write(output.c_str(), output.size());
 		file.close();
 
-		logger->log("Created OBJ file " + path);
+		logger.log("Created OBJ file " + path);
 	}
 }
