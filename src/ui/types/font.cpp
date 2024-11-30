@@ -1,6 +1,6 @@
 #include "font.h"
 #include <rendering/types/image.h>
-#include <rendering/texture_manager.h>
+#include <resource/texture_manager.h>
 #include <rendering/renderer.h>
 
 using namespace math;

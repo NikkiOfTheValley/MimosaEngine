@@ -1,5 +1,5 @@
 #include "resource_manager.h"
-#include "rendering/texture_manager.h"
+#include <resource/texture_manager.h>
 
 void ResourceManager::LoadTexture(std::string path, bool isRGBA, std::string name)
 {

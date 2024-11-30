@@ -1,5 +1,5 @@
 #include "../polygon.h"
-#include "rendering/texture_manager.h"
+#include <resource/texture_manager.h>
 
 Polygon2D::Polygon2D() {}
 

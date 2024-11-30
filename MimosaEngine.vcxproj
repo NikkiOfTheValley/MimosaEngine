@@ -211,8 +211,8 @@
     <ClInclude Include="src\core\globals.h" />
     <ClInclude Include="src\core\input_handler.h" />
     <ClInclude Include="src\core\log.h" />
-    <ClInclude Include="src\rendering\material_manager.h" />
-    <ClInclude Include="src\rendering\resource_manager.h" />
+    <ClInclude Include="src\resource\material_manager.h" />
+    <ClInclude Include="src\resource\resource_manager.h" />
     <ClInclude Include="src\networking\m_net\common.h" />
     <ClInclude Include="src\networking\m_net\connection.h" />
     <ClInclude Include="src\networking\m_net\device_interface.h" />
@@ -236,7 +236,7 @@
     <ClInclude Include="src\physics\types\phys_state.h" />
     <ClInclude Include="src\rendering\post_processing_manager.h" />
     <ClInclude Include="src\rendering\renderer.h" />
-    <ClInclude Include="src\rendering\texture_manager.h" />
+    <ClInclude Include="src\resource\texture_manager.h" />
     <ClInclude Include="src\rendering\types\camera.h" />
     <ClInclude Include="src\rendering\types\image.h" />
     <ClInclude Include="src\math\mat3x3.h" />
@@ -933,8 +933,8 @@
     <ClCompile Include="src\debug\detail\obj_writer.cpp" />
     <ClCompile Include="src\math\detail\conversion.cpp" />
     <ClCompile Include="src\math\detail\formatting_util.cpp" />
-    <ClCompile Include="src\rendering\material_manager.cpp" />
-    <ClCompile Include="src\rendering\resource_manager.cpp" />
+    <ClCompile Include="src\resource\material_manager.cpp" />
+    <ClCompile Include="src\resource\resource_manager.cpp" />
     <ClCompile Include="src\networking\m_net\connection.cpp" />
     <ClCompile Include="src\networking\m_net\device_interface.cpp" />
     <ClCompile Include="src\networking\m_net\message.cpp" />
@@ -948,7 +948,7 @@
     <ClCompile Include="src\physics\types\detail\sle_solver.cpp" />
     <ClCompile Include="src\rendering\post_processing_manager.cpp" />
     <ClCompile Include="src\rendering\renderer.cpp" />
-    <ClCompile Include="src\rendering\texture_manager.cpp" />
+    <ClCompile Include="src\resource\texture_manager.cpp" />
     <ClCompile Include="src\rendering\types\detail\camera.cpp" />
     <ClCompile Include="src\rendering\types\detail\image.cpp" />
     <ClCompile Include="src\math\detail\mat3x3.cpp" />

@@ -1,7 +1,7 @@
 #include "../material.h"
 #include "../../renderer.h"
-#include "rendering/resource_manager.h"
-#include "rendering/texture_manager.h"
+#include <resource/resource_manager.h>
+#include <resource/texture_manager.h>
 #include "../mesh.h"
 
 using namespace math;

@@ -1,7 +1,7 @@
 #pragma once
 #include "rendering/types/polygon.h"
 #include "rendering/types/shader.h"
-#include "rendering/resource_manager.h"
+#include <resource/resource_manager.h>
 #include <memory>
 
 namespace ui

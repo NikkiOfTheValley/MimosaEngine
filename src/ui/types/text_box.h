@@ -1,7 +1,7 @@
 #pragma once
 #include <math/vec.h>
 #include "ui/types/text.h"
-#include "rendering/resource_manager.h"
+#include <resource/resource_manager.h>
 #include <functional>
 #include "button.h"
 

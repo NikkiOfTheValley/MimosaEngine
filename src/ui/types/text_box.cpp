@@ -1,5 +1,5 @@
 #include "text_box.h"
-#include <rendering/texture_manager.h>
+#include <resource/texture_manager.h>
 
 using namespace math;
 

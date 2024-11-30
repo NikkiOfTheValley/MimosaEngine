@@ -24,7 +24,7 @@
     <ClInclude Include="src\core\log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\rendering\resource_manager.h">
+    <ClInclude Include="src\resource\resource_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\networking\m_net\common.h">
@@ -2097,7 +2097,7 @@
     <ClInclude Include="src\rendering\types\material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\rendering\material_manager.h">
+    <ClInclude Include="src\resource\material_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering\post_processing_manager.h">
@@ -2106,7 +2106,7 @@
     <ClInclude Include="src\physics\physics_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\rendering\texture_manager.h">
+    <ClInclude Include="src\resource\texture_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering\types\image.h">
@@ -2210,7 +2210,7 @@
     <ClCompile Include="src\core\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\resource_manager.cpp">
+    <ClCompile Include="src\resource\resource_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\networking\m_net\connection.cpp">
@@ -2270,7 +2270,7 @@
     <ClCompile Include="src\rendering\types\detail\material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\material_manager.cpp">
+    <ClCompile Include="src\resource\material_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\rendering\post_processing_manager.cpp">
@@ -2288,7 +2288,7 @@
     <ClCompile Include="src\rendering\types\detail\image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\texture_manager.cpp">
+    <ClCompile Include="src\resource\texture_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\physics\types\detail\sle_solver.cpp">

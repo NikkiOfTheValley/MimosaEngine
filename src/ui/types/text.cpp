@@ -1,5 +1,5 @@
 #include "text.h"
-#include <rendering/texture_manager.h>
+#include <resource/texture_manager.h>
 #include <ui/font_manager.h>
 
 using namespace math;

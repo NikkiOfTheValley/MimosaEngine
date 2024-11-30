@@ -1,5 +1,5 @@
 #include "font_manager.h"
-#include "rendering/texture_manager.h"
+#include <resource/texture_manager.h>
 
 namespace ui
 {

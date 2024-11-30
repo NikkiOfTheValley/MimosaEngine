@@ -1,5 +1,5 @@
 #pragma once
-#include "types/texture.h"
+#include <rendering/types/texture.h>
 #include <math/vec.h>
 #include <vector>
 #include <unordered_map>
