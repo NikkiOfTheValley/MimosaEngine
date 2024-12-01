@@ -2196,10 +2196,58 @@
     <ClInclude Include="src\scene\gltf_importer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\types\node.h">
+    <ClInclude Include="src\scene\types\nodes\node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\nodes\ui_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\nodes\ui_panel_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\nodes\ui_text_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\nodes\ui_button_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\nodes\ui_text_box_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\nodes\ui_margin_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\nodes\ui_v_organizer_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\nodes\ui_h_organizer_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\nodes\ui_scroll_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\nodes\phys_obj_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\nodes\node_2d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\nodes\node_3d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\nodes\mesh_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\nodes\polygon_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types\node_path.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\resource\types\resource_reference.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\scene\types\node_type.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -2334,6 +2382,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\resource\types\resource_reference.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\types\nodes\detail\node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\types\detail\node_path.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
