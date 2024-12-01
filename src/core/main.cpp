@@ -17,6 +17,9 @@
 #include "accurate_timer.h"
 #include "math/formatting_util.h"
 
+#pragma warning(disable : 4996)
+#include <vendor/steam/steam_api.h>
+
 #include "embedded_files/headers/assets_flatShader_vert.h"
 #include "embedded_files/headers/assets_flatShader_frag.h"
 #include "embedded_files/headers/assets_button_png.h"
@@ -210,6 +213,12 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// The UI manager needs to be initialized after the texture manager,
 	// as it uses the texture atlas while initializing text rendering
 	uiManager = new ui::UIManager();
+
+	SteamErrMsg msg;
+	if (SteamAPI_InitEx(&msg) != k_ESteamAPIInitResult_OK)
+		logger.fatal("Failed to init Steam: " + std::string(&msg[0]));
+
+	//SteamMatchmaking()->CreateLobby(k_ELobbyTypeFriendsOnly, 2);
 
 	// -- Load assets --
 
@@ -447,6 +456,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 	renderer->destroy();
 	resourceManager->Dealloc();
 	delete uiManager;
+	SteamAPI_Shutdown();
 
 	logger.log("Exiting application");
 

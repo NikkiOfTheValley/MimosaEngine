@@ -2435,5 +2435,6 @@
     <Text Include="assets\floor.obj" />
     <Text Include="assets\example.obj" />
     <Text Include="assets\cube.obj" />
+    <Text Include="x64\Release\steam_appid.txt" />
   </ItemGroup>
 </Project>
