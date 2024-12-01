@@ -251,6 +251,7 @@
     <ClInclude Include="src\rendering\types\shader.h" />
     <ClInclude Include="src\rendering\types\texture.h" />
     <ClInclude Include="src\math\vec.h" />
+    <ClInclude Include="src\resource\types\resource_reference.h" />
     <ClInclude Include="src\scene\gltf_importer.h" />
     <ClInclude Include="src\scene\scene_manager.h" />
     <ClInclude Include="src\scene\types\node.h" />
@@ -962,6 +963,7 @@
     <ClCompile Include="src\rendering\types\detail\polygon.cpp" />
     <ClCompile Include="src\rendering\types\detail\shader.cpp" />
     <ClCompile Include="src\rendering\types\detail\texture.cpp" />
+    <ClCompile Include="src\resource\types\resource_reference.cpp" />
     <ClCompile Include="src\ui\font_manager.cpp" />
     <ClCompile Include="src\ui\types\button.cpp" />
     <ClCompile Include="src\ui\types\font.cpp" />

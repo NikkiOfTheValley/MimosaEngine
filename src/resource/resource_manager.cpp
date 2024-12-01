@@ -1,35 +1,25 @@
 #include "resource_manager.h"
 #include <resource/texture_manager.h>
 
-void ResourceManager::LoadTexture(std::string path, bool isRGBA, std::string name)
+void ResourceManager::LoadTexture(ResourceReference resource, bool isRGBA, std::string name)
 {
-	logger.log("Loading texture " + name + " (at " + path + ")");
+	logger.log("Loading texture " + name);
+	resource_data data = resource.GetData();
 
-	TextureManager::getInstance().AddTexture(path, name, isRGBA);
-	
-}
-
-void ResourceManager::LoadShader(std::string vertPath, std::string fragPath, std::string name)
-{
-	logger.log("Loading shader " + name + " (at " + vertPath + " and " + fragPath + ")");
-	nameToShaderIndex[name] = shaders.size();
-	shaders.push_back(new Shader(vertPath, fragPath));
-}
-
-void ResourceManager::LoadTexture(const unsigned char* data, size_t len, bool isRGBA, std::string name)
-{
-	logger.log("Loading texture " + name + " (embedded resource)");
-
-	Image* img = new Image(data, len, isRGBA);
+	Image* img = new Image(data.data, data.length, isRGBA);
 
 	TextureManager::getInstance().AddImage(img, name);
 }
 
-void ResourceManager::LoadShader(const unsigned char* vertData, size_t vertLength, const unsigned char* fragData, size_t fragLength, std::string name)
+void ResourceManager::LoadShader(ResourceReference vertResource, ResourceReference fragResource, std::string name)
 {
-	logger.log("Loading shader " + name + " (embedded resource)");
+	logger.log("Loading shader " + name);
 	nameToShaderIndex[name] = shaders.size();
-	shaders.push_back(new Shader(vertData, vertLength, fragData, fragLength));
+
+	resource_data vertData = vertResource.GetData();
+	resource_data fragData = fragResource.GetData();
+
+	shaders.push_back(new Shader(vertData.data, vertData.length, fragData.data, fragData.length));
 }
 
 std::shared_ptr<Texture> ResourceManager::GetTexture(std::string name)

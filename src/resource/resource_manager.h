@@ -1,6 +1,7 @@
 #pragma once
 #include "rendering/types/texture.h"
 #include "rendering/types/shader.h"
+#include "types/resource_reference.h"
 #include <unordered_map>
 
 // The ResourceManager is a Singleton because more than one thing accesses it while also needing global state
@@ -15,10 +16,8 @@ public:
 		return instance;
 	}
 
-	void LoadTexture(std::string path, bool isRGBA, std::string name);
-	void LoadShader(std::string vertPath, std::string fragPath, std::string name);
-	void LoadTexture(const unsigned char* data, size_t len, bool isRGBA, std::string name);
-	void LoadShader(const unsigned char* vertData, size_t vertLength, const unsigned char* fragData, size_t fragLength, std::string name);
+	void LoadTexture(ResourceReference resource, bool isRGBA, std::string name);
+	void LoadShader(ResourceReference vertResource, ResourceReference fragResource, std::string name);
 	void LoadModel(std::string path, std::string name);
 
 	std::shared_ptr<Texture> GetTexture(std::string name);

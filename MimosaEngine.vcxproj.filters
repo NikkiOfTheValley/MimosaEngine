@@ -2197,6 +2197,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\types\node.h">
+    <ClInclude Include="src\resource\types\resource_reference.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -2328,6 +2331,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ui\types\font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\types\resource_reference.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

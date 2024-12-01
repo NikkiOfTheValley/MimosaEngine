@@ -25,6 +25,8 @@
 #include "embedded_files/headers/assets_text_box_highlighted_png.h"
 
 using namespace math;
+namespace fs = std::filesystem;
+
 
 // - Global variables -
 
@@ -215,23 +217,23 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	// The flat shader is mandatory for the UI to render correctly
 	resourceManager->LoadShader(
-		assets_flatShader_vert, ASSETS_FLATSHADER_VERT_SIZE,
-		assets_flatShader_frag, ASSETS_FLATSHADER_FRAG_SIZE,
+		ResourceReference(assets_flatShader_vert, ASSETS_FLATSHADER_VERT_SIZE),
+		ResourceReference(assets_flatShader_frag, ASSETS_FLATSHADER_FRAG_SIZE),
 		"flatShader");
 
 	// We need button.png and button-highlighted.png to render buttons
-	resourceManager->LoadTexture(assets_button_png, ASSETS_BUTTON_PNG_SIZE, true, "buttonBackground");
-	resourceManager->LoadTexture(assets_button_highlighted_png, ASSETS_BUTTON_HIGHLIGHTED_PNG_SIZE, true, "buttonBackgroundHighlighted");
+	resourceManager->LoadTexture(ResourceReference(assets_button_png, ASSETS_BUTTON_PNG_SIZE), true, "buttonBackground");
+	resourceManager->LoadTexture(ResourceReference(assets_button_highlighted_png, ASSETS_BUTTON_HIGHLIGHTED_PNG_SIZE), true, "buttonBackgroundHighlighted");
 
 	// We need text-box.png and text-box-highlighted.png to render text boxes
-	resourceManager->LoadTexture(assets_text_box_png, ASSETS_TEXT_BOX_PNG_SIZE, true, "textBox");
-	resourceManager->LoadTexture(assets_text_box_highlighted_png, ASSETS_TEXT_BOX_HIGHLIGHTED_PNG_SIZE, true, "textBoxHighlighted");
+	resourceManager->LoadTexture(ResourceReference(assets_text_box_png, ASSETS_TEXT_BOX_PNG_SIZE), true, "textBox");
+	resourceManager->LoadTexture(ResourceReference(assets_text_box_highlighted_png, ASSETS_TEXT_BOX_HIGHLIGHTED_PNG_SIZE), true, "textBoxHighlighted");
 
-	resourceManager->LoadTexture("assets/example.png", true, "exampleImage");
-	resourceManager->LoadTexture("assets/example2.png", true, "exampleImage2");
-	resourceManager->LoadShader("assets/example.vert", "assets/example.frag", "exampleShader");
+	resourceManager->LoadTexture(ResourceReference(fs::path("assets/example.png")), true, "exampleImage");
+	resourceManager->LoadTexture(ResourceReference(fs::path("assets/example2.png")), true, "exampleImage2");
+	resourceManager->LoadShader(ResourceReference(fs::path("assets/example.vert")), ResourceReference(fs::path("assets/example.frag")), "exampleShader");
 
-	resourceManager->LoadShader("assets/examplePostProcessingShader.vert", "assets/examplePostProcessingShader.frag", "examplePostProcessingShader");
+	resourceManager->LoadShader(ResourceReference(fs::path("assets/examplePostProcessingShader.vert")), ResourceReference(fs::path("assets/examplePostProcessingShader.frag")), "examplePostProcessingShader");
 	renderer->AddNewPostProcessingShader(resourceManager->GetShader("examplePostProcessingShader"));
 
 	// -- Create materials --
