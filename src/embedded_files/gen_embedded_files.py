@@ -1,6 +1,9 @@
 import os
 import sys
 
+# This Python script generates the embedded engine files.
+# Add a file to the `assets/` directory to include it in the embedded files.
+
 for subdir, dirs, files in os.walk("assets/"):
     for file in files:
         filePath = os.path.join(subdir, file)
