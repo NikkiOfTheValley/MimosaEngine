@@ -2250,6 +2250,15 @@
     <ClInclude Include="src\scene\types\node_type.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\math\basis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\quaternion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\transform3d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\input_handler.cpp">
@@ -2388,6 +2397,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\scene\types\detail\node_path.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\detail\basis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\detail\transform3d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\scene\scene_manager.cpp">

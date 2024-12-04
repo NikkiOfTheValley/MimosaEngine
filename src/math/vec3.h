@@ -7,12 +7,13 @@
 namespace math
 {
 	/*
-Predefine matrix classes so no circular dependency is
-required between headers
-*/
+	Predefine classes so no circular dependency is
+	required between headers
+	*/
 
 	class mat4x4f;
 	class mat3x3f;
+	class Transform3D;
 
 	struct vec3
 	{
@@ -50,6 +51,8 @@ required between headers
 
 		vec3& operator*=(const mat3x3f rhs);
 
+		vec3& operator*=(const Transform3D rhs);
+
 		vec3& operator/=(const vec3& rhs);
 
 		vec3& operator/=(const float rhs);
@@ -70,6 +73,8 @@ required between headers
 		friend vec3 operator*(const vec3& lhs, const mat4x4f rhs);
 
 		friend vec3 operator*(const vec3& lhs, const mat3x3f rhs);
+
+		friend vec3 operator*(const vec3& lhs, const Transform3D rhs);
 
 		friend vec3 operator/(const vec3& lhs, const vec3& rhs);
 

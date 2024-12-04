@@ -202,8 +202,11 @@
     <ClInclude Include="src\animation\types\bone.h" />
     <ClInclude Include="src\animation\types\keyframe.h" />
     <ClInclude Include="src\debug\obj_writer.h" />
+    <ClInclude Include="src\math\basis.h" />
     <ClInclude Include="src\math\conversion.h" />
     <ClInclude Include="src\math\formatting_util.h" />
+    <ClInclude Include="src\math\quaternion.h" />
+    <ClInclude Include="src\math\transform3d.h" />
     <ClInclude Include="src\parallel\parallel_processing.h" />
     <ClInclude Include="src\parallel\parallel_processing_manager.h" />
     <ClInclude Include="src\parallel\parallel_processing_impl_opencl.h" />
@@ -948,8 +951,10 @@
     <ClCompile Include="src\core\log.cpp" />
     <ClCompile Include="src\core\main.cpp" />
     <ClCompile Include="src\debug\detail\obj_writer.cpp" />
+    <ClCompile Include="src\math\detail\basis.cpp" />
     <ClCompile Include="src\math\detail\conversion.cpp" />
     <ClCompile Include="src\math\detail\formatting_util.cpp" />
+    <ClCompile Include="src\math\detail\transform3d.cpp" />
     <ClCompile Include="src\resource\material_manager.cpp" />
     <ClCompile Include="src\resource\resource_manager.cpp" />
     <ClCompile Include="src\networking\m_net\connection.cpp" />

@@ -12,6 +12,7 @@ namespace math
 	class mat4x4f
 	{
 	public:
+		__declspec(align(16))
 		float data[4][4] = {
 			{0, 0, 0, 0},
 			{0, 0, 0, 0},
@@ -42,6 +43,19 @@ namespace math
 		   Euler angles about X, Y, and Z
 		*/
 		void rotate(vec3 rotation);
+
+		/*!
+		 * @brief Sets the matrix to a rotation matrix about `axis` with angle `angle`
+		 * @param axis The axis to rotate around
+		 * @param angle The angle to rotate to
+		 */
+		void rotate(vec3 axis, float angle);
+
+		mat4x4f operator*=(const mat4x4f& rhs);
+
+		friend mat4x4f operator*(const mat4x4f& lhs, const mat4x4f& rhs);
+
+		bool operator==(const mat4x4f& rhs);
 
 		operator std::string() const;
 	};
