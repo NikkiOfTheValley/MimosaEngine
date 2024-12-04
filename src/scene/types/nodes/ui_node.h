@@ -4,12 +4,10 @@
 
 namespace scene
 {
-	class UINodeData
+	class UINode : public Node
 	{
-		//! @brief The position in pixels relative to the node's parent
+	public:
 		math::vec2 pos;
-
-		//! @brief The size in pixels
-		math::vec2 size;
+		math::vec2 dim;
 	};
 }

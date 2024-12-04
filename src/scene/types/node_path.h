@@ -28,14 +28,14 @@ namespace scene
 		NodePath(const std::vector<std::string>& path, std::shared_ptr<Node> origin);
 
 		//! @brief Gets the path in the format "/nodeA/childNode"
-		const std::string& GetConcatenatedPath();
+		const std::string GetConcatenatedPath();
 
 		/*!
 		 * @brief Sets this node path from a path string
-		 * @param path The string to generate from
-		 * @param origin The origin node of the path
+		 * @param newPath The string to generate from
+		 * @param newOrigin The origin node of the path
 		 */
-		void SetPath(const std::string& path, std::shared_ptr<Node> origin);
+		void SetPath(const std::string& newPath, std::shared_ptr<Node> newOrigin);
 
 		//! @brief Gets the node path
 		const std::vector<std::string>& GetPath();
@@ -47,7 +47,7 @@ namespace scene
 		std::shared_ptr<Node> GetOrigin();
 
 		//! @brief Appends a node
-		void AppendNode(std::string name);
+		void AppendNode(std::string nodeName);
 
 		//! @brief Converts this path to an absolute path
 		void ConvertToAbsolute();

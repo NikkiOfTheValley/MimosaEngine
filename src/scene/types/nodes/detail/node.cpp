@@ -8,10 +8,26 @@ namespace scene {
 		this->parent = parent;
 	}
 
+	void Node::Update(double delta)
+	{
+		if (updateFunc)
+			updateFunc(std::make_shared<Node>(*this), delta);
+	}
+
+	void Node::PhysUpdate(double delta)
+	{
+		if (physUpdateFunc)
+			physUpdateFunc(std::make_shared<Node>(*this), delta);
+	}
+
 	size_t Node::AddChild(std::shared_ptr<Node> child)
 	{
 		size_t index = children.size();
 		children.push_back(child);
+
+		if (this->isRoot || this->isInSceneTree)
+			child->UpdateIsInSceneTree(true);
+
 		return index;
 	}
 
@@ -30,11 +46,11 @@ namespace scene {
 		}
 
 		const std::vector<std::string> nodePath = path.GetPath();
-		std::shared_ptr<Node> curNode = std::make_shared<Node>(this);
+		std::shared_ptr<Node> curNode = std::make_shared<Node>(*this);
 
-		for (auto& name : nodePath)
+		for (auto& pathNode : nodePath)
 		{
-			std::shared_ptr<Node> child = curNode->FindChildPtr(name);
+			std::shared_ptr<Node> child = curNode->FindChildPtr(pathNode);
 
 			if (child)
 			{
@@ -50,26 +66,44 @@ namespace scene {
 		return curNode;
 	}
 
-	size_t Node::FindChild(std::string name)
+	size_t Node::FindChild(std::string childName)
 	{
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->name == name)
+			if (children[i]->name == childName)
 				return i;
 		}
 
 		logger.warn("Couldn't find child with name " + name);
-		return -1;
+		return (unsigned long long)-1;
 	}
 
-	std::shared_ptr<Node> Node::FindChildPtr(std::string name)
+	std::shared_ptr<Node> Node::FindChildPtr(std::string childName)
 	{
-		size_t index = FindChild(name);
+		size_t index = FindChild(childName);
 
 		if (index == -1)
 			return nullptr;
 
 		return children[index];
+	}
+
+	const std::vector<std::shared_ptr<Node>> Node::FindChildren(std::function<bool(std::shared_ptr<Node>)> filterFunc)
+	{
+		if (!filterFunc)
+		{
+			logger.err("FindChildren(): `filterFunc` was empty!");
+			return {};
+		}
+
+		std::vector<std::shared_ptr<Node>> matchedChildren = {};
+		for (auto& node : children)
+		{
+			if (filterFunc(node))
+				matchedChildren.push_back(node);
+		}
+
+		return matchedChildren;
 	}
 
 	const std::vector<std::shared_ptr<Node>>& Node::GetChildren()
@@ -82,13 +116,67 @@ namespace scene {
 		return parent;
 	}
 
-	void Node::SetParent(std::shared_ptr<Node> parent)
+	void Node::SetParent(std::shared_ptr<Node> newParent)
 	{
-		this->parent = parent;
+		this->parent = newParent;
 	}
 
 	NodeType Node::GetType()
 	{
 		return type;
+	}
+
+	void Node::UpdateIsInSceneTree(bool newValue)
+	{
+		// Update and maybe initialize the children first
+		for (auto& child : children)
+		{
+			child->UpdateIsInSceneTree(newValue);
+		}
+
+		// Then update and maybe initialize this node
+
+		isInSceneTree = newValue;
+
+		if (!hasBeenInitalized && newValue == true)
+		{
+			if (initFunc)
+				initFunc(std::make_shared<Node>(*this));
+
+			hasBeenInitalized = true;
+		}
+	}
+
+	void Node::SetInitFunc(std::function<void(std::shared_ptr<Node>)> newInitFunc)
+	{
+		if (initFunc)
+		{
+			logger.err("Tried to set the init function of " + name + ", but it has already been set!");
+			return;
+		}
+
+		initFunc = newInitFunc;
+	}
+
+	void Node::SetUpdateFunc(std::function<void(std::shared_ptr<Node>, double)> newUpdateFunc)
+	{
+		if (updateFunc)
+		{
+			logger.err("Tried to set the update function of " + name + ", but it has already been set!");
+			return;
+		}
+
+		updateFunc = newUpdateFunc;
+	}
+
+	void Node::SetPhysUpdateFunc(std::function<void(std::shared_ptr<Node>, double)> newPhysUpdateFunc)
+	{
+		if (physUpdateFunc)
+		{
+			logger.err("Tried to set the physics update function of " + name + ", but it has already been set!");
+			return;
+		}
+
+		physUpdateFunc = newPhysUpdateFunc;
 	}
 }

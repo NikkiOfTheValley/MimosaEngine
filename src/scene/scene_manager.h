@@ -17,8 +17,9 @@ namespace scene
 		/*!
 		 * @brief Loads a scene
 		 * @param resource A reference to the scene resource
+		 * @param loadOrigin The node to parent the scene to
 		 */
-		bool LoadScene(ResourceReference resource, std::shared_ptr<Node> = nullptr);
+		bool LoadScene(ResourceReference resource, std::shared_ptr<Node> loadOrigin = nullptr);
 
 		//! @brief Gets the root node
 		std::shared_ptr<Node> GetRoot();
@@ -26,8 +27,6 @@ namespace scene
 	private:
 		//! @brief The root node
 		std::shared_ptr<Node> root;
-
-
 	};
 }
 

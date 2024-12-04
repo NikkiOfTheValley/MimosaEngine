@@ -980,7 +980,9 @@
     <ClCompile Include="src\rendering\types\detail\shader.cpp" />
     <ClCompile Include="src\rendering\types\detail\texture.cpp" />
     <ClCompile Include="src\resource\types\resource_reference.cpp" />
+    <ClCompile Include="src\scene\scene_manager.cpp" />
     <ClCompile Include="src\scene\types\detail\node_path.cpp" />
+    <ClCompile Include="src\scene\types\detail\node_type.cpp" />
     <ClCompile Include="src\scene\types\nodes\detail\node.cpp" />
     <ClCompile Include="src\ui\font_manager.cpp" />
     <ClCompile Include="src\ui\types\button.cpp" />
