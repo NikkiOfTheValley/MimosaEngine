@@ -1,5 +1,5 @@
 #include "../texture.h"
-#include "../../texture_manager.h"
+#include <resource/texture_manager.h>
 
 #include <math/vec.h>
 
