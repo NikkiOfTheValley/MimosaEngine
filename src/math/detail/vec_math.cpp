@@ -132,6 +132,16 @@ namespace math
 		return std::sqrt(squaredDist(a, b));
 	}
 
+	vec3 lerp(vec3 a, vec3 b, float weight)
+	{
+		return (a * (1.f - weight)) + (b * weight);
+	}
+
+	vec2 lerp(vec2 a, vec2 b, float weight)
+	{
+		return (a * (1.f - weight)) + (b * weight);
+	}
+
 	vec3 tripleProduct(vec3 a, vec3 b, vec3 c)
 	{
 		return cross(a, cross(b, c));

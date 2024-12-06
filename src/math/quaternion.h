@@ -3,7 +3,7 @@
 
 namespace math
 {
-	//! @brief A implementation of quaterions for representing 3D rotations
+	//! @brief A implementation of quaternions for representing 3D rotations
 	class Quaternion
 	{
 	public:
@@ -11,6 +11,8 @@ namespace math
 		float y = 0;
 		float z = 0;
 		float w = 1;
+
+		Quaternion() {}
 
 		Quaternion(vec3 arcFrom, vec3 arcTo);
 

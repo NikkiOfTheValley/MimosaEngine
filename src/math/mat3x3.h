@@ -25,6 +25,8 @@ namespace math
 		// Set the matrix to a translation matrix
 		void translate(vec3 offset);
 
+		void rotate(vec3 axis, float angle);
+
 		/*
 		   Set the matrix to a rotation matrix
 		   Rotation matrix from https://en.wikipedia.org/wiki/Rotation_matrix
@@ -37,6 +39,12 @@ namespace math
 
 		// Computes the inverse matrix of the matrix it is called on, then returns it
 		mat3x3f inverse();
+
+		mat3x3f& operator*=(const mat3x3f& rhs);
+
+		friend mat3x3f operator*(const mat3x3f& lhs, const mat3x3f& rhs);
+
+		bool operator==(const mat3x3f& rhs) const;
 
 		operator std::string() const;
 

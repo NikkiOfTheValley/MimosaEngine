@@ -2259,6 +2259,15 @@
     <ClInclude Include="src\math\transform3d.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\math\math_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\transform2d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\detail\transform2d.cpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\input_handler.cpp">

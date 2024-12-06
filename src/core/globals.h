@@ -54,6 +54,7 @@ const std::string VERSION_STR = "v0.0.1";
 const std::string NAME_STR = "Example Application";
 
 const float epsilon = 0.005f;
+const float flt_cmp_epsilon = 0.000000001f;
 
 const float clearColorR = 0.2f;
 const float clearColorG = 0.3f;

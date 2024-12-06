@@ -1,4 +1,5 @@
 #include <math/transform3d.h>
+#include <physics/types/assert.h>
 
 namespace math
 {
@@ -47,18 +48,23 @@ namespace math
 
 	Transform3D Transform3D::LookAt(vec3 target, vec3 up) const
 	{
-		mat4x4f result;
-		const vec3 scale = this->GetBasis().GetScale();
+		assert(dist(GetOrigin(), target) < epsilon, "Transform origin and target are equal!");
 
-		result.lookAt(GetOrigin(), target, up);
+		Transform3D result = *this;
 
-		// Make sure to preserve scale
-		return Transform3D(result).Scaled(scale);
+		result.SetBasis(result.GetBasis().LookAt(target - GetOrigin(), up));
+
+		return result;
 	}
 
 	Transform3D Transform3D::Orthonormalized() const
 	{
 		return Transform3D(GetBasis().Orthonormalized(), GetOrigin());
+	}
+
+	void Transform3D::Orthonormalize()
+	{
+		SetBasis(GetBasis().Orthonormalized());
 	}
 
 	Transform3D Transform3D::Rotated(vec3 axis, float angle, bool local) const
@@ -73,9 +79,26 @@ namespace math
 		return matrix * rotationMatrix;
 	}
 
+	void Transform3D::Rotate(vec3 axis, float angle, bool local)
+	{
+		mat4x4f rotationMatrix = mat4x4f();
+
+		if (!local)
+			rotationMatrix.rotate(axis, angle);
+		else
+			rotationMatrix.rotate(normalize(axis * matrix), angle);
+
+		this->matrix *= rotationMatrix;
+	}
+
 	Transform3D Transform3D::Scaled(vec3 scale, bool local) const
 	{
 		return Transform3D(GetBasis().Scaled(scale, local), GetOrigin());
+	}
+
+	void Transform3D::Scale(vec3 scale, bool local)
+	{
+		SetBasis(GetBasis().Scaled(scale, local));
 	}
 
 	Transform3D Transform3D::Translated(vec3 offset, bool local) const
@@ -91,6 +114,18 @@ namespace math
 		transform.SetOrigin(newOrigin);
 
 		return transform;
+	}
+
+	void Transform3D::Translate(vec3 offset, bool local)
+	{
+		vec3 newOrigin;
+
+		if (!local)
+			newOrigin = GetOrigin() + offset;
+		else
+			newOrigin = GetOrigin() + (offset * this->Orthonormalized());
+
+		SetOrigin(newOrigin);
 	}
 
 	const vec3 Transform3D::GetOrigin() const

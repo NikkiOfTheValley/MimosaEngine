@@ -5,70 +5,59 @@
 
 namespace math
 {
-	//! @brief Represents a transformation in 3D space
-	class Transform3D
+	//! @brief Represents a transformation in 2D space
+	class Transform2D
 	{
 	public:
-		Transform3D() {};
+		Transform2D() {};
 
-		Transform3D(mat4x4f matrix);
+		Transform2D(float rotation, vec2 position);
 
-		Transform3D(Basis basis, vec3 origin);
+		Transform2D(float rotation, vec2 scale, float skew, vec2 position);
 
-		/*!
-		 * @brief Constructs a Transform3D from the basis axes and the origin
-		 * @param xAxis The X axis of the basis
-		 * @param yAxis The Y axis of the basis
-		 * @param zAxis The Z axis of the basis
-		 * @param origin The transform origin
-		 */
-		Transform3D(vec3 xAxis, vec3 yAxis, vec3 zAxis, vec3 origin);
+		Transform2D(vec2 xAxis, vec2 yAxis, vec2 origin);
 
 		/*! @brief Returns the result of the linear interpolation between
 		* this transform and `transform` by the given weight.
 		*/
-		Transform3D Interpolate(const Transform3D& transform, float weight) const;
+		Transform2D Interpolate(const Transform2D& transform, float weight) const;
 
 		/*!
 		 * @brief Checks if this and `transform` are approximately equal, depending on the `epsilon` global
 		 * @param transform The transform to compare to
 		 * @return The result of the comparison
 		 */
-		bool IsEqualApprox(const Transform3D& transform) const;
+		bool IsEqualApprox(const Transform2D& transform) const;
 
 		/*!
-		 * @brief Rotates this transform so Z- points at the target position, with the Y+ axis being as close to `up` as possible
+		 * @brief Rotates this transform so X+ points at the target position
 		 * @param target The target to look at
-		 * @param up The up direction
 		 * @return The result of the operation
 		 */
-		Transform3D LookAt(vec3 target, vec3 up = vec3(0, 1, 0)) const;
+		Transform2D LookAt(vec2 target) const;
 
 		/*!
 		 * @brief Orthonormalizes the transform, resulting in a transform that only represents rotation
 		 * @return The result of the operation
 		 */
-		Transform3D Orthonormalized() const;
+		Transform2D Orthonormalized() const;
 
 		//! @brief Orthonormalizes the transform, resulting in a transform that only represents rotation
 		void Orthonormalize();
 
 		/*!
-		 * @brief Rotates the transform around `axis` by `angle`
-		 * @param axis The axis to rotate around
+		 * @brief Rotates the transform by `angle`
 		 * @param angle The angle to rotate
-		 * @param local Set to true if the rotation is in local space
 		 * @return The result of the rotation
 		 */
-		Transform3D Rotated(vec3 axis, float angle, bool local = false) const;
+		Transform2D Rotated(float angle, bool local = false) const;
 
 		/*!
-		 * @brief Rotates the transform around `axis` by `angle`
-		 * @param axis The axis to rotate around
+		 * @brief Rotates the transform by `angle`
 		 * @param angle The angle to rotate
-		 * @param local Set to true if the rotation is in local space
+		 * @return The result of the rotation
 		 */
-		void Rotate(vec3 axis, float angle, bool local = false);
+		Transform2D Rotate(float angle, bool local = false);
 
 		/*!
 		 * @brief Scales the transform
@@ -76,14 +65,14 @@ namespace math
 		 * @param local Set to true if the operation is in local space
 		 * @return The result of the operation
 		 */
-		Transform3D Scaled(vec3 scale, bool local = false) const;
+		Transform2D Scaled(vec2 scale, bool local = false) const;
 
 		/*!
 		 * @brief Scales the transform
 		 * @param scale The scale to apply
 		 * @param local Set to true if the operation is in local space
 		 */
-		void Scale(vec3 scale, bool local = false);
+		void Scale(vec2 scale, bool local = false);
 
 		/*!
 		 * @brief Translates the transform
@@ -91,33 +80,21 @@ namespace math
 		 * @param local Set to true if the translation is in local space
 		 * @return The result of the translation
 		 */
-		Transform3D Translated(vec3 offset, bool local = false) const;
+		Transform2D Translated(vec2 offset, bool local = false) const;
 
 		/*!
 		 * @brief Translates the transform
 		 * @param offset The offset to apply
 		 * @param local Set to true if the translation is in local space
 		 */
-		void Translate(vec3 offset, bool local = false);
-
-		//! @brief Gets the origin of the transform (in other words, the translation part)
-		const vec3 GetOrigin() const;
-
-		//! @brief Sets the origin of the transform (in other words, the translation part)
-		void SetOrigin(vec3 newOrigin);
-
-		//! @brief Gets the basis of the transform
-		Basis GetBasis() const;
-
-		//! @brief Sets the basis of the transform
-		void SetBasis(Basis newBasis);
+		void Translate(vec2 offset, bool local = false);
 
 		/*!
 		 * @brief Multiplies the two transforms together, resulting in a combination of the two
 		 * @param rhs The right hand side of the operation
 		 * @return The result of the operation
 		 */
-		Transform3D& operator*=(const Transform3D& rhs);
+		Transform2D& operator*=(const Transform2D& rhs);
 
 		/*!
 		 * @brief Multiplies the positions by the transform, resulting in a transformed list of positions
@@ -125,7 +102,7 @@ namespace math
 		 * @param lhs The left hand side of the operation
 		 * @return The result of the operation
 		 */
-		friend std::vector<vec3> operator*(const std::vector<vec3>& rhs, const Transform3D& lhs);
+		friend std::vector<vec2> operator*(const std::vector<vec2>& rhs, const Transform2D& lhs);
 
 		/*!
 		 * @brief Multiplies the two transforms together, resulting in a combination of the two
@@ -133,10 +110,12 @@ namespace math
 		 * @param lhs The left hand side of the operation
 		 * @return The result of the operation
 		 */
-		friend Transform3D operator*(const Transform3D& lhs, const Transform3D& rhs);
+		friend Transform2D operator*(const Transform2D& lhs, const Transform2D& rhs);
 
 	public:
-		mat4x4f matrix;
+		vec2 origin = vec2(0, 0);
+		vec2 x = vec2(1, 0);
+		vec2 y = vec2(0, 1);
 	};
 
 	/*!
@@ -145,5 +124,5 @@ namespace math
 	 * @param lhs The left hand side of the operation
 	 * @return The result of the operation
 	 */
-	std::vector<vec3>& operator*=(const std::vector<vec3>& lhs, const Transform3D& rhs);
+	std::vector<vec2>& operator*=(const std::vector<vec2>& lhs, const Transform2D& rhs);
 }

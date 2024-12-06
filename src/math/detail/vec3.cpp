@@ -211,15 +211,28 @@ namespace math
 		{
 		case 0:
 			return x;
-			break;
-
 		case 1:
 			return y;
-			break;
-
 		case 2:
 			return z;
-			break;
+		}
+
+		// This is here for when the index is out of bounds while asserts are turned off
+		return x;
+	}
+
+	const float& vec3::operator[](const size_t i) const
+	{
+		assert(i < 3, "Index out of bounds when executing vec3::operator[]");
+
+		switch (i)
+		{
+		case 0:
+			return x;
+		case 1:
+			return y;
+		case 2:
+			return z;
 		}
 
 		// This is here for when the index is out of bounds while asserts are turned off

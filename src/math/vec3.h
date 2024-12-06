@@ -87,6 +87,7 @@ namespace math
 		bool operator==(const vec3& rhs);
 		bool operator!=(const vec3& rhs);
 		float& operator[](const size_t i);
+		const float& operator[](const size_t i) const;
 
 		operator std::string() const;
 	};

@@ -158,6 +158,12 @@ namespace math
 		return i == 0 ? x : y;
 	}
 
+	const float& vec2::operator[](const size_t i) const
+	{
+		assert(i < 2, "Index out of bounds when executing vec2::operator[]");
+		return i == 0 ? x : y;
+	}
+
 
 	vec2::operator std::string() const {
 		std::stringstream resultString;

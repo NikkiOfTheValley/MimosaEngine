@@ -96,6 +96,8 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <Optimization>MaxSpeed</Optimization>
       <FloatingPointExceptions>false</FloatingPointExceptions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,6 +123,8 @@
       <LanguageStandard_C>Default</LanguageStandard_C>
       <TreatWarningAsError>true</TreatWarningAsError>
       <FloatingPointExceptions>false</FloatingPointExceptions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,6 +152,8 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <Optimization>Disabled</Optimization>
       <FloatingPointExceptions>false</FloatingPointExceptions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -204,8 +210,11 @@
     <ClInclude Include="src\debug\obj_writer.h" />
     <ClInclude Include="src\math\basis.h" />
     <ClInclude Include="src\math\conversion.h" />
+    <ClInclude Include="src\math\detail\transform2d.cpp" />
     <ClInclude Include="src\math\formatting_util.h" />
+    <ClInclude Include="src\math\math_util.h" />
     <ClInclude Include="src\math\quaternion.h" />
+    <ClInclude Include="src\math\transform2d.h" />
     <ClInclude Include="src\math\transform3d.h" />
     <ClInclude Include="src\parallel\parallel_processing.h" />
     <ClInclude Include="src\parallel\parallel_processing_manager.h" />
