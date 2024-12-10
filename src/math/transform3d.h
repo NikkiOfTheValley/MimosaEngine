@@ -30,7 +30,7 @@ namespace math
 		Transform3D Interpolate(const Transform3D& transform, float weight) const;
 
 		/*!
-		 * @brief Checks if this and `transform` are approximately equal, depending on the `epsilon` global
+		 * @brief Checks if this and `transform` are approximately equal, depending on the `flt_cmp_epsilon` global
 		 * @param transform The transform to compare to
 		 * @return The result of the comparison
 		 */

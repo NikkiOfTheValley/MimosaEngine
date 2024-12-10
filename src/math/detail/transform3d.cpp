@@ -41,14 +41,14 @@ namespace math
 
 		for (size_t i = 0; i < 4; i++)
 			for (size_t k = 0; k < 4; k++)
-				isNotEqual |= abs(this->matrix.data[i][k] - transform.matrix.data[i][k]) > epsilon;
+				isNotEqual |= abs(this->matrix.data[i][k] - transform.matrix.data[i][k]) > flt_cmp_epsilon;
 
 		return !isNotEqual;
 	}
 
 	Transform3D Transform3D::LookAt(vec3 target, vec3 up) const
 	{
-		assert(dist(GetOrigin(), target) < epsilon, "Transform origin and target are equal!");
+		assert(dist(GetOrigin(), target) < flt_cmp_epsilon, "Transform origin and target are equal");
 
 		Transform3D result = *this;
 
