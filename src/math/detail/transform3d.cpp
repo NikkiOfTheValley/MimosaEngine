@@ -160,10 +160,9 @@ namespace math
 		matrix.data[2][2] = newBasis.zAxis[2];
 	}
 
-	Transform3D& Transform3D::operator*=(const Transform3D& rhs)
+	void Transform3D::operator*=(const Transform3D& rhs)
 	{
 		matrix *= rhs.matrix;
-		return *this;
 	}
 
 	std::vector<vec3> operator*(const std::vector<vec3>& lhs, const Transform3D& rhs)
@@ -181,13 +180,9 @@ namespace math
 		return Transform3D(lhs.matrix * rhs.matrix);
 	}
 
-	std::vector<vec3>& operator*=(const std::vector<vec3>& lhs, const Transform3D& rhs)
+	void operator*=(std::vector<vec3>& lhs, const Transform3D& rhs)
 	{
-		std::vector<vec3>* result = new std::vector<vec3>();
-
 		for (auto& vec : lhs)
-			result->push_back(vec * rhs);
-
-		return *result;
+			vec *= rhs;
 	}
 }

@@ -35,27 +35,27 @@ namespace math
 		// Unsigned integer version of the float constructor
 		vec3(unsigned int x, unsigned int y, unsigned int z);
 
-		vec3& operator+=(const vec3& rhs);
+		void operator+=(const vec3& rhs);
 
-		vec3& operator+=(const float rhs);
+		void operator+=(const float rhs);
 
-		vec3& operator-=(const vec3& rhs);
+		void operator-=(const vec3& rhs);
 
-		vec3& operator-=(const float rhs);
+		void operator-=(const float rhs);
 
-		vec3& operator*=(const vec3& rhs);
+		void operator*=(const vec3& rhs);
 
-		vec3& operator*=(const float rhs);
+		void operator*=(const float rhs);
 
-		vec3& operator*=(const mat4x4f rhs);
+		void operator*=(const mat4x4f rhs);
 
-		vec3& operator*=(const mat3x3f rhs);
+		void operator*=(const mat3x3f rhs);
 
-		vec3& operator*=(const Transform3D rhs);
+		void operator*=(const Transform3D rhs);
 
-		vec3& operator/=(const vec3& rhs);
+		void operator/=(const vec3& rhs);
 
-		vec3& operator/=(const float rhs);
+		void operator/=(const float rhs);
 
 
 		friend vec3 operator+(const vec3& lhs, const vec3& rhs);

@@ -38,60 +38,52 @@ namespace math
 
 	// Implementation of various operators
 
-	vec2& vec2::operator+=(const vec2& rhs)
+	void vec2::operator+=(const vec2& rhs)
 	{
 		this->x += rhs.x;
 		this->y += rhs.y;
-		return *this;
 	}
 
-	vec2& vec2::operator+=(const float rhs)
+	void vec2::operator+=(const float rhs)
 	{
 		this->x += rhs;
 		this->y += rhs;
-		return *this;
 	}
 
-	vec2& vec2::operator-=(const vec2& rhs)
+	void vec2::operator-=(const vec2& rhs)
 	{
 		this->x -= rhs.x;
 		this->y -= rhs.y;
-		return *this;
 	}
 
-	vec2& vec2::operator-=(const float rhs)
+	void vec2::operator-=(const float rhs)
 	{
 		this->x -= rhs;
 		this->y -= rhs;
-		return *this;
 	}
 
-	vec2& vec2::operator*=(const vec2& rhs)
+	void vec2::operator*=(const vec2& rhs)
 	{
 		this->x *= rhs.x;
 		this->y *= rhs.y;
-		return *this;
 	}
 
-	vec2& vec2::operator*=(const float rhs)
+	void vec2::operator*=(const float rhs)
 	{
 		this->x *= rhs;
 		this->y *= rhs;
-		return *this;
 	}
 
-	vec2& vec2::operator/=(const vec2& rhs)
+	void vec2::operator/=(const vec2& rhs)
 	{
 		this->x /= rhs.x;
 		this->y /= rhs.y;
-		return *this;
 	}
 
-	vec2& vec2::operator/=(const float rhs)
+	void vec2::operator/=(const float rhs)
 	{
 		this->x /= rhs;
 		this->y /= rhs;
-		return *this;
 	}
 
 

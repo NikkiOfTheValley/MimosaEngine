@@ -92,9 +92,8 @@ namespace math
 		/*!
 		 * @brief Multiplies the two transforms together, resulting in a combination of the two
 		 * @param rhs The right hand side of the operation
-		 * @return The result of the operation
 		 */
-		Transform2D& operator*=(const Transform2D& rhs);
+		void operator*=(const Transform2D& rhs);
 
 		/*!
 		 * @brief Multiplies the positions by the transform, resulting in a transformed list of positions
@@ -122,7 +121,6 @@ namespace math
 	 * @brief Multiplies the positions by the transform, resulting in a transformed list of positions
 	 * @param rhs The right hand side of the operation
 	 * @param lhs The left hand side of the operation
-	 * @return The result of the operation
 	 */
-	std::vector<vec2>& operator*=(const std::vector<vec2>& lhs, const Transform2D& rhs);
+	void operator*=(std::vector<vec2>& lhs, const Transform2D& rhs);
 }

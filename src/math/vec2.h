@@ -34,21 +34,21 @@ required between headers
 		vec2(unsigned int x, unsigned int y);
 
 
-		vec2& operator+=(const vec2& rhs);
+		void operator+=(const vec2& rhs);
 
-		vec2& operator+=(const float rhs);
+		void operator+=(const float rhs);
 
-		vec2& operator-=(const vec2& rhs);
+		void operator-=(const vec2& rhs);
 
-		vec2& operator-=(const float rhs);
+		void operator-=(const float rhs);
 
-		vec2& operator*=(const vec2& rhs);
+		void operator*=(const vec2& rhs);
 
-		vec2& operator*=(const float rhs);
+		void operator*=(const float rhs);
 
-		vec2& operator/=(const vec2& rhs);
+		void operator/=(const vec2& rhs);
 
-		vec2& operator/=(const float rhs);
+		void operator/=(const float rhs);
 
 
 		friend vec2 operator+(const vec2& lhs, const vec2& rhs);

@@ -36,92 +36,79 @@ namespace math
 	}
 
 
-	vec3& vec3::operator+=(const vec3& rhs)
+	void vec3::operator+=(const vec3& rhs)
 	{
 		this->x += rhs.x;
 		this->y += rhs.y;
 		this->z += rhs.z;
-		return *this;
 	}
 
-	vec3& vec3::operator+=(const float rhs)
+	void vec3::operator+=(const float rhs)
 	{
 		this->x += rhs;
 		this->y += rhs;
 		this->z += rhs;
-		return *this;
 	}
 
-	vec3& vec3::operator-=(const vec3& rhs)
+	void vec3::operator-=(const vec3& rhs)
 	{
 		this->x -= rhs.x;
 		this->y -= rhs.y;
 		this->z -= rhs.z;
-		return *this;
 	}
 
-	vec3& vec3::operator-=(const float rhs)
+	void vec3::operator-=(const float rhs)
 	{
 		this->x -= rhs;
 		this->y -= rhs;
 		this->z -= rhs;
-		return *this;
 	}
 
-	vec3& vec3::operator*=(const vec3& rhs)
+	void vec3::operator*=(const vec3& rhs)
 	{
 		this->x *= rhs.x;
 		this->y *= rhs.y;
 		this->z *= rhs.z;
-		return *this;
 	}
 
-	vec3& vec3::operator*=(const float rhs)
+	void vec3::operator*=(const float rhs)
 	{
 		this->x *= rhs;
 		this->y *= rhs;
 		this->z *= rhs;
-		return *this;
 	}
 
-	vec3& vec3::operator*=(const mat4x4f rhs)
+	void vec3::operator*=(const mat4x4f rhs)
 	{
 		this->x = this->x * rhs.data[0][0] + this->y * rhs.data[0][1] + this->z * rhs.data[0][2] + 1 * rhs.data[0][3];
 		this->y = this->x * rhs.data[1][0] + this->y * rhs.data[1][1] + this->z * rhs.data[1][2] + 1 * rhs.data[1][3];
 		this->z = this->x * rhs.data[2][0] + this->y * rhs.data[2][1] + this->z * rhs.data[2][2] + 1 * rhs.data[2][3];
-
-		return *this;
 	}
 
-	vec3& vec3::operator*=(const mat3x3f rhs)
+	void vec3::operator*=(const mat3x3f rhs)
 	{
 		this->x = this->x * rhs.data[0][0] + this->y * rhs.data[0][1] + this->z * rhs.data[0][2];
 		this->y = this->x * rhs.data[1][0] + this->y * rhs.data[1][1] + this->z * rhs.data[1][2];
 		this->z = this->x * rhs.data[2][0] + this->y * rhs.data[2][1] + this->z * rhs.data[2][2];
-
-		return *this;
 	}
 
-	vec3& vec3::operator*=(const Transform3D rhs)
+	void vec3::operator*=(const Transform3D rhs)
 	{
 		*this *= rhs.matrix;
-		return *this;
 	}
 
-	vec3& vec3::operator/=(const vec3& rhs)
+	void vec3::operator/=(const vec3& rhs)
 	{
 		this->x /= rhs.x;
 		this->y /= rhs.y;
 		this->z /= rhs.z;
-		return *this;
 	}
 
-	vec3& vec3::operator/=(const float rhs)
+	void vec3::operator/=(const float rhs)
 	{
 		this->x /= rhs;
 		this->y /= rhs;
 		this->z /= rhs;
-		return *this;
 	}
 
 
