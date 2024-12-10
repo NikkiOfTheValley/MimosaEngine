@@ -963,6 +963,7 @@
     <ClCompile Include="src\math\detail\basis.cpp" />
     <ClCompile Include="src\math\detail\conversion.cpp" />
     <ClCompile Include="src\math\detail\formatting_util.cpp" />
+    <ClCompile Include="src\math\detail\quaternion.cpp" />
     <ClCompile Include="src\math\detail\transform3d.cpp" />
     <ClCompile Include="src\resource\material_manager.cpp" />
     <ClCompile Include="src\resource\resource_manager.cpp" />
