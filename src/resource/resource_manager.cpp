@@ -19,7 +19,21 @@ void ResourceManager::LoadShader(ResourceReference vertResource, ResourceReferen
 	resource_data vertData = vertResource.GetData();
 	resource_data fragData = fragResource.GetData();
 
-	shaders.push_back(new Shader(vertData.data, vertData.length, fragData.data, fragData.length));
+	if (vertData.data == nullptr && fragData.data == nullptr)
+	{
+		Shader* shader = new Shader();
+		shader->GenShaderFromStrings(vertData.dataAsText, fragData.dataAsText);
+
+		shaders.push_back(shader);
+		return;
+	}
+	else if (vertData.data != nullptr && fragData.data != nullptr)
+	{
+		shaders.push_back(new Shader(vertData.data, vertData.length, fragData.data, fragData.length));
+		return;
+	}
+
+	logger.err("ResourceManager::LoadShader was given invalid resource references!");
 }
 
 std::shared_ptr<Texture> ResourceManager::GetTexture(std::string name)

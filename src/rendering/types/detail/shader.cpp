@@ -51,33 +51,7 @@ Shader::Shader(std::string vertShaderPath, std::string fragShaderPath)
 
 	// - Compile shaders -
 
-	const char* vertShaderCode = vertCodeString.c_str();
-	const char* fragShaderCode = fragCodeString.c_str();
-
-	GLuint vert, frag;
-
-	// Compile vert shader
-	vert = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vert, 1, &vertShaderCode, NULL);
-	glCompileShader(vert);
-	CheckCompileErrors(vert, "VERT");
-
-	// Compile frag shader
-	frag = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(frag, 1, &fragShaderCode, NULL);
-	glCompileShader(frag);
-	CheckCompileErrors(frag, "FRAG");
-
-	// Compile shader program
-	ID = glCreateProgram();
-	glAttachShader(ID, vert);
-	glAttachShader(ID, frag);
-	glLinkProgram(ID);
-	CheckCompileErrors(ID, "PROGRAM");
-
-	// Delete the shaders as they're not needed after linking them to the program
-	glDeleteShader(vert);
-	glDeleteShader(frag);
+	GenShaderFromStrings(vertCodeString, fragCodeString);
 }
 
 Shader::Shader(const unsigned char* vertShaderData, size_t vertLength, const unsigned char* fragShaderData, size_t fragLength)
@@ -85,14 +59,18 @@ Shader::Shader(const unsigned char* vertShaderData, size_t vertLength, const uns
 	vertPath = "embedded_vert:" + std::to_string(rand());
 	fragPath = "embedded_frag:" + std::to_string(rand());
 
-
 	// - Compile shaders -
 
 	std::string vertShaderString = std::string((const char*)vertShaderData, vertLength);
 	std::string fragShaderString = std::string((const char*)fragShaderData, fragLength);
 
-	const char* vertShaderCode = vertShaderString.c_str();
-	const char* fragShaderCode = fragShaderString.c_str();
+	GenShaderFromStrings(vertShaderString, fragShaderString);
+}
+
+void Shader::GenShaderFromStrings(std::string vertShader, std::string fragShader)
+{
+	const char* vertShaderCode = vertShader.c_str();
+	const char* fragShaderCode = fragShader.c_str();
 
 	GLuint vert, frag;
 

@@ -36,13 +36,23 @@ ResourceReference::ResourceReference(const fs::path& filePath, bool useBinary)
 	}
 
 	data.length = fs::file_size(filePath);
-	data.data = new unsigned char[data.length];
 
-	fileStream.readsome((char*)data.data, data.length);
+	if (useBinary)
+	{
+		data.data = new unsigned char[data.length];
+		fileStream.read((char*)&data.data[0], data.length);
+	}
+	else
+	{
+		data.data = nullptr;
+		data.dataAsText.resize(data.length);
+		fileStream.read(data.dataAsText.data(), data.length);
+	}
 }
 
 ResourceReference::ResourceReference(const unsigned char* data, size_t length)
 {
+	this->data.dataAsText = "";
 	this->data.data = (unsigned char*)data;
 	this->data.length = length;
 }

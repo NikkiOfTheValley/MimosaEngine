@@ -13,9 +13,13 @@ public:
 	std::string vertPath;
 	std::string fragPath;
 
+	Shader() {};
+
 	Shader(std::string vertShaderPath, std::string fragShaderPath);
 
 	Shader(const unsigned char* vertShaderData, size_t vertLength, const unsigned char* fragShaderData, size_t fragLength);
+
+	void GenShaderFromStrings(std::string vertShader, std::string fragShader);
 
 	// Bind this shader
 	void Bind();

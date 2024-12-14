@@ -4,6 +4,7 @@
 
 struct resource_data
 {
+	std::string dataAsText;
 	unsigned char* data;
 	size_t length;
 };
@@ -27,5 +28,5 @@ public:
 	resource_data GetData() const;
 
 private:
-	resource_data data = { nullptr, 0 };
+	resource_data data = { "", nullptr, 0};
 };
