@@ -37,17 +37,17 @@ namespace math
 
 	Quaternion Quaternion::exp() const
 	{
-
+		return Quaternion();
 	}
 
 	Quaternion Quaternion::log() const
 	{
-
+		return Quaternion();
 	}
 
 	Quaternion Quaternion::inverse() const
 	{
-
+		return Quaternion();
 	}
 
 	float Quaternion::length_squared() const
@@ -62,7 +62,7 @@ namespace math
 
 	Quaternion Quaternion::FromEuler(vec3 euler)
 	{
-
+		return Quaternion();
 	}
 
 	vec3 Quaternion::GetAxis() const
@@ -108,23 +108,23 @@ namespace math
 		return *this;
 	}
 
-	Quaternion Quaternion::slerp(Quaternion to, float weight) const
-	{
+	//Quaternion Quaternion::slerp(Quaternion to, float weight) const
+	//{
 
-	}
+	//}
 
-	Quaternion Quaternion::slerpni(Quaternion to, float weight) const
-	{
+	//Quaternion Quaternion::slerpni(Quaternion to, float weight) const
+	//{
 
-	}
+	//}
 
-	Quaternion Quaternion::SphericalCubicInterpolate(Quaternion b, Quaternion preA, Quaternion postB, float weight) const
-	{
+	//Quaternion Quaternion::SphericalCubicInterpolate(Quaternion b, Quaternion preA, Quaternion postB, float weight) const
+	//{
 
-	}
+	//}
 
-	Quaternion Quaternion::SphericalCubicInterpolateInTime(Quaternion b, Quaternion preA, Quaternion postB, float bTime, float preATime, float postBTime, float weight) const
-	{
+	//Quaternion Quaternion::SphericalCubicInterpolateInTime(Quaternion b, Quaternion preA, Quaternion postB, float bTime, float preATime, float postBTime, float weight) const
+	//{
 
-	}
+	//}
 }

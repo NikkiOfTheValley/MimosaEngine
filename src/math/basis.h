@@ -1,8 +1,12 @@
 #pragma once
-#include "quaternion.h"
+#include <math/vec3.h>
+#include <math/mat4x4.h>
+#include <math/mat3x3.h>
 
 namespace math
 {
+	class Quaternion;
+
 	//! @brief The basis of a Transform3D
 	class Basis
 	{

@@ -1,4 +1,5 @@
 #include <math/basis.h>
+#include <math/quaternion.h>
 #include <math/mat4x4.h>
 #include <math/mat3x3.h>
 #include <physics/types/assert.h>
@@ -197,6 +198,7 @@ namespace math
 		//result[1] *= std::lerp(magnitude((*this)[1]), magnitude(to[1]), weight);
 		//result[2] *= std::lerp(magnitude((*this)[2]), magnitude(to[2]), weight);
 		
+		//return result;
 		return Basis();
 	}
 
