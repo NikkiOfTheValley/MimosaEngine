@@ -360,7 +360,7 @@ public:
 		return result;
 	}
 
-	constexpr float& operator[](const size_t i)
+	float& operator[](const size_t i)
 	{
 		assert(i < this->size, "Index out of bounds when executing LargeVector::operator[]");
 		return data[i];

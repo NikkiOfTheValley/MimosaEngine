@@ -123,7 +123,7 @@ public:
 		return *this;
 	}
 
-	constexpr float& operator[](position pos)
+	float& operator[](position pos)
 	{
 		const size_t& row = pos.row;
 		const size_t& col = pos.col;
@@ -175,7 +175,7 @@ public:
 		return values[colEnd - 1];
 	}
 
-	constexpr float operator[](position pos) const
+	float operator[](position pos) const
 	{
 		const size_t& row = pos.row;
 		const size_t& col = pos.col;
