@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <sstream>
-#include <intrin.h>
+#include <immintrin.h>
 #include "core/log.h"
 #include "core/globals.h"
 
@@ -14,7 +14,7 @@
             output << "Assertion `" #condition "` failed in " << __FILE__ << " line " << __LINE__ << ": " << message; \
             logger.err(output.str()); \
             logger.dumpLog(); \
-            __debugbreak(); \
+            /*__debugbreak();*/ \
             exit(EXIT_ASSERT_FAIL); \
         } \
         _Pragma("warning(pop)"); \

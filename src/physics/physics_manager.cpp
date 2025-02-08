@@ -2,6 +2,7 @@
 #include "core/accurate_timer.h"
 #include <math/formatting_util.h>
 #include <math/conversion.h>
+#include <math.h>
 
 using namespace math;
 
@@ -51,13 +52,13 @@ void PhysicsManager::Start()
 					totalStepTime += value;
 				}
 
-				averageStepTime = totalStepTime / max((double)stepTimeOverLastSecond.size(), 1);
+				averageStepTime = totalStepTime / std::max((double)stepTimeOverLastSecond.size(), 1.0);
 
 				logger.log(
-					"fixedDeltaTime: " + math::floatToString((float)fixedDeltaTime * conv::SEC_TO_MICROSEC, 4) + "us "
-					"|  stepTime: "+ math::floatToString((float)averageStepTime * conv::SEC_TO_MICROSEC, 4) + "us "
-					"| avgUpdateRate: " + std::to_string(((int)ceil(1.f / (max(averageStepTime, fixedDeltaTime)) / 1000))) + "kHz "
-					"| worstUpdateRate: " + std::to_string(((int)ceil(1.f / (max(worstStepTime, fixedDeltaTime)) / 1000))) + "kHz");
+					"fixedDeltaTime: " + math::floatToString((float)fixedDeltaTime * conv::SEC_TO_MICROSEC, 4.0) + "us "
+					"|  stepTime: "+ math::floatToString((float)averageStepTime * conv::SEC_TO_MICROSEC, 4.0) + "us "
+					"| avgUpdateRate: " + std::to_string(((int)ceil(1.f / (std::max(averageStepTime, (double)fixedDeltaTime)) / 1000))) + "kHz "
+					"| worstUpdateRate: " + std::to_string(((int)ceil(1.f / (std::max(worstStepTime, (double)fixedDeltaTime)) / 1000))) + "kHz");
 				timer = 0;
 			}
 

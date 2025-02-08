@@ -1,6 +1,7 @@
 #pragma once
 #include "shader.h"
 #include "texture.h"
+#include <vector>
 
 class Material
 {

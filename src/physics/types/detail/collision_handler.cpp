@@ -2,6 +2,7 @@
 #include "../phys_state.h"
 #include "../phys_obj.h"
 #include "debug/obj_writer.h"
+#include <cfloat>
 
 using namespace math;
 
@@ -47,7 +48,7 @@ void CollisionHandler::HandleCollisions(PhysState* state)
 		for (auto& collision : collisions)
 		{
 			CollisionConstraint* constraint = new CollisionConstraint();
-			constraint->collision = collision;
+			constraint->collision_data = collision;
 
 			startingIndex = objA.index * (MAX_CONSTRAINTS_PER_PHYS_OBJ - 1);
 

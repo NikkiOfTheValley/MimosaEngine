@@ -19,4 +19,4 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 
-#include "..\core\globals.h"
+#include "../../core/globals.h"

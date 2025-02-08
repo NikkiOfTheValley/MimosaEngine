@@ -1,5 +1,5 @@
 #include "../vec_math.h"
-#include <intrin.h>
+#include <immintrin.h>
 
 namespace math
 {

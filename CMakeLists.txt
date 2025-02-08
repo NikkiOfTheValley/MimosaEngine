@@ -64,7 +64,7 @@ set(Source_Files
 source_group("Source Files" FILES ${Source_Files})
 
 add_executable(MimosaEngine ${Source_Files})
-set_target_properties(MimosaEngine PROPERTIES LINK_FLAGS -Wl,-stack-size=41943040)
+set_target_properties(MimosaEngine PROPERTIES LINK_FLAGS -W)
 
 target_include_directories(MimosaEngine PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/vendor;"
@@ -108,13 +108,13 @@ endif()
 
 add_custom_command(
     TARGET MimosaEngine POST_BUILD
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}../
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     COMMAND "doxygen"
 )
 
 add_custom_command(
     TARGET MimosaEngine POST_BUILD
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}../
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     COMMAND "doxygen"
 )
 
@@ -124,35 +124,57 @@ add_custom_command(
     ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:MimosaEngine>/assets
 )
 
+if(CMAKE_HOST_WIN32)
 add_custom_command(
     TARGET MimosaEngine POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_SOURCE_DIR}/src/vendor/lib/steam_api64.dll $<TARGET_FILE_DIR:MimosaEngine>
 )
+endif(CMAKE_HOST_WIN32)
 
 file(WRITE build/steam_appid.txt ${STEAM_APPID})
 
-set(LIBRARIES
-"steam_api64;"
-"freetype;"
-"opengl32;"
-"glfw3;"
-"kernel32;"
-"user32;"
-"gdi32;"
-"winspool;"
-"comdlg32;"
-"advapi32;"
-"shell32;"
-"ole32;"
-"oleaut32;"
-"uuid;"
-"odbc32;"
-"odbccp32"
-)
+if(CMAKE_HOST_LINUX)
+    set(LIBRARIES
+    ":libsteam_api.so;"
+    ":libfreetype.so;"
+    "-lGL;"
+    "-lglfw;"
+    )
+endif(CMAKE_HOST_LINUX)
+
+if(CMAKE_HOST_WIN32)
+    set(LIBRARIES
+    "steam_api64;"
+    "freetype;"
+    "opengl32;"
+    "glfw3;"
+    "kernel32;"
+    "user32;"
+    "gdi32;"
+    "winspool;"
+    "comdlg32;"
+    "advapi32;"
+    "shell32;"
+    "ole32;"
+    "oleaut32;"
+    "uuid;"
+    "odbc32;"
+    "odbccp32"
+    )
+endif(CMAKE_HOST_WIN32)
 
 target_link_libraries(MimosaEngine PRIVATE "${LIBRARIES}")
 
+if(CMAKE_HOST_LINUX)
+target_link_directories(MimosaEngine PRIVATE
+    "${CMAKE_SOURCE_DIR}/src/vendor/lib"
+    "/usr/local/lib"
+)
+endif(CMAKE_HOST_LINUX)
+
+if(CMAKE_HOST_WIN32)
 target_link_directories(MimosaEngine PRIVATE
     "${CMAKE_SOURCE_DIR}/src/vendor/lib"
 )
+endif(CMAKE_HOST_WIN32)

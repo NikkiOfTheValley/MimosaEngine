@@ -1,4 +1,5 @@
 #pragma once
+#include <cstddef>
 
 const size_t MAX_PHYS_OBJECTS = 256;
 const size_t MAX_CONSTRAINTS_PER_PHYS_OBJ = 32;

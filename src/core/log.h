@@ -1,15 +1,19 @@
 #pragma once
 #ifndef APIENTRY // Keep windows.h from redefining APIENTRY due to GLAD defining it beforehand
+#if (defined(_WIN32) || defined(_WIN64))
 #include <windows.h>
+#endif
 #endif
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <any>
 
-// A small logging library. Windows only, I might add Linux & MacOS compatibility
-// when I need it for my own programs, but I don't really want to spend time on dealing
-// with Linux & MacOS when I don't need to.
+#if (defined(LINUX) || defined(__linux__))
+#include <signal.h>
+#endif
+
+// A small logging library. Works on Linux and Windows
 
 // Free to copy, preferably with credit, but I don't mind if you don't give credit. 
 
@@ -48,5 +52,7 @@ public:
 
 private:
 	std::string* m_log;
+
+	bool IsDebuggerAttached();
 };
 

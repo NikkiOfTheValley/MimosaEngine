@@ -61,6 +61,21 @@ bool enableFPSLimiter = true;
 bool displayUI = true;
 int setFPS = 60;
 
+#ifdef _WIN32
+
+//  Windows
+#define cpuid(info, x)    __cpuidex(info, x, 0)
+
+#else
+
+//  GCC Intrinsics
+#include <cpuid.h>
+static void cpuid(int info[4], int InfoType) {
+	__cpuid_count(InfoType, 0, info[0], info[1], info[2], info[3]);
+}
+
+#endif
+
 int main(int /*argc*/, char* /*argv[]*/)
 {
 	// -- Initialize --
@@ -71,21 +86,6 @@ int main(int /*argc*/, char* /*argv[]*/)
 	logger.log(NAME_STR + " " + VERSION_STR);
 
 	// Check what the CPU supports
-
-	#ifdef _WIN32
-
-	//  Windows
-	#define cpuid(info, x)    __cpuidex(info, x, 0)
-
-	#else
-
-	//  GCC Intrinsics
-	#include <cpuid.h>
-	static void cpuid(int info[4], int InfoType) {
-		__cpuid_count(InfoType, 0, info[0], info[1], info[2], info[3]);
-	}
-
-	#endif
 
 	int info[4];
 
@@ -137,7 +137,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 	if (osUsesXSAVE_XRSTORE && ((supportedFeatures & HW_AVX) != 0))
 	{
-		unsigned long long xcrFeatureMask = _xgetbv(_XCR_XFEATURE_ENABLED_MASK);
+		unsigned long long xcrFeatureMask = _xgetbv(0);
 		bool avxSupportedByOS = (xcrFeatureMask & 0x6) == 0x6;
 		bool avx512SupportedByOS = (xcrFeatureMask & 0xe6) == 0xe6;
 
@@ -214,9 +214,9 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// as it uses the texture atlas while initializing text rendering
 	uiManager = new ui::UIManager();
 
-	SteamErrMsg msg;
-	if (SteamAPI_InitEx(&msg) != k_ESteamAPIInitResult_OK)
-		logger.fatal("Failed to init Steam: " + std::string(&msg[0]));
+	//SteamErrMsg msg;
+	//if (SteamAPI_InitEx(&msg) != k_ESteamAPIInitResult_OK)
+	//	logger.fatal("Failed to init Steam: " + std::string(&msg[0]));
 
 	//SteamMatchmaking()->CreateLobby(k_ELobbyTypeFriendsOnly, 2);
 
@@ -434,7 +434,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 			deltaTime += (1.f / (float)setFPS) - frameTime;
 		
 		if (enableFPSLimiter)
-			BlockForNanoseconds(long long(((1.f / (double)(setFPS)) - frameTime) * conv::SEC_TO_NANOSEC));
+			BlockForNanoseconds((long long)(((1.f / (double)(setFPS)) - frameTime) * conv::SEC_TO_NANOSEC));
 
 		FPS = 1 / deltaTime;
 		if ((int)counter % setFPS == 0)

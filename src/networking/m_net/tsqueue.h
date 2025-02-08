@@ -11,8 +11,8 @@ public:
 
 
 	// Returns and maintains item at front of Queue
-	template<typename T>
-	const T& front()
+	template<typename T2>
+	const T2& front()
 	{
 		std::scoped_lock lock(muxQueue);
 		if (deqQueue.empty()) { logger.err("Attempted to call front() on an empty tsqueue!"); throw std::exception(); }
@@ -20,8 +20,8 @@ public:
 	}
 
 	// Returns and maintains item at back of Queue
-	template<typename T>
-	const T& back()
+	template<typename T2>
+	const T2& back()
 	{
 		std::scoped_lock lock(muxQueue);
 		if (deqQueue.empty()) { logger.err("Attempted to call back() on an empty tsqueue!"); throw std::exception(); }
@@ -29,24 +29,24 @@ public:
 	}
 
 	// Adds an item to back of Queue
-	template<typename T>
-	const T& push_back(const T& item)
+	template<typename T2>
+	const T2& push_back(const T2& item)
 	{
 		std::scoped_lock lock(muxQueue);
 		return deqQueue.emplace_back(std::move(item));
 	}
 
 	// Adds an item to front of Queue
-	template<typename T>
-	const T& push_front(const T& item)
+	template<typename T2>
+	const T2& push_front(const T2& item)
 	{
 		std::scoped_lock lock(muxQueue);
 		return deqQueue.emplace_front(std::move(item));
 	}
 
 	// Removes and returns item from front of Queue
-	template<typename T>
-	T pop_front()
+	template<typename T2>
+	T2 pop_front()
 	{
 		std::scoped_lock lock(muxQueue);
 		if (deqQueue.empty()) { logger.err("Attempted to call pop_front() on an empty tsqueue!"); throw std::exception(); }
@@ -56,8 +56,8 @@ public:
 	}
 
 	// Removes and returns item from back of Queue
-	template<typename T>
-	T pop_back()
+	template<typename T2>
+	T2 pop_back()
 	{
 		std::scoped_lock lock(muxQueue);
 		if (deqQueue.empty()) { logger.err("Attempted to call pop_back() on an empty tsqueue!"); throw std::exception(); }
@@ -67,7 +67,7 @@ public:
 	}
 
 	// Returns true if Queue has no items
-	template<typename T>
+	template<typename T2>
 	bool empty()
 	{
 		std::scoped_lock lock(muxQueue);
@@ -75,7 +75,7 @@ public:
 	}
 
 	// Returns the number of items in Queue
-	template<typename T>
+	template<typename T2>
 	size_t count()
 	{
 		std::scoped_lock lock(muxQueue);
@@ -83,7 +83,7 @@ public:
 	}
 
 	// Clears Queue
-	template<typename T>
+	template<typename T2>
 	void clear()
 	{
 		std::scoped_lock lock(muxQueue);

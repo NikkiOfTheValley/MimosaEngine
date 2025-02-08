@@ -79,11 +79,11 @@ bool Renderer::init(uint32_t width, uint32_t height, std::function<void(GLFWwind
 
     // Add the default pass-through shader
 
-    Shader* shader = new Shader(assets_passthrough_vert, ASSETS_PASSTHROUGH_VERT_SIZE, assets_passthrough_frag, ASSETS_PASSTHROUGH_FRAG_SIZE);
-    shader->Bind();
-    shader->SetInt("framebufferSampler", 0);
+    //Shader* shader = new Shader(assets_passthrough_vert, ASSETS_PASSTHROUGH_VERT_SIZE, assets_passthrough_frag, ASSETS_PASSTHROUGH_FRAG_SIZE);
+    //shader->Bind();
+    //shader->SetInt("framebufferSampler", 0);
 
-    postProcessingManager->shaders.push_back(shader);
+    //postProcessingManager->shaders.push_back(shader);
 
     logger.log("Initialized rendering");
     return true;

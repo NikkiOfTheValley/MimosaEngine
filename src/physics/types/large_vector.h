@@ -1,7 +1,7 @@
 #pragma once
 #include <array>
 #include <initializer_list>
-#include <intrin.h>
+#include <immintrin.h>
 #include "assert.h"
 #include "large_matrix.h"
 #include "large_sparse_matrix.h"
@@ -15,12 +15,12 @@ template<size_t _size> class LargeVector
 {
 public:
 	// Aligned to 32 bytes so SSE instructions work
-	__declspec(align(32)) std::array<float, _size> data;
+	alignas(32) std::array<float, _size> data;
 	static const size_t size = _size;
 
 	LargeVector()
 	{
-		data.fill(0.f);
+		this->data.fill(0.f);
 	}
 
 	LargeVector(std::initializer_list<float> list)
@@ -30,7 +30,7 @@ public:
 		size_t i = 0;
 		for (auto elem : list)
 		{
-			data[i] = elem;
+			this->data[i] = elem;
 			i++;
 		}
 	}
@@ -130,7 +130,7 @@ public:
 
 	template<size_t matrix_size_x, size_t matrix_size_y> LargeVector& operator*=(const LargeMatrix<matrix_size_x, matrix_size_y> rhs)
 	{
-		__declspec(align(32)) LargeVector<size> resultVector = *this;
+		alignas(32) LargeVector<size> resultVector = *this;
 
 		#ifdef NO_SIMD
 
@@ -147,7 +147,7 @@ public:
 
 		assert(this->size % 8 == 0, "Size is not a multiple of 8 when executing LargeVector::operator*=(LargeMatrix) while SIMD is enabled");
 
-		__declspec(align(32)) float zero[8] = { 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f };
+		alignas(32) float zero[8] = { 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f };
 
 		for (size_t i = 0; i < size; i += 8)
 		{
@@ -159,7 +159,7 @@ public:
 			for (size_t k = 0; k < size; k += 8)
 			{
 				__m256 matData = _mm256_load_ps(&rhs.data[i][k]);
-				__m256 vectorData = _mm256_load_ps(&data[k]);
+				__m256 vectorData = _mm256_load_ps(&this->data[k]);
 
 				// Equivelant to result += vectorData * matData
 				result = _mm256_fmadd_ps(vectorData, matData, result);
@@ -185,7 +185,7 @@ public:
 
 	template<size_t matrix_size_x, size_t matrix_size_y> LargeVector& operator*=(const LargeSparseMatrix<matrix_size_x, matrix_size_y> rhs)
 	{
-		__declspec(align(32)) LargeVector<size> resultVector;
+		alignas(32) LargeVector<size> resultVector;
 
 		for (size_t column = 0; column < size; column++)
 		{
@@ -323,7 +323,7 @@ public:
 
 	template<size_t matrix_size_x, size_t matrix_size_y> LargeVector operator*(const LargeSparseMatrix<matrix_size_x, matrix_size_y> rhs)
 	{
-		__declspec(align(32)) LargeVector<size> resultVector;
+		alignas(32) LargeVector<size> resultVector;
 
 		for (size_t column = 0; column < size; column++)
 		{
@@ -363,7 +363,7 @@ public:
 	float& operator[](const size_t i)
 	{
 		assert(i < this->size, "Index out of bounds when executing LargeVector::operator[]");
-		return data[i];
+		return this->data[i];
 	}
 
 	// Returns the vector type at index i, assuming the type has a a subscript operator and that it contains only floats
@@ -375,13 +375,13 @@ public:
 
 		assert(i < this->size - numElemsInVecType, "Index out of bounds when executing LargeVector::GetVector()");
 
-		return (vec_type*)&data[i];
+		return (vec_type*)&this->data[i];
 	}
 
 	void operator=(const LargeVector& rhs)
 	{
 		assert(rhs.size == this->size, "Mismatched size when executing LargeVector::operator=(LargeVector)");
-		data = rhs.data;
+		this->data = rhs.data;
 	}
 
 	bool operator==(const LargeVector& rhs)
@@ -406,9 +406,9 @@ public:
 		resultString << "{";
 
 		for (size_t i = 0; i < size - 1; i++)
-			resultString << data[i] << ", ";
+			resultString << this->data[i] << ", ";
 
-		resultString << data[size - 1] << "}";
+		resultString << this->data[size - 1] << "}";
 
 		return resultString.str();
 	}

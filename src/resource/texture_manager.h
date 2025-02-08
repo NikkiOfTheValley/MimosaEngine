@@ -3,6 +3,8 @@
 #include <math/vec.h>
 #include <vector>
 #include <unordered_map>
+#include <memory>
+#include <cstring>
 
 const size_t ATLAS_STARTING_WIDTH = 512;
 const size_t ATLAS_STARTING_HEIGHT = 512;

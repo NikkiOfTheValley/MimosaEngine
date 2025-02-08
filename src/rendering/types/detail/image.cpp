@@ -3,6 +3,7 @@
 #include "core/log.h"
 #include "../image.h"
 #include <math/vec2.h>
+#include  <cstring>
 
 Image::Image(std::string path, bool isRGBA)
 {

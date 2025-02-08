@@ -1,6 +1,6 @@
 #include "../phys_obj.h"
 #include "../phys_state.h"
-#include <intrin.h>
+#include <immintrin.h>
 
 void PhysObj::Update(double fixedDeltaTime)
 {

@@ -3,6 +3,7 @@
 #include "rendering/types/shader.h"
 #include "types/resource_reference.h"
 #include <unordered_map>
+#include <vector>
 
 // The ResourceManager is a Singleton because more than one thing accesses it while also needing global state
 

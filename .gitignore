@@ -5,3 +5,5 @@ docs/*
 build
 
 CMakeFiles
+
+.vscode/*

@@ -12,8 +12,7 @@ namespace math
 	class mat4x4f
 	{
 	public:
-		__declspec(align(16))
-		float data[4][4] = {
+		alignas(16) float data[4][4] = {
 			{0, 0, 0, 0},
 			{0, 0, 0, 0},
 			{0, 0, 0, 0},

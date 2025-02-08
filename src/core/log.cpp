@@ -29,12 +29,16 @@ void Logger::warn(std::string str)
 		std::cout << "[WARN]: ";
 
 		// Draw str yellow
-		HANDLE c = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(c, FOREGROUND_RED | FOREGROUND_GREEN);
+		#if (defined(LINUX) || defined(__linux__))
+			std::cout << "\033[0;33m" << str << "\033[0;30m\n";
+		#elif (defined(_WIN32) || defined(_WIN64))
+			HANDLE c = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(c, FOREGROUND_RED | FOREGROUND_GREEN);
 
-		std::cout << str << "\n";
+			std::cout << str << "\n";
 
-		SetConsoleTextAttribute(c, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			SetConsoleTextAttribute(c, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		#endif
 	}
 		
 	m_log->append("[WARN]: " + str + "\n");
@@ -48,12 +52,16 @@ void Logger::err(std::string str)
 		std::cout << "[ERR]: ";
 
 		// Draw str red
-		HANDLE c = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(c, FOREGROUND_RED);
+		#if (defined(LINUX) || defined(__linux__))
+			std::cout << "\033[0;31m" << str << "\033[0;30m\n";
+		#elif (defined(_WIN32) || defined(_WIN64))
+			HANDLE c = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(c, FOREGROUND_RED);
 
-		std::cout << str << "\n";
+			std::cout << str << "\n";
 
-		SetConsoleTextAttribute(c, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			SetConsoleTextAttribute(c, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		#endif
 	}
 
 	m_log->append("[ERR]: " + str + "\n");
@@ -67,20 +75,31 @@ void Logger::fatal(std::string str)
 		std::cout << "[FATAL]: ";
 
 		// Draw str red
-		HANDLE c = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(c, FOREGROUND_RED);
+		#if (defined(LINUX) || defined(__linux__))
+			std::cout << "\033[0;31m" << str << "\033[0;30m\n";
+		#elif (defined(_WIN32) || defined(_WIN64))
+			HANDLE c = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(c, FOREGROUND_RED);
 
-		std::cout << str << "\n";
+			std::cout << str << "\n";
 
-		SetConsoleTextAttribute(c, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			SetConsoleTextAttribute(c, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		#endif
 	}
 
 	m_log->append("[FATAL]: " + str + "\n");
 
 	this->dumpLog();
 
-	if (IsDebuggerPresent())
-		__debugbreak();
+	if (IsDebuggerAttached())
+	{
+		#if (defined(LINUX) || defined(__linux__))
+			raise(SIGTRAP);
+		#elif (defined(_WIN32) || defined(_WIN64))
+			__debugbreak();
+		#endif
+	}
+		
 
 	exit(EXIT_FATAL_ERR);
 }
@@ -144,4 +163,28 @@ std::string Logger::serialize(std::any input)
 	err("Invalid type passed to serialize()\n");
 	err(type + "\n");
 	return "Invalid Type";
+}
+
+bool Logger::IsDebuggerAttached()
+{
+	#if (defined(LINUX) || defined(__linux__))
+	std::ifstream sf("/proc/self/status");
+	std::string s;
+
+	while(sf >> s)
+	{
+		if (s == "TracerPid:")
+		{
+			int pid;
+			sf >> pid;
+			return pid != 0;
+		}
+		std::getline(sf, s);
+	}
+
+	return false;
+
+	#elif (defined(_WIN32) || defined(_WIN64))
+	return IsDebuggerPresent();
+	#endif
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <sstream>
+#include <math.h>
 #include "core/log.h"
 #include "core/globals.h"
 
