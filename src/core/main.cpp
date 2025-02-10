@@ -214,9 +214,9 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// as it uses the texture atlas while initializing text rendering
 	uiManager = new ui::UIManager();
 
-	//SteamErrMsg msg;
-	//if (SteamAPI_InitEx(&msg) != k_ESteamAPIInitResult_OK)
-	//	logger.fatal("Failed to init Steam: " + std::string(&msg[0]));
+	SteamErrMsg msg;
+	if (SteamAPI_InitEx(&msg) != k_ESteamAPIInitResult_OK)
+		logger.fatal("Failed to init Steam: " + std::string(&msg[0]));
 
 	//SteamMatchmaking()->CreateLobby(k_ELobbyTypeFriendsOnly, 2);
 

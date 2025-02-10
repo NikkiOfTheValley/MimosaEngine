@@ -22,7 +22,7 @@ for subdir, dirs, files in os.walk("assets/"):
 
             outputData = "unsigned char " + sanitizedName + "[] = {{{}}}".format(", ".join(bytesAsString))
 
-        with open(outputPath, 'w', -1, 'utf-16') as outputFile:
+        with open(outputPath, 'w', -1, 'utf-8') as outputFile:
             outputFile.write("const size_t " + sanitizedName.upper() + "_SIZE = " + str(numBytes) + ";\n")
             outputFile.write(outputData)
             outputFile.write(";")
