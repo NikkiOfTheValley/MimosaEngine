@@ -30,7 +30,7 @@ void Logger::warn(std::string str)
 
 		// Draw str yellow
 		#if (defined(LINUX) || defined(__linux__))
-			std::cout << "\033[0;33m" << str << "\033[0;30m\n";
+			std::cout << "\033[0;33m" << str << "\033[0m\n";
 		#elif (defined(_WIN32) || defined(_WIN64))
 			HANDLE c = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(c, FOREGROUND_RED | FOREGROUND_GREEN);
@@ -53,7 +53,7 @@ void Logger::err(std::string str)
 
 		// Draw str red
 		#if (defined(LINUX) || defined(__linux__))
-			std::cout << "\033[0;31m" << str << "\033[0;30m\n";
+			std::cout << "\033[0;31m" << str << "\033[0m\n";
 		#elif (defined(_WIN32) || defined(_WIN64))
 			HANDLE c = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(c, FOREGROUND_RED);
@@ -76,7 +76,7 @@ void Logger::fatal(std::string str)
 
 		// Draw str red
 		#if (defined(LINUX) || defined(__linux__))
-			std::cout << "\033[0;31m" << str << "\033[0;30m\n";
+			std::cout << "\033[0;31m" << str << "\033[0m\n";
 		#elif (defined(_WIN32) || defined(_WIN64))
 			HANDLE c = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(c, FOREGROUND_RED);
