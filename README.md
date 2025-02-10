@@ -2,8 +2,9 @@
 MimosaEngine is primarily a game engine for my projects.
 
 ## Compiling
-At least VS 2019 16.11.0 is required to compile the engine.
-Older VS versions might work, but I haven't tested them.
+You need CMake, Make, and Clang to compile the engine.
+You also need Doxygen, as the docs are generated as part
+of the build process.
 
 ## Libraries
 This engine uses the libraries ASIO, GLAD, GLFW, FreeType,
@@ -14,5 +15,5 @@ Each library has their respective license either in the
 file itself or next to the header files in the `vendor/*`
 directories.
 
-Portions of this software are copyright © 2023 The FreeType
+Portions of this software are copyright ï¿½ 2023 The FreeType
 Project (www.freetype.org).  All rights reserved.
