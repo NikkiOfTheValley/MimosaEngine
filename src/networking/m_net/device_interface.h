@@ -1,7 +1,6 @@
 #pragma once
 #include "common.h"
 #include "message.h"
-#include "tsqueue.h"
 #include "connection.h"
 
 // This class represents this computer on the network. It handles the Connections & message passing.

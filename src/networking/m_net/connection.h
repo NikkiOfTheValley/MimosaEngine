@@ -1,6 +1,5 @@
 #pragma once
 #include "common.h"
-#include "tsqueue.h"
 #include "message.h"
 
 class Connection : public std::enable_shared_from_this<Connection>

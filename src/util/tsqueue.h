@@ -1,5 +1,11 @@
 #pragma once
-#include "common.h"
+#include <memory>
+#include <deque>
+#include <thread>
+#include <mutex>
+#include <optional>
+#include <algorithm>
+#include <cstdint>
 
 template<typename T>
 class tsqueue

@@ -20,3 +20,5 @@
 #include <asio/ts/internet.hpp>
 
 #include "../../core/globals.h"
+
+#include "../../util/tsqueue.h"
