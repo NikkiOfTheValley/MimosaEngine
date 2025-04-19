@@ -26,6 +26,9 @@
 #include "embedded_files/headers/assets_button_highlighted_png.h"
 #include "embedded_files/headers/assets_text_box_png.h"
 #include "embedded_files/headers/assets_text_box_highlighted_png.h"
+#include "embedded_files/headers/assets_debug_vert.h"
+#include "embedded_files/headers/assets_debug_frag.h"
+#include "embedded_files/headers/assets_debug_png.h"
 
 using namespace math;
 namespace fs = std::filesystem;
@@ -238,6 +241,18 @@ int main(int /*argc*/, char* /*argv[]*/)
 	resourceManager->LoadTexture(ResourceReference(assets_text_box_png, ASSETS_TEXT_BOX_PNG_SIZE), true, "textBox");
 	resourceManager->LoadTexture(ResourceReference(assets_text_box_highlighted_png, ASSETS_TEXT_BOX_HIGHLIGHTED_PNG_SIZE), true, "textBoxHighlighted");
 
+	// Create debug material (used for debug visualizations)
+
+	ResourceManager* resourceManager = &ResourceManager::getInstance();
+	resourceManager->LoadShader(
+		ResourceReference(assets_debug_vert, ASSETS_DEBUG_VERT_SIZE),
+		ResourceReference(assets_debug_frag, ASSETS_DEBUG_FRAG_SIZE),
+		"debug");
+	
+	// Note: the debug texture not being here is intentional, as trying to load it causes a segfault.
+	// Since it's a only single color, the fragment shader has the debug color hardcoded.
+	renderer->debugMaterial = new Material("debug", "debug_png");
+
 	resourceManager->LoadTexture(ResourceReference(fs::path("assets/example.png")), true, "exampleImage");
 	resourceManager->LoadTexture(ResourceReference(fs::path("assets/example2.png")), true, "exampleImage2");
 	resourceManager->LoadShader(ResourceReference(fs::path("assets/example.vert")), ResourceReference(fs::path("assets/example.frag")), "exampleShader");
@@ -366,6 +381,9 @@ int main(int /*argc*/, char* /*argv[]*/)
 			//uiManager->UpdateTextElement("example");
 			inputHandler.reloadAssets = false;
 		}
+
+		renderer->DrawDebugVector(0, math::vec3(0.f, 0.f, 0.f), math::vec3(1.f, 1.f, 1.f));
+		renderer->DrawDebugSphere(1, math::vec3(2.f, 0.f, 0.f), math::vec3(1.f, 1.f, 1.f));
 
 		if (glfwGetKey(renderer->window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS && !useTextInput)
 			cam.pos.y -= 1.f * (float)deltaTime;

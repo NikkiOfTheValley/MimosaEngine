@@ -4,11 +4,13 @@
 #include "types/polygon.h"
 #include "types/obj_loader.h"
 #include "post_processing_manager.h"
+#include <queue>
 
 #include "embedded_files/headers/assets_passthrough_vert.h"
 #include "embedded_files/headers/assets_passthrough_frag.h"
 
 #include <ft2build.h>
+#include <resource/resource_manager.h>
 #include FT_FREETYPE_H
 
 using namespace math;
@@ -191,6 +193,45 @@ void Renderer::CreateNewPolygon(std::vector<vert2d> verts, std::string name, Sha
 }
 #pragma warning(pop)
 
+void Renderer::DrawDebugSphere(size_t id, math::vec3 pos, math::vec3 scale)
+{
+    debug_object obj;
+
+    obj.type = DebugObjectType::Sphere;
+    obj.id = id;
+    obj.pos = pos;
+    obj.size = scale;
+
+    debugRenderQueue.push_back(obj);
+}
+
+void Renderer::DrawDebugVector(size_t id, math::vec3 origin, math::vec3 vector)
+{
+    debug_object obj;
+
+    obj.type = DebugObjectType::Vector;
+
+    obj.type = DebugObjectType::Vector;
+    obj.id = id;
+    obj.pos = origin;
+    obj.size = vector;
+
+    debugRenderQueue.push_back(obj);
+}
+
+void Renderer::DrawDebugCube(size_t id, math::vec3 pos, math::vec3 scale, math::vec3 rot)
+{
+    debug_object obj;
+
+    obj.type = DebugObjectType::Cube;
+    obj.id = id;
+    obj.pos = pos;
+    obj.size = scale;
+    obj.rot = rot;
+
+    debugRenderQueue.push_back(obj);
+}
+
 void Renderer::AddNewPostProcessingShader(Shader* shader)
 {
     shader->SetInt("framebufferSampler", 0);
@@ -246,5 +287,232 @@ void Renderer::Draw(mat4x4f viewMatrix, mat4x4f projectionMatrix)
         poly->Draw();
     }
 
+    std::queue<debug_object> objsOnTop;
+    while (!debugRenderQueue.empty<debug_object>())
+    {
+        debug_object obj = debugRenderQueue.pop_back<debug_object>();
+        if (obj.drawOnTop)
+        {
+            objsOnTop.push(obj);
+            continue;
+        }
+
+        DrawDebugObject(obj, viewMatrix, projectionMatrix);
+    }
+
+    while (!objsOnTop.empty())
+    {
+        const debug_object& obj = objsOnTop.front();
+        
+        DrawDebugObject(obj, viewMatrix, projectionMatrix);
+        objsOnTop.pop();
+    }
+    
+
     //postProcessingManager->EndRendering();
+}
+
+void Renderer::DrawDebugObject(const debug_object& obj, const math::mat4x4f& viewMatrix,  const math::mat4x4f& projectionMatrix)
+{
+    // Generate vertices
+    std::vector<vert> verts;
+
+    switch (obj.type)
+    {
+    case DebugObjectType::Sphere:
+    {
+        constexpr size_t NUM_POINTS_X = 16;
+        constexpr size_t NUM_POINTS_Y = 16;
+
+        for (size_t i = 0; i < NUM_POINTS_X; i++)
+        {
+            for (size_t k = 0; k < NUM_POINTS_Y; k++)
+            {
+                float stepSizeX = (1.f / (float)NUM_POINTS_X) * M_PI * 2.f;
+                float stepSizeY = (1.f / (float)NUM_POINTS_Y) * M_PI * 2.f;
+
+                float tX = ((float)i / (float)NUM_POINTS_X) * M_PI * 2.f;
+                float tY = ((float)k / (float)NUM_POINTS_Y) * M_PI * 2.f;
+
+                // First point (0, 0)
+                math::vec3 p1;
+                p1.x = (obj.size.x * cos(tY)) * cos(tX);
+                p1.y = (obj.size.y * cos(tY)) * sin(tX);
+                p1.z = obj.size.z * sin(tY);
+
+                // Second point (1, 0)
+                math::vec3 p2;
+                p2.x = (obj.size.x * cos(tY)) * cos(tX + stepSizeX);
+                p2.y = (obj.size.y * cos(tY)) * sin(tX + stepSizeX);
+                p2.z = obj.size.z * sin(tY);
+
+                // Third point (0, 1)
+                math::vec3 p3;
+                p3.x = (obj.size.x * cos(tY + stepSizeY)) * cos(tX);
+                p3.y = (obj.size.y * cos(tY + stepSizeY)) * sin(tX);
+                p3.z = obj.size.z * sin(tY + stepSizeY);
+
+                // Fourth point (1, 1)
+                math::vec3 p4;
+                p4.x = (obj.size.x * cos(tY + stepSizeY)) * cos(tX + stepSizeX);
+                p4.y = (obj.size.y * cos(tY + stepSizeY)) * sin(tX + stepSizeX);
+                p4.z = obj.size.z * sin(tY + stepSizeY);
+
+                // Construct triangles
+                verts.push_back(vert{p1.x, p1.y, p1.z, 0.f, 0.f, 0.f, 0.f, 0.f});
+                verts.push_back(vert{p3.x, p3.y, p3.z, 0.f, 0.f, 0.f, 0.f, 0.f});
+                verts.push_back(vert{p4.x, p4.y, p4.z, 0.f, 0.f, 0.f, 0.f, 0.f});
+
+                verts.push_back(vert{p1.x, p1.y, p1.z, 0.f, 0.f, 0.f, 0.f, 0.f});
+                verts.push_back(vert{p4.x, p4.y, p4.z, 0.f, 0.f, 0.f, 0.f, 0.f});
+                verts.push_back(vert{p2.x, p2.y, p2.z, 0.f, 0.f, 0.f, 0.f, 0.f});
+            }
+            
+        }
+        
+
+        break;
+    }
+    case DebugObjectType::Vector:
+    {
+        // Generate the cylinder used for the vector line
+
+        constexpr size_t NUM_CIRCLE_POINTS = 10;
+        constexpr float CIRCLE_RADIUS = 0.125f;
+        constexpr float ARROWHEAD_LENGTH_FACTOR = 0.1f;
+
+        verts.reserve(NUM_CIRCLE_POINTS * 12);
+
+        for (size_t i = 0; i < NUM_CIRCLE_POINTS; i++)
+        {
+            float stepSize = 1.f / (float)NUM_CIRCLE_POINTS;
+            float t = (float)i / (float)NUM_CIRCLE_POINTS;
+
+            // Generate points on the rim of the cylinder 
+            // and connect them as a fan from the center
+
+            float x1 = CIRCLE_RADIUS * cos(t * M_PI * 2.f);
+            float y1 = CIRCLE_RADIUS * sin(t * M_PI * 2.f);
+
+            float x2 = CIRCLE_RADIUS * cos((t + stepSize) * M_PI * 2.f);
+            float y2 = CIRCLE_RADIUS * sin((t + stepSize) * M_PI * 2.f);
+
+            verts.push_back(vert{0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f});
+            verts.push_back(vert{x1,  y1,  0.f, 0.f, 0.f, 0.f, 0.f, 0.f});
+            verts.push_back(vert{x2,  y2,  0.f, 0.f, 0.f, 0.f, 0.f, 0.f});
+
+            // Generate the cylinder wall triangles
+
+            float vectorLength = math::magnitude(obj.size);
+            float arrowheadLength = vectorLength * ARROWHEAD_LENGTH_FACTOR;
+            float cylinderLength = vectorLength - arrowheadLength;
+
+            verts.push_back(vert{x1, y1, 0.f,            0.f, 0.f, 0.f, 0.f, 0.f});
+            verts.push_back(vert{x1, y1, cylinderLength, 0.f, 0.f, 0.f, 0.f, 0.f});
+            verts.push_back(vert{x2, y2, 0.f,            0.f, 0.f, 0.f, 0.f, 0.f});
+
+            verts.push_back(vert{x2, y2, 0.f,            0.f, 0.f, 0.f, 0.f, 0.f});
+            verts.push_back(vert{x1, y1, cylinderLength, 0.f, 0.f, 0.f, 0.f, 0.f});
+            verts.push_back(vert{x2, y2, cylinderLength, 0.f, 0.f, 0.f, 0.f, 0.f});
+
+            // Generate the arrowhead triangles
+
+            float x1_ah = x1 * 2.f;
+            float y1_ah = y1 * 2.f;
+            float x2_ah = x2 * 2.f;
+            float y2_ah = y2 * 2.f;
+            
+            verts.push_back(vert{x2_ah,  y2_ah,  cylinderLength, 0.f, 0.f, 0.f, 0.f, 0.f});
+            verts.push_back(vert{x1_ah,  y1_ah,  cylinderLength, 0.f, 0.f, 0.f, 0.f, 0.f});
+            verts.push_back(vert{0.f,    0.f,    vectorLength,   0.f, 0.f, 0.f, 0.f, 0.f});
+        }
+
+        break;
+    }
+    case DebugObjectType::Cube:
+    {
+        verts = {
+            vert{-0.5f,-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f,-0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f, 0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f, 0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f,-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f, 0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f,-0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f,-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f,-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f, 0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f,-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f,-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f,-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f, 0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f, 0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f,-0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f,-0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f,-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f, 0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f,-0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f,-0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f, 0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f,-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f, 0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f,-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f, 0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f,-0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f, 0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f, 0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f, 0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f, 0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f, 0.5f,-0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f, 0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f, 0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{-0.5f, 0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+            vert{ 0.5f,-0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 0.f},
+        };
+
+        for (size_t i = 0; i < verts.size(); i++)
+        {
+            verts[i].x *= obj.size.x;
+            verts[i].y *= obj.size.y;
+            verts[i].z *= obj.size.z;
+        }
+        
+
+        break;
+    }
+    }
+
+    // If the object ID is outside of the range
+    // of the debug meshes vector, then resize it
+    // to match
+    if ((int)obj.id > (int)(debugMeshes.size()) - 1)
+    {
+        debugMeshes.resize(obj.id + 2);
+    }
+    
+    // If the debug mesh has not been created, then create it
+    if (debugMeshes.at(obj.id) == nullptr)
+    {
+        Mesh* mesh = new Mesh(verts, debugMaterial);
+        debugMeshes[obj.id] = mesh;
+    }
+
+    // Now that the object's mesh definitely exists,
+    // draw it
+
+    if (obj.type == DebugObjectType::Cube)
+        debugMeshes[obj.id]->rotation = obj.rot;
+    
+    if (obj.type == DebugObjectType::Vector)
+    {
+        math::vec3 direction = math::normalize(obj.size);
+        
+        debugMeshes[obj.id]->rotation.x = asin(direction.y);
+        debugMeshes[obj.id]->rotation.y = atan2(direction.x, direction.z);
+    }
+    
+    debugMeshes[obj.id]->position = obj.pos;
+    debugMeshes[obj.id]->verts = verts;
+    debugMeshes[obj.id]->UpdateMesh();
+    debugMeshes[obj.id]->Draw(viewMatrix, projectionMatrix);
 }
