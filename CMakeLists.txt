@@ -8,7 +8,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(Source_Files
-    "gen_docs.bat"
     "src/core/accurate_timer.cpp"
     "src/core/input_handler.cpp"
     "src/core/log.cpp"
@@ -96,7 +95,8 @@ else()
 target_compile_options(MimosaEngine PRIVATE
     -Wall -Wextra -Wpedantic
     -Wno-language-extension-token
-    -O3 -ffast-math
+    $<IF:$<CONFIG:Debug>,-O0,-O3>
+    -ffast-math
     -msse
     -msse2
     -msse3
