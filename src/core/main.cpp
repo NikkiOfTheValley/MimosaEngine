@@ -439,7 +439,6 @@ int main(int /*argc*/, char* /*argv[]*/)
 		SteamAPI_RunCallbacks();
 		steamNet->ProcessIncomingMessages();
 		steamNet->BroadcastMessageRaw({255, 255, 255, 255});
-		steamNet->SendMessageRaw()
 
 		if (displayUI)
 			uiManager->Update();
