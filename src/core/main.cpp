@@ -20,6 +20,9 @@
 #pragma warning(disable : 4996)
 #include <vendor/steam/steam_api.h>
 
+#include "networking/steam/steam_manager.h"
+#include "networking/steam/steam_net.h"
+
 #include "embedded_files/headers/assets_flatShader_vert.h"
 #include "embedded_files/headers/assets_flatShader_frag.h"
 #include "embedded_files/headers/assets_button_png.h"
@@ -60,6 +63,7 @@ ui::UIManager* uiManager;
 MaterialManager materialManager;
 ResourceManager* resourceManager;
 PhysicsManager* physicsManager;
+SteamManager* steamManager;
 bool enableFPSLimiter = true;
 bool displayUI = true;
 int setFPS = 60;
@@ -217,11 +221,11 @@ int main(int /*argc*/, char* /*argv[]*/)
 	// as it uses the texture atlas while initializing text rendering
 	uiManager = new ui::UIManager();
 
-	SteamErrMsg msg;
-	if (SteamAPI_InitEx(&msg) != k_ESteamAPIInitResult_OK)
-		logger.fatal("Failed to init Steam: " + std::string(&msg[0]));
+	steamManager = new SteamManager();
+	steamManager->Init();
 
-	//SteamMatchmaking()->CreateLobby(k_ELobbyTypeFriendsOnly, 2);
+	SteamNet* steamNet = nullptr;
+	std::shared_ptr<Lobby> lobby = nullptr;
 
 	// -- Load assets --
 
@@ -420,6 +424,23 @@ int main(int /*argc*/, char* /*argv[]*/)
 
 		// -- Update --
 
+		// Init Steam on the first frame, so the menu has a chance
+		// to render before Steam locks up the main thread
+		if (counter == 0)
+		{
+			steamNet = new SteamNet();
+
+			lobby = steamManager->CreateLobbyObject("MimosaEngine test lobby", 2, true);
+			SteamAPI_RunCallbacks();
+			steamNet->SetupLobby(lobby);
+		}
+		
+		// Update Steam stuff
+		SteamAPI_RunCallbacks();
+		steamNet->ProcessIncomingMessages();
+		steamNet->BroadcastMessageRaw({255, 255, 255, 255});
+		steamNet->SendMessageRaw()
+
 		if (displayUI)
 			uiManager->Update();
 
@@ -474,6 +495,15 @@ int main(int /*argc*/, char* /*argv[]*/)
 	renderer->destroy();
 	resourceManager->Dealloc();
 	delete uiManager;
+
+	lobby = nullptr;
+	delete steamManager;
+	steamNet->LeaveLobby();
+
+	using namespace std::chrono_literals;
+
+	std::this_thread::sleep_for(250ms);
+
 	SteamAPI_Shutdown();
 
 	logger.log("Exiting application");
